@@ -1,0 +1,2 @@
+C:\Users\Debora\Documents\Unreal Projects\LabyrinthOfCollosia\Intermediate\Build\Win64\UE4Editor\Development\LabyrinthOfCollosia\Definitions.LabyrinthOfCollosia.h
+C:\Users\Debora\Documents\Unreal Projects\LabyrinthOfCollosia\Source\LabyrinthOfCollosia\Objects\Weapon.h

@@ -1,0 +1,29 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UE4Editor-LabyrinthOfCollosia.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"C:\Users\Debora\Documents\Unreal Projects\LabyrinthOfCollosia\Intermediate\Build\Win64\LabyrinthOfCollosiaEditor\Development\Engine\SharedPCH.Engine.h.obj"
+"C:\Users\Debora\Documents\Unreal Projects\LabyrinthOfCollosia\Intermediate\Build\Win64\UE4Editor\Development\LabyrinthOfCollosia\MyClass.cpp.obj"
+"C:\Users\Debora\Documents\Unreal Projects\LabyrinthOfCollosia\Intermediate\Build\Win64\UE4Editor\Development\LabyrinthOfCollosia\TlocCharacter2.cpp.obj"
+"C:\Users\Debora\Documents\Unreal Projects\LabyrinthOfCollosia\Intermediate\Build\Win64\UE4Editor\Development\LabyrinthOfCollosia\TlocPlayer.cpp.obj"
+"C:\Users\Debora\Documents\Unreal Projects\LabyrinthOfCollosia\Intermediate\Build\Win64\UE4Editor\Development\LabyrinthOfCollosia\TlocIngredients.cpp.obj"
+"C:\Users\Debora\Documents\Unreal Projects\LabyrinthOfCollosia\Intermediate\Build\Win64\UE4Editor\Development\LabyrinthOfCollosia\TlocSpell.cpp.obj"
+"C:\Users\Debora\Documents\Unreal Projects\LabyrinthOfCollosia\Intermediate\Build\Win64\UE4Editor\Development\LabyrinthOfCollosia\TlocGauntlet.cpp.obj"
+"C:\Users\Debora\Documents\Unreal Projects\LabyrinthOfCollosia\Intermediate\Build\Win64\UE4Editor\Development\LabyrinthOfCollosia\TlocItem.cpp.obj"
+"C:\Users\Debora\Documents\Unreal Projects\LabyrinthOfCollosia\Intermediate\Build\Win64\UE4Editor\Development\LabyrinthOfCollosia\TlocObject.cpp.obj"
+"C:\Users\Debora\Documents\Unreal Projects\LabyrinthOfCollosia\Intermediate\Build\Win64\UE4Editor\Development\LabyrinthOfCollosia\TlocWeapon.cpp.obj"
+"C:\Users\Debora\Documents\Unreal Projects\LabyrinthOfCollosia\Intermediate\Build\Win64\UE4Editor\Development\LabyrinthOfCollosia\TlocStateManager.cpp.obj"
+"C:\Users\Debora\Documents\Unreal Projects\LabyrinthOfCollosia\Intermediate\Build\Win64\UE4Editor\Development\LabyrinthOfCollosia\LabyrinthOfCollosia.cpp.obj"
+"C:\Users\Debora\Documents\Unreal Projects\LabyrinthOfCollosia\Intermediate\Build\Win64\UE4Editor\Development\LabyrinthOfCollosia\LabyrinthOfCollosiaGameModeBase.cpp.obj"
+"C:\Users\Debora\Documents\Unreal Projects\LabyrinthOfCollosia\Intermediate\Build\Win64\UE4Editor\Development\LabyrinthOfCollosia\LabyrinthOfCollosia.init.gen.cpp.obj"
+"C:\Users\Debora\Documents\Unreal Projects\LabyrinthOfCollosia\Intermediate\Build\Win64\UE4Editor\Development\LabyrinthOfCollosia\LabyrinthOfCollosiaGameModeBase.gen.cpp.obj"
+"C:\Users\Debora\Documents\Unreal Projects\LabyrinthOfCollosia\Intermediate\Build\Win64\UE4Editor\Development\LabyrinthOfCollosia\TlocCharacter2.gen.cpp.obj"
+"C:\Users\Debora\Documents\Unreal Projects\LabyrinthOfCollosia\Intermediate\Build\Win64\UE4Editor\Development\LabyrinthOfCollosia\TlocObject.gen.cpp.obj"
+"C:\Users\Debora\Documents\Unreal Projects\LabyrinthOfCollosia\Intermediate\Build\Win64\UE4Editor\Development\LabyrinthOfCollosia\TlocStateManager.gen.cpp.obj"
+"C:\Users\Debora\Documents\Unreal Projects\LabyrinthOfCollosia\Intermediate\Build\Win64\UE4Editor\Development\LabyrinthOfCollosia\Default.rc2.res"
+/OUT:"C:\Users\Debora\Documents\Unreal Projects\LabyrinthOfCollosia\Intermediate\Build\Win64\UE4Editor\Development\LabyrinthOfCollosia\UE4Editor-LabyrinthOfCollosia.lib"
+/INCLUDE:IMPLEMENT_MODULE_LabyrinthOfCollosia
