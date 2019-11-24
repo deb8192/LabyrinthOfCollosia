@@ -1,9 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include <stdlib.h>
 
 #include "../Public/Characters/TlocPlayer.h"
 #include "../Public/GlobalConstants.h"
+
+#include <stdlib.h>
 
 // Sets default values
 TlocPlayer::TlocPlayer()
