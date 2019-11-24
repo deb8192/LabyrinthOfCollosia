@@ -2,38 +2,39 @@
 
 #pragma once
 
-#include "TlocCharacter2.h"
+#include "TlocCharacter.h"
+//#include "TlocEnemy.h"
 
 /**
- *
+ * TlocPlayer is the main class which contains the players main set of functions and variables 
  */
-
-UCLASS()
-class LABYRINTHOFCOLLOSIA_API ATlocPlayer : public ATlocCharacter2
+class LABYRINTHOFCOLLOSIA_API TlocPlayer : public TlocCharacter
 {
+public:
+	// Sets default values for this actor's properties
+	TlocPlayer();
+	TlocPlayer(int idChrctr, int lvl, int lif, int att, int def, int magdef, int exp, int nxtlvl, int crit, int critProb, int lck, int eva);
+	~TlocPlayer();
+
+	//Character's functions
+	void ModifyLife(float quantity);
+	//int  Attack();
+	//int  Attack(TlocWeapon* _wp, ATlocEnemy* _enm);
+	int  Attack(TlocWeapon* _wp);
+	int Magic();
+	void Transact();
+	void Talk();
+	void Move();
+	void Defend();
+
+private:
+	
+	//Variables
+	int nextLevel;				//Necessary experience to reach next level
+	int experience;				//Player experience
 
 public:
-	// Sets default values for this character's properties
-	ATlocPlayer();
-	ATlocPlayer(int idChrctr, int lvl, int lif, int att, int def, int exp, int nxtlvl);
-	~ATlocPlayer();
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-	//Variables
-	int nextLevel;
-	int experience;
-
-public:	
-
-	bool Defense();
-
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	bool GetDefend();
 
 };
