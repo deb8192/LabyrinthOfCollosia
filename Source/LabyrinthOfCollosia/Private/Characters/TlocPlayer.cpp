@@ -79,14 +79,14 @@ int TlocPlayer::Attack(TlocWeapon* _wp)
 	GlobalConstants constants;
 	float damage = constants.KBASICDAMAGE * (attack + _wp->GetAttack());
 
-	//If random value hitProbability is bigger than luck, player will miss the attack
+	//If hitProbability random value is bigger than luck, player will miss the attack
 	int hitProbability = rand() % constants.KPERCENT;
 	if (hitProbability >= luck)
 	{
 		return -1;
 	}
 
-	//If random value critProbability is lower than criticalProb, player hit will be critical
+	//If critProbability random value is lower than criticalProb, player hit will be critical
 	int critProbability = rand() % constants.KPERCENT;
 	if (critProbability < criticalProb * _wp->GetCriticalProbabilityInc())
 	{
