@@ -25,7 +25,7 @@ public:
 	// Called when the game starts or when spawned
 
 	virtual void ModifyLife(float quantity) = 0;				//Adds or substracts as many as quantity value is
-	//virtual int Attack() = 0;	//Calculates hit damage
+	virtual int Attack() = 0;									//Calculates hit damage
 	virtual int Magic() = 0;									//Calculates magic damage
 	virtual void Transact() = 0;								//Function for buying or selling objects
 	virtual void Talk() = 0;									//Function to talk with anyone
@@ -50,6 +50,8 @@ protected:
 	int evasion;									//Character hit evade probability
 	int luck;										//Character hit probability
 	bool defending;									//Character defending state
+	bool invulnerable;
+	float invulnerableTime;
 	std::vector<TlocIngredients*> _ingredients;		//Character ingredient list
 	std::vector<TlocSpell*> _learnedSpells;			//Character learned spell list
 	std::vector<TlocSpell*> _memorizedSpells;		//Character memorized spell list from the learned spell list

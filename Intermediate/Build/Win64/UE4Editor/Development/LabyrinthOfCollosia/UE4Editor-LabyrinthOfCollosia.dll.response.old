@@ -32,8 +32,6 @@
 /NODEFAULTLIB:"LIBCPD"
 /FUNCTIONPADMIN
 "C:\Users\Debora\Documents\Unreal Projects\LabyrinthOfCollosia\Intermediate\Build\Win64\LabyrinthOfCollosiaEditor\Development\Engine\SharedPCH.Engine.h.obj"
-"C:\Users\Debora\Documents\Unreal Projects\LabyrinthOfCollosia\Intermediate\Build\Win64\UE4Editor\Development\LabyrinthOfCollosia\MyClass.cpp.obj"
-"C:\Users\Debora\Documents\Unreal Projects\LabyrinthOfCollosia\Intermediate\Build\Win64\UE4Editor\Development\LabyrinthOfCollosia\TlocCharacter2.cpp.obj"
 "C:\Users\Debora\Documents\Unreal Projects\LabyrinthOfCollosia\Intermediate\Build\Win64\UE4Editor\Development\LabyrinthOfCollosia\TlocEnemy.cpp.obj"
 "C:\Users\Debora\Documents\Unreal Projects\LabyrinthOfCollosia\Intermediate\Build\Win64\UE4Editor\Development\LabyrinthOfCollosia\TlocHumanPlayer.cpp.obj"
 "C:\Users\Debora\Documents\Unreal Projects\LabyrinthOfCollosia\Intermediate\Build\Win64\UE4Editor\Development\LabyrinthOfCollosia\TlocPlayer.cpp.obj"
@@ -49,7 +47,6 @@
 "C:\Users\Debora\Documents\Unreal Projects\LabyrinthOfCollosia\Intermediate\Build\Win64\UE4Editor\Development\LabyrinthOfCollosia\LabyrinthOfCollosiaGameModeBase.cpp.obj"
 "C:\Users\Debora\Documents\Unreal Projects\LabyrinthOfCollosia\Intermediate\Build\Win64\UE4Editor\Development\LabyrinthOfCollosia\LabyrinthOfCollosia.init.gen.cpp.obj"
 "C:\Users\Debora\Documents\Unreal Projects\LabyrinthOfCollosia\Intermediate\Build\Win64\UE4Editor\Development\LabyrinthOfCollosia\LabyrinthOfCollosiaGameModeBase.gen.cpp.obj"
-"C:\Users\Debora\Documents\Unreal Projects\LabyrinthOfCollosia\Intermediate\Build\Win64\UE4Editor\Development\LabyrinthOfCollosia\TlocCharacter2.gen.cpp.obj"
 "C:\Users\Debora\Documents\Unreal Projects\LabyrinthOfCollosia\Intermediate\Build\Win64\UE4Editor\Development\LabyrinthOfCollosia\TlocEnemy.gen.cpp.obj"
 "C:\Users\Debora\Documents\Unreal Projects\LabyrinthOfCollosia\Intermediate\Build\Win64\UE4Editor\Development\LabyrinthOfCollosia\TlocHumanPlayer.gen.cpp.obj"
 "C:\Users\Debora\Documents\Unreal Projects\LabyrinthOfCollosia\Intermediate\Build\Win64\UE4Editor\Development\LabyrinthOfCollosia\TlocObject.gen.cpp.obj"

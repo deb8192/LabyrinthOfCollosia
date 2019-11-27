@@ -18,7 +18,7 @@ public:
 
 	//Character's functions
 	void ModifyLife(float quantity);
-	//int  Attack();
+	int  Attack();
 	//int  Attack(TlocWeapon* _wp, ATlocEnemy* _enm);
 	int  Attack(TlocWeapon* _wp);
 	int Magic();

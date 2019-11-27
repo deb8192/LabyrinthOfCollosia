@@ -21,7 +21,7 @@ void EmptyLinkFunctionForGeneratedCodeLabyrinthOfCollosia_init() {}
 				nullptr,
 				0,
 				PKG_CompiledIn | 0x00000000,
-				0x4BA74EC1,
+				0x0E66935F,
 				0x54C25473,
 				METADATA_PARAMS(nullptr, 0)
 			};

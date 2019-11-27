@@ -13,9 +13,9 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 #endif
 #define LABYRINTHOFCOLLOSIA_TlocStateManager_generated_h
 
-#define LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_TlocStateManager_h_13_RPC_WRAPPERS
-#define LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_TlocStateManager_h_13_RPC_WRAPPERS_NO_PURE_DECLS
-#define LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_TlocStateManager_h_13_STANDARD_CONSTRUCTORS \
+#define LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_GameState_TlocStateManager_h_13_RPC_WRAPPERS
+#define LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_GameState_TlocStateManager_h_13_RPC_WRAPPERS_NO_PURE_DECLS
+#define LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_GameState_TlocStateManager_h_13_STANDARD_CONSTRUCTORS \
 	/** Standard constructor, called after all reflected properties have been initialized */ \
 	LABYRINTHOFCOLLOSIA_API UTlocStateManager(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()); \
 	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(UTlocStateManager) \
@@ -28,7 +28,7 @@ private: \
 public:
 
 
-#define LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_TlocStateManager_h_13_ENHANCED_CONSTRUCTORS \
+#define LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_GameState_TlocStateManager_h_13_ENHANCED_CONSTRUCTORS \
 	/** Standard constructor, called after all reflected properties have been initialized */ \
 	LABYRINTHOFCOLLOSIA_API UTlocStateManager(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()) : Super(ObjectInitializer) { }; \
 private: \
@@ -41,7 +41,7 @@ DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(UTlocStateManager); \
 	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(UTlocStateManager)
 
 
-#define LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_TlocStateManager_h_13_GENERATED_UINTERFACE_BODY() \
+#define LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_GameState_TlocStateManager_h_13_GENERATED_UINTERFACE_BODY() \
 private: \
 	static void StaticRegisterNativesUTlocStateManager(); \
 	friend struct Z_Construct_UClass_UTlocStateManager_Statics; \
@@ -50,22 +50,22 @@ public: \
 	DECLARE_SERIALIZER(UTlocStateManager)
 
 
-#define LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_TlocStateManager_h_13_GENERATED_BODY_LEGACY \
+#define LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_GameState_TlocStateManager_h_13_GENERATED_BODY_LEGACY \
 		PRAGMA_DISABLE_DEPRECATION_WARNINGS \
-	LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_TlocStateManager_h_13_GENERATED_UINTERFACE_BODY() \
-	LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_TlocStateManager_h_13_STANDARD_CONSTRUCTORS \
+	LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_GameState_TlocStateManager_h_13_GENERATED_UINTERFACE_BODY() \
+	LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_GameState_TlocStateManager_h_13_STANDARD_CONSTRUCTORS \
 	PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
 
-#define LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_TlocStateManager_h_13_GENERATED_BODY \
+#define LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_GameState_TlocStateManager_h_13_GENERATED_BODY \
 	PRAGMA_DISABLE_DEPRECATION_WARNINGS \
-	LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_TlocStateManager_h_13_GENERATED_UINTERFACE_BODY() \
-	LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_TlocStateManager_h_13_ENHANCED_CONSTRUCTORS \
+	LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_GameState_TlocStateManager_h_13_GENERATED_UINTERFACE_BODY() \
+	LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_GameState_TlocStateManager_h_13_ENHANCED_CONSTRUCTORS \
 private: \
 	PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
 
-#define LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_TlocStateManager_h_13_INCLASS_IINTERFACE_NO_PURE_DECLS \
+#define LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_GameState_TlocStateManager_h_13_INCLASS_IINTERFACE_NO_PURE_DECLS \
 protected: \
 	virtual ~ITlocStateManager() {} \
 public: \
@@ -74,7 +74,7 @@ public: \
 	virtual UObject* _getUObject() const { check(0 && "Missing required implementation."); return nullptr; }
 
 
-#define LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_TlocStateManager_h_13_INCLASS_IINTERFACE \
+#define LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_GameState_TlocStateManager_h_13_INCLASS_IINTERFACE \
 protected: \
 	virtual ~ITlocStateManager() {} \
 public: \
@@ -83,21 +83,21 @@ public: \
 	virtual UObject* _getUObject() const { check(0 && "Missing required implementation."); return nullptr; }
 
 
-#define LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_TlocStateManager_h_10_PROLOG
-#define LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_TlocStateManager_h_21_GENERATED_BODY_LEGACY \
+#define LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_GameState_TlocStateManager_h_10_PROLOG
+#define LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_GameState_TlocStateManager_h_21_GENERATED_BODY_LEGACY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_TlocStateManager_h_13_RPC_WRAPPERS \
-	LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_TlocStateManager_h_13_INCLASS_IINTERFACE \
+	LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_GameState_TlocStateManager_h_13_RPC_WRAPPERS \
+	LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_GameState_TlocStateManager_h_13_INCLASS_IINTERFACE \
 public: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
 
-#define LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_TlocStateManager_h_21_GENERATED_BODY \
+#define LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_GameState_TlocStateManager_h_21_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_TlocStateManager_h_13_RPC_WRAPPERS_NO_PURE_DECLS \
-	LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_TlocStateManager_h_13_INCLASS_IINTERFACE_NO_PURE_DECLS \
+	LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_GameState_TlocStateManager_h_13_RPC_WRAPPERS_NO_PURE_DECLS \
+	LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_GameState_TlocStateManager_h_13_INCLASS_IINTERFACE_NO_PURE_DECLS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
@@ -105,7 +105,7 @@ PRAGMA_ENABLE_DEPRECATION_WARNINGS
 template<> LABYRINTHOFCOLLOSIA_API UClass* StaticClass<class UTlocStateManager>();
 
 #undef CURRENT_FILE_ID
-#define CURRENT_FILE_ID LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_TlocStateManager_h
+#define CURRENT_FILE_ID LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_GameState_TlocStateManager_h
 
 
 PRAGMA_ENABLE_DEPRECATION_WARNINGS

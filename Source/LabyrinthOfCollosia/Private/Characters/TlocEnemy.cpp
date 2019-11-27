@@ -42,6 +42,63 @@ ATlocEnemy::ATlocEnemy(int idChrctr, int lvl, int lif, int att, int def, int mag
 
 ATlocEnemy::~ATlocEnemy()
 {
+	int size = 0;
+	for (size; size < _ingredients.size(); size++)
+	{
+		delete _ingredients[size];
+	}
+
+	size = 0;
+	for (size; size < _learnedSpells.size(); size++)
+	{
+		delete _learnedSpells[size];
+	}
+
+	size = 0;
+	for (size; size < _memorizedSpells.size(); size++)
+	{
+		delete _memorizedSpells[size];
+	}
+
+	size = 0;
+	for (size; size < _items.size(); size++)
+	{
+		for (int j = 0; j < _items[size].size(); j++)
+		{
+			delete _items[size][j];
+		}
+	}
+
+	size = 0;
+	for (size; size < _weapon.size(); size++)
+	{
+		delete _weapon[size];
+	}
+
+	size = 0;
+	for (size; size < _armor.size(); size++)
+	{
+		delete _armor[size];
+	}
+
+	size = 0;
+	for (size; size < _armor.size(); size++)
+	{
+		delete _gauntlet[size];
+	}
+
+	defending = false;
+
+	ID = 0;
+	level = 0;
+	life = defaultLife = 0;
+	attack = 0;
+	defense = 0;
+	magicDef = 0;
+	criticalHit = 0;
+	criticalProb = 0;
+	luck = 0;
+	evasion = 0;
 }
 
 // Called when the game starts or when spawned
@@ -65,12 +122,29 @@ void ATlocEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 
 }
 
+/***************************** Modify life **************************
+*** 	Function that adds the quantity parameter value to the   ****
+***	character's life. Quantity value may be positive or negative ****
+*********************************************************************
+*		In:
+*			float quantity
+*
+*		Out:
+*
+*/
 void ATlocEnemy::ModifyLife(float quantity)
 {
 	life += quantity;
-	if (life < 0)
+	if (life <= 0)
 	{
+		//Se muere
 		life = 0;
+	}
+	else if (quantity < 0)
+	{
+		GlobalConstants constants;
+		invulnerable = true;
+		invulnerableTime = constants.KINVULNERABLE_TIME;
 	}
 	else if (life > defaultLife)
 	{
@@ -78,16 +152,14 @@ void ATlocEnemy::ModifyLife(float quantity)
 	}
 }
 
-/************************** Attack **************************
-***	Function that calculates the damage the player will  ****
-***	cause to the enemies whom the player is attacking to ****
-*************************************************************
-*				In:
-*					TlocWeapon* wp  -> player's equiped weapon
-*					ATlocEnemy* enm -> attacked enemy
-*
-*				Out:
-*					int damage
+/*************************** Attack ***************************
+****  Function that calculates the damage the player will  ****
+****  cause to the enemies whom the player is attacking to ****
+***************************************************************
+*		In:
+*			
+*		Out:
+*			int damage
 *
 */
 int ATlocEnemy::Attack()
@@ -98,14 +170,13 @@ int ATlocEnemy::Attack()
 	int hitProbability = rand() % constants.KPERCENT;
 	if (hitProbability >= luck)
 	{
-		return -1;
+		return constants.KMINUS_ONE;
 	}
 	int critProbability = rand() % constants.KPERCENT;
 	if (critProbability < criticalProb)
 	{
 		damage *= criticalHit;
 	}
-	//_ply->ModifyLife(int(damage));
 
 	return int(damage);
 }

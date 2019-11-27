@@ -24,6 +24,15 @@ ATlocHumanPlayer::ATlocHumanPlayer(int idChrctr, int lvl, int lif, int att, int 
 ATlocHumanPlayer::~ATlocHumanPlayer()
 {
 	//PrimaryActorTick.bCanEverTick = false;
+	delete playerEquipment._weapon;
+	playerEquipment._weapon = NULL;
+
+	delete playerEquipment._armor;
+	playerEquipment._armor = NULL;
+
+	delete playerEquipment._gauntlet;
+	playerEquipment._gauntlet = NULL;
+
 }
 
 
@@ -53,9 +62,6 @@ ATlocHumanPlayer::Equipment ATlocHumanPlayer::GetPlayerEquipment()
 {
 	return playerEquipment;
 }
-
-
-//ESTAS FUNCIONES PUEDE QUE SE SUBAN A TLOCPLAYER (O INCLUSO A CHARACTER)
 
 void ATlocHumanPlayer::moveVertically(float value)
 {

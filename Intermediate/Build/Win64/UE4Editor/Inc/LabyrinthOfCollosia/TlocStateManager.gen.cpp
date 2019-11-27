@@ -5,7 +5,7 @@
 ===========================================================================*/
 
 #include "UObject/GeneratedCppIncludes.h"
-#include "LabyrinthOfCollosia/Public/TlocStateManager.h"
+#include "LabyrinthOfCollosia/Public/GameState/TlocStateManager.h"
 #ifdef _MSC_VER
 #pragma warning (push)
 #pragma warning (disable : 4883)
@@ -40,7 +40,7 @@ void EmptyLinkFunctionForGeneratedCodeTlocStateManager() {}
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UTlocStateManager_Statics::Class_MetaDataParams[] = {
-		{ "ModuleRelativePath", "Public/TlocStateManager.h" },
+		{ "ModuleRelativePath", "Public/GameState/TlocStateManager.h" },
 	};
 #endif
 	const FCppClassTypeInfoStatic Z_Construct_UClass_UTlocStateManager_Statics::StaticCppClassTypeInfo = {
@@ -70,7 +70,7 @@ void EmptyLinkFunctionForGeneratedCodeTlocStateManager() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UTlocStateManager, 1563556543);
+	IMPLEMENT_CLASS(UTlocStateManager, 575224199);
 	template<> LABYRINTHOFCOLLOSIA_API UClass* StaticClass<UTlocStateManager>()
 	{
 		return UTlocStateManager::StaticClass();

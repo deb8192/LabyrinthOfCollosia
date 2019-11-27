@@ -97,9 +97,6 @@
     <ClInclude Include="..\..\Source\LabyrinthOfCollosia\Public\GlobalConstants.h">
       <Filter>Source\LabyrinthOfCollosia\Public</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\LabyrinthOfCollosia\Public\TlocStateManager.h">
-      <Filter>Source\LabyrinthOfCollosia\Public</Filter>
-    </ClInclude>
     <Filter Include="Source\LabyrinthOfCollosia\Public\Characters">
       <UniqueIdentifier>{AB4ABB07-AE44-4EF4-A6B5-BA23A30A8221}</UniqueIdentifier>
     </Filter>
@@ -141,6 +138,27 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\LabyrinthOfCollosia\Public\Objects\TlocWeapon.h">
       <Filter>Source\LabyrinthOfCollosia\Public\Objects</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source\LabyrinthOfCollosia\Public\GameState">
+      <UniqueIdentifier>{854a470b-2ffc-484e-a8d8-73fadc87ba58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\LabyrinthOfCollosia\Private\GameState">
+      <UniqueIdentifier>{a3823445-4fb8-462f-8649-411a59cd6af3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Source\LabyrinthOfCollosia\Private\GameState\TlocStateManager.cpp">
+      <Filter>Source\LabyrinthOfCollosia\Private\GameState</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Source\LabyrinthOfCollosia\Public\GameState\TlocState.h">
+      <Filter>Source\LabyrinthOfCollosia\Public\GameState</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LabyrinthOfCollosia\Public\GameState\TlocStateManager.h">
+      <Filter>Source\LabyrinthOfCollosia\Public\GameState</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

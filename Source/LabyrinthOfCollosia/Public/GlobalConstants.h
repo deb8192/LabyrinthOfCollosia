@@ -14,9 +14,15 @@ using GlobalConstants = struct Constants
 
 	const int KROTATIONSPEED = 15;
 
+	//Return vlues
+
+	const int KZERO = 0;
+	const int KMINUS_ONE = -1;
+
 
 	//Default values
 
+	const float KINVULNERABLE_TIME = 1.5;
 	const int KBASICDAMAGE = 2;
 
 
