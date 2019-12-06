@@ -20,9 +20,25 @@ TlocPlayer::TlocPlayer()
 
 	defending = false;
 
+	//ID = idChrctr;
+	level = 1;
+	life = defaultLife = 50;
+	attack = 25;
+	defense = 15;
+	magicDef = 13;
+	criticalHit = 2;
+	criticalProb = 16;
+	luck = 75;
+	evasion = 25;
+
+	experience = 0;
+	nextLevel = 200;
+
 }
 
-TlocPlayer::TlocPlayer(int idChrctr, int lvl, int lif, int att, int def, int magdef, int exp, int nxtlvl, int crit, int critProb, int lck, int eva)
+//COMENTADO PARA EXPORTACIONES DE PROYECTO
+
+/*TlocPlayer::TlocPlayer(int idChrctr, int lvl, int lif, int att, int def, int magdef, int exp, int nxtlvl, int crit, int critProb, int lck, int eva)
 {
 	TlocPlayer();
 	ID = idChrctr;
@@ -39,7 +55,7 @@ TlocPlayer::TlocPlayer(int idChrctr, int lvl, int lif, int att, int def, int mag
 	experience = exp;
 	nextLevel = nxtlvl;
 
-}
+}*/
 
 TlocPlayer::~TlocPlayer()
 {
@@ -158,14 +174,33 @@ int TlocPlayer::Attack(TlocWeapon* _wp)
 		return constants.KMINUS_ONE;
 	}
 
-	float damage = constants.KBASICDAMAGE * (attack + _wp->GetAttack());
-
-	//If critProbability random value is lower than criticalProb, player hit will be critical
+	float damage = constants.KBASICDAMAGE;
 	int critProbability = rand() % constants.KPERCENT;
-	if (critProbability < criticalProb * _wp->GetCriticalProbabilityInc())
+
+	//If player posses a weapon
+	if (_wp != nullptr)
 	{
-		damage *= (criticalHit * _wp->GetCriticalDamageInc());
+		damage *= (attack + _wp->GetAttack());
+		//If critProbability random value is lower than criticalProb, player hit will be critical
+		if (critProbability < criticalProb * _wp->GetCriticalProbabilityInc())
+		{
+			damage *= (criticalHit * _wp->GetCriticalDamageInc());
+		}
 	}
+
+
+	//If player don't posses any weapon
+	else
+	{
+		damage *= attack;
+		//If critProbability random value is lower than criticalProb, player hit will be critical
+		if (critProbability < criticalProb)
+		{
+			damage *= criticalHit;
+		}
+	}
+
+	damage += rand() % 
 
 	return int(damage);
 }

@@ -2,12 +2,12 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "TlocObject.h"
 
 /**
  * 
  */
-class LABYRINTHOFCOLLOSIA_API TlocArmor
+class LABYRINTHOFCOLLOSIA_API TlocArmor : public ATlocObject
 {
 public:
 	TlocArmor();

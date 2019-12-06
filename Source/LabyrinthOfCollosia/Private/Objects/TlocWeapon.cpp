@@ -6,6 +6,7 @@
 
 TlocWeapon::TlocWeapon()
 {
+	
 }
 
 TlocWeapon::~TlocWeapon()

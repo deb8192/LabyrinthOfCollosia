@@ -3,7 +3,7 @@
   <ItemGroup>
     <None Include="..\..\LabyrinthOfCollosia.uproject" />
     <Filter Include="Source">
-      <UniqueIdentifier>{A537A97F-973A-499E-9B2F-597222272429}</UniqueIdentifier>
+      <UniqueIdentifier>{F470415D-3C27-47B5-BDE9-45E2E8298944}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Source\LabyrinthOfCollosia.Target.cs">
       <Filter>Source</Filter>
@@ -14,7 +14,7 @@
     <None Include="..\..\.gitattributes" />
     <None Include="..\..\.gitignore" />
     <Filter Include="Config">
-      <UniqueIdentifier>{7CF7E9EF-3442-44E3-9B83-FF2E24C15240}</UniqueIdentifier>
+      <UniqueIdentifier>{89C2E0C9-1EC8-4522-AC19-91FD36A4FCD3}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Config\DefaultEditor.ini">
       <Filter>Config</Filter>
@@ -29,7 +29,7 @@
       <Filter>Config</Filter>
     </None>
     <Filter Include="Source\LabyrinthOfCollosia">
-      <UniqueIdentifier>{4E2A1FD7-5554-47A4-B52A-E2258CCCDD68}</UniqueIdentifier>
+      <UniqueIdentifier>{8B3E3559-8325-4AF9-BBD9-CEDDA5C3E901}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Source\LabyrinthOfCollosia\LabyrinthOfCollosia.Build.cs">
       <Filter>Source\LabyrinthOfCollosia</Filter>
@@ -47,13 +47,10 @@
       <Filter>Source\LabyrinthOfCollosia</Filter>
     </ClInclude>
     <Filter Include="Source\LabyrinthOfCollosia\Private">
-      <UniqueIdentifier>{80DDD148-9DED-44AB-A27B-C1236997ABE9}</UniqueIdentifier>
+      <UniqueIdentifier>{BDA0A930-7098-4BCA-BEB1-DD29ED2E5105}</UniqueIdentifier>
     </Filter>
-    <ClCompile Include="..\..\Source\LabyrinthOfCollosia\Private\TlocStateManager.cpp">
-      <Filter>Source\LabyrinthOfCollosia\Private</Filter>
-    </ClCompile>
     <Filter Include="Source\LabyrinthOfCollosia\Private\Characters">
-      <UniqueIdentifier>{E46E46A1-8CBF-4F3E-8758-DB43B61B39C9}</UniqueIdentifier>
+      <UniqueIdentifier>{41E6997B-6269-497D-8F63-288E4AD6E4D3}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Source\LabyrinthOfCollosia\Private\Characters\TlocEnemy.cpp">
       <Filter>Source\LabyrinthOfCollosia\Private\Characters</Filter>
@@ -64,8 +61,14 @@
     <ClCompile Include="..\..\Source\LabyrinthOfCollosia\Private\Characters\TlocPlayer.cpp">
       <Filter>Source\LabyrinthOfCollosia\Private\Characters</Filter>
     </ClCompile>
+    <Filter Include="Source\LabyrinthOfCollosia\Private\GameState">
+      <UniqueIdentifier>{AA66A952-80C6-4885-94A3-89E18073375E}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\LabyrinthOfCollosia\Private\GameState\TlocGameStateBase.cpp">
+      <Filter>Source\LabyrinthOfCollosia\Private\GameState</Filter>
+    </ClCompile>
     <Filter Include="Source\LabyrinthOfCollosia\Private\Magic">
-      <UniqueIdentifier>{3D0F7ABB-FB31-4FA8-AFD7-32411C1109AB}</UniqueIdentifier>
+      <UniqueIdentifier>{3C7610AF-E730-44F7-A5D5-311E37F50CA8}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Source\LabyrinthOfCollosia\Private\Magic\TlocIngredients.cpp">
       <Filter>Source\LabyrinthOfCollosia\Private\Magic</Filter>
@@ -74,7 +77,7 @@
       <Filter>Source\LabyrinthOfCollosia\Private\Magic</Filter>
     </ClCompile>
     <Filter Include="Source\LabyrinthOfCollosia\Private\Objects">
-      <UniqueIdentifier>{2A764AD0-926D-400C-AF73-282C177A0D28}</UniqueIdentifier>
+      <UniqueIdentifier>{8D044C43-E9E3-482E-BCD1-89610FB3614B}</UniqueIdentifier>
     </Filter>
     <ClCompile Include="..\..\Source\LabyrinthOfCollosia\Private\Objects\TlocArmor.cpp">
       <Filter>Source\LabyrinthOfCollosia\Private\Objects</Filter>
@@ -92,13 +95,13 @@
       <Filter>Source\LabyrinthOfCollosia\Private\Objects</Filter>
     </ClCompile>
     <Filter Include="Source\LabyrinthOfCollosia\Public">
-      <UniqueIdentifier>{5640A911-9DA7-470D-94A0-19BDF5CF3344}</UniqueIdentifier>
+      <UniqueIdentifier>{9EE6144D-4E7F-41E0-97E5-A55AACF3691D}</UniqueIdentifier>
     </Filter>
     <ClInclude Include="..\..\Source\LabyrinthOfCollosia\Public\GlobalConstants.h">
       <Filter>Source\LabyrinthOfCollosia\Public</Filter>
     </ClInclude>
     <Filter Include="Source\LabyrinthOfCollosia\Public\Characters">
-      <UniqueIdentifier>{AB4ABB07-AE44-4EF4-A6B5-BA23A30A8221}</UniqueIdentifier>
+      <UniqueIdentifier>{AAD18B7F-4D81-4193-96C2-C7F96DE0B500}</UniqueIdentifier>
     </Filter>
     <ClInclude Include="..\..\Source\LabyrinthOfCollosia\Public\Characters\TlocCharacter.h">
       <Filter>Source\LabyrinthOfCollosia\Public\Characters</Filter>
@@ -112,8 +115,14 @@
     <ClInclude Include="..\..\Source\LabyrinthOfCollosia\Public\Characters\TlocPlayer.h">
       <Filter>Source\LabyrinthOfCollosia\Public\Characters</Filter>
     </ClInclude>
+    <Filter Include="Source\LabyrinthOfCollosia\Public\GameState">
+      <UniqueIdentifier>{667ACDDD-E120-4FB4-AE9E-1B9259BEC8C4}</UniqueIdentifier>
+    </Filter>
+    <ClInclude Include="..\..\Source\LabyrinthOfCollosia\Public\GameState\TlocGameStateBase.h">
+      <Filter>Source\LabyrinthOfCollosia\Public\GameState</Filter>
+    </ClInclude>
     <Filter Include="Source\LabyrinthOfCollosia\Public\Magic">
-      <UniqueIdentifier>{EF4D5534-D2BB-4199-AC24-45DD511942F3}</UniqueIdentifier>
+      <UniqueIdentifier>{410FDF78-7E24-4156-BDF4-A08FE42E8D8F}</UniqueIdentifier>
     </Filter>
     <ClInclude Include="..\..\Source\LabyrinthOfCollosia\Public\Magic\TlocIngredients.h">
       <Filter>Source\LabyrinthOfCollosia\Public\Magic</Filter>
@@ -122,7 +131,7 @@
       <Filter>Source\LabyrinthOfCollosia\Public\Magic</Filter>
     </ClInclude>
     <Filter Include="Source\LabyrinthOfCollosia\Public\Objects">
-      <UniqueIdentifier>{E77DF9D9-7C8B-4603-8346-87F6CF3047C9}</UniqueIdentifier>
+      <UniqueIdentifier>{3A1B4E0A-7164-4EF3-AE7A-95FF1E0A3D52}</UniqueIdentifier>
     </Filter>
     <ClInclude Include="..\..\Source\LabyrinthOfCollosia\Public\Objects\TlocArmor.h">
       <Filter>Source\LabyrinthOfCollosia\Public\Objects</Filter>
@@ -141,24 +150,20 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Source\LabyrinthOfCollosia\Public\GameState">
-      <UniqueIdentifier>{854a470b-2ffc-484e-a8d8-73fadc87ba58}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\LabyrinthOfCollosia\Private\GameState">
-      <UniqueIdentifier>{a3823445-4fb8-462f-8649-411a59cd6af3}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\Source\LabyrinthOfCollosia\Private\GameState\TlocStateManager.cpp">
-      <Filter>Source\LabyrinthOfCollosia\Private\GameState</Filter>
+    <ClCompile Include="..\..\SOURCE\LABYRINTHOFCOLLOSIA\PUBLIC\GAMESTATE\TLOCSTATE.CPP" />
+    <ClCompile Include="..\..\Source\LabyrinthOfCollosia\Private\TlocGameMode.cpp">
+      <Filter>Source\LabyrinthOfCollosia\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LabyrinthOfCollosia\Private\Characters\TlocDogPlayer.cpp">
+      <Filter>Source\LabyrinthOfCollosia\Private\Characters</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Source\LabyrinthOfCollosia\Public\GameState\TlocState.h">
-      <Filter>Source\LabyrinthOfCollosia\Public\GameState</Filter>
+    <ClInclude Include="..\..\Source\LabyrinthOfCollosia\Public\TlocGameMode.h">
+      <Filter>Source\LabyrinthOfCollosia\Public</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\LabyrinthOfCollosia\Public\GameState\TlocStateManager.h">
-      <Filter>Source\LabyrinthOfCollosia\Public\GameState</Filter>
+    <ClInclude Include="..\..\Source\LabyrinthOfCollosia\Public\Characters\TlocDogPlayer.h">
+      <Filter>Source\LabyrinthOfCollosia\Public\Characters</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

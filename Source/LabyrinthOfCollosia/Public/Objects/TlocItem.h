@@ -7,7 +7,7 @@
 /**
  *
  */
-class LABYRINTHOFCOLLOSIA_API TlocItem : ATlocObject
+class LABYRINTHOFCOLLOSIA_API TlocItem : public ATlocObject
 {
 public:
 	TlocItem();

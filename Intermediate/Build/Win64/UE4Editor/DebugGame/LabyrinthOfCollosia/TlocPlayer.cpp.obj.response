@@ -432,7 +432,7 @@
 /I "C:\Users\Debora\Documents\Unreal Projects\LabyrinthOfCollosia\Source\LabyrinthOfCollosia\Public\GameState"
 /I "C:\Users\Debora\Documents\Unreal Projects\LabyrinthOfCollosia\Source\LabyrinthOfCollosia\Public\Magic"
 /I "C:\Users\Debora\Documents\Unreal Projects\LabyrinthOfCollosia\Source\LabyrinthOfCollosia\Public\Objects"
-/I "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.21.27702\INCLUDE"
+/I "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.23.28105\INCLUDE"
 /I "C:\Program Files (x86)\Windows Kits\10\include\10.0.10586.0\ucrt"
 /I "C:\Program Files (x86)\Windows Kits\10\include\10.0.10586.0\shared"
 /I "C:\Program Files (x86)\Windows Kits\10\include\10.0.10586.0\um"

@@ -14,8 +14,10 @@ class LABYRINTHOFCOLLOSIA_API ATlocHumanPlayer : public ACharacter , public Tloc
 
 public:
 	// Sets default values for this character's properties
+
 	ATlocHumanPlayer();
-	ATlocHumanPlayer(int idChrctr, int lvl, int lif, int att, int def, int magdef, int exp, int nxtlvl, int crit, int critProb, int lck, int eva);
+	//NO ES INCORRECTO, PERO NO ES FUNCIONAL EN UNREAL ENGINE
+	//ATlocHumanPlayer(int idChrctr, int lvl, int lif, int att, int def, int magdef, int exp, int nxtlvl, int crit, int critProb, int lck, int eva);
 	~ATlocHumanPlayer();
 
 protected:
@@ -24,10 +26,13 @@ protected:
 
 private:
 
+
 	//Functions to move and rotate character
 	void moveVertically(float value);
 	void moveHorizontally(float value);
 	void rotateHorizontally(float value);
+
+	void attack();
 
 	//Variables
 	using Equipment = struct equipmentStructure
@@ -39,12 +44,18 @@ private:
 
 	Equipment playerEquipment;
 
+	//TEST
+	TSubclassOf<AActor> playerSpawn;
+
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	UFUNCTION()
+	void OnHumanActorHit(AActor* player, AActor* enemy);
 
 	//Getters
 	Equipment GetPlayerEquipment();

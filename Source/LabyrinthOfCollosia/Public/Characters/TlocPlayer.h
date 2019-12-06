@@ -2,6 +2,8 @@
 
 #pragma once
 
+
+#include <iostream>
 #include "TlocCharacter.h"
 //#include "TlocEnemy.h"
 
@@ -13,7 +15,8 @@ class LABYRINTHOFCOLLOSIA_API TlocPlayer : public TlocCharacter
 public:
 	// Sets default values for this actor's properties
 	TlocPlayer();
-	TlocPlayer(int idChrctr, int lvl, int lif, int att, int def, int magdef, int exp, int nxtlvl, int crit, int critProb, int lck, int eva);
+	//NO ES INCORRECTO, PERO NO ES FUNCIONAL EN UNREAL ENGINE
+	//TlocPlayer(int idChrctr, int lvl, int lif, int att, int def, int magdef, int exp, int nxtlvl, int crit, int critProb, int lck, int eva);
 	~TlocPlayer();
 
 	//Character's functions
