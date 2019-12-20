@@ -6,6 +6,8 @@
 
 #include "Characters/TlocEnemy.h"
 #include "Characters/TlocHumanPlayer.h"
+#include "Engine/World.h"
+#include "Engine/Scene.h"
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameMode.h"
@@ -28,8 +30,13 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	void Tick(float DeltaTime);
+
 private:
-	ATlocHumanPlayer* humanPlayer;
-	//std::vector<ATlocEnemy*> enemies;
+	ATlocHumanPlayer* _humanPlayer;
+	UWorld* _world;
+	//UScene* _scene;
+
+	std::vector<ATlocEnemy*> enemies;
 	
 };

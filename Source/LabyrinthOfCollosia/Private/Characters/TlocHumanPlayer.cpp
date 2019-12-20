@@ -4,15 +4,66 @@
 #include "../Public/Characters/TlocEnemy.h"
 #include "Engine/World.h"
 #include "../Public/GlobalConstants.h"
+#include "ConstructorHelpers.h"
+
+#include "Engine/Scene.h"
 
 // Sets default values
 ATlocHumanPlayer::ATlocHumanPlayer() : TlocPlayer()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	playerEquipment._weapon = NULL;
+	AutoPossessPlayer = EAutoReceiveInput::Player0;
+	playerEquipment._weapon = CreateDefaultSubobject<TlocWeapon>(TEXT("PlayerWeapon")); /* NewObject<TlocWeapon>();*/		//Calling the constructor to create a new TlocWeapon object
 	playerEquipment._armor = NULL;
 	playerEquipment._gauntlet = NULL;
+
+	enemy = NULL;
+
+	//MESH
+	
+	_charMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PlayerMesh"));
+	_charMesh->SetupAttachment(GetRootComponent());
+
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> PlayerMeshAsset(TEXT("/Game/Models/Characters/Hero-M.Hero-M"));
+
+	if (PlayerMeshAsset.Succeeded())
+	{
+		_charMesh->SetStaticMesh(PlayerMeshAsset.Object);
+		_charMesh->SetWorldScale3D(FVector(1.f));
+		_charMesh->SetRelativeLocation(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z - 90));
+		_charMesh->SetRelativeRotation(FRotator(GetActorRotation().Pitch, GetActorRotation().Yaw - 90, GetActorRotation().Roll));
+	}
+
+	//CAMERA
+
+	_playerCameraSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraSpringArm"));
+	_playerCameraSpringArm->SetupAttachment(GetRootComponent());
+	_playerCameraSpringArm->TargetArmLength = 250.f;
+
+	//Camera target arm
+	_playerCameraSpringArm->bEnableCameraLag = true;
+
+	_playerCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("PlayerCamera"));
+	_playerCamera->SetupAttachment(_playerCameraSpringArm, USpringArmComponent::SocketName);
+	_playerCameraSpringArm->SetRelativeLocationAndRotation(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z + 45.0), FRotator(-10.0f, 0.0f, 0.0f));
+
+	//playerEquipment._weapon->GetMesh()->SetupAttachment(GetRootComponent());
+
+	_wpnMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PlayerWeaponMesh"));
+
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> ObjectMeshAsset(playerEquipment._weapon->GetMeshFileRoot());
+
+	if (ObjectMeshAsset.Succeeded())
+	{
+		_wpnMesh->SetStaticMesh(ObjectMeshAsset.Object);
+		_wpnMesh->SetWorldScale3D(FVector(1.f));
+		_wpnMesh->SetupAttachment(GetRootComponent());
+		_wpnMesh->SetRelativeLocation(FVector(0.0f, 0.0f, 45.0f));
+		_wpnMesh->SetRelativeRotation(FRotator(-90.f, 0.0f, 0.0f));
+		_wpnMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
+	}
+
 
 }
 
@@ -26,13 +77,13 @@ ATlocHumanPlayer::ATlocHumanPlayer() : TlocPlayer()
 ATlocHumanPlayer::~ATlocHumanPlayer()
 {
 	PrimaryActorTick.bCanEverTick = false;
-	delete playerEquipment._weapon;
+	//delete playerEquipment._weapon;
 	playerEquipment._weapon = NULL;
 
-	delete playerEquipment._armor;
+	//delete playerEquipment._armor;
 	playerEquipment._armor = NULL;
 
-	delete playerEquipment._gauntlet;
+	//delete playerEquipment._gauntlet;
 	playerEquipment._gauntlet = NULL;
 
 
@@ -42,10 +93,10 @@ ATlocHumanPlayer::~ATlocHumanPlayer()
 // Called when the game starts or when spawned
 void ATlocHumanPlayer::BeginPlay()
 {
-	Super::BeginPlay();
-	GetWorld()->SpawnActor<AActor>(playerSpawn);
-	//OnActorHit.AddDynamic(this, &ATlocHumanPlayer::OnHumanActorHit);
-	
+	Super::BeginPlay();	
+
+	_wpnMesh->OnComponentBeginOverlap.AddDynamic(this, &ATlocHumanPlayer::OnHumanActorHit);
+	_wpnMesh->OnComponentEndOverlap.AddDynamic(this, &ATlocHumanPlayer::OnHumanActorStopHit);
 }
 
 // Called every frame
@@ -53,7 +104,15 @@ void ATlocHumanPlayer::Tick(float DeltaTime)
 {
 	//AddActorWorldOffset(FVector(0, 0, 0));
 	//AddActorLocalOffset(FVector(1, 0, 0));
-	//Super::Tick(DeltaTime);
+	Super::Tick(DeltaTime);
+
+	/*if (playerEquipment._weapon != NULL)
+	{
+		playerEquipment._weapon->SetPosition(GetActorLocation());
+	}*/
+
+	
+
 
 }
 
@@ -67,12 +126,22 @@ void ATlocHumanPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &ATlocHumanPlayer::attack);
 }
 
-void ATlocHumanPlayer::OnHumanActorHit(AActor *player, AActor *enemy)
+void ATlocHumanPlayer::OnHumanActorHit(UPrimitiveComponent* _weaponMesh, AActor* Other, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& Hit)
 {
-	int damage = this->Attack();
-	ATlocEnemy *tlocEnemy = Cast<ATlocEnemy>(enemy);
-	tlocEnemy->ModifyLife(damage);
+	if (!attacking)
+	{
+		attacking = true;
+		enemy = Other;
+	}
+}
 
+void ATlocHumanPlayer::OnHumanActorStopHit(UPrimitiveComponent* _weaponMesh, AActor* Other, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	if (attacking)
+	{
+		attacking = false;
+		enemy = NULL;
+	}
 }
 
 ATlocHumanPlayer::Equipment ATlocHumanPlayer::GetPlayerEquipment()
@@ -100,6 +169,17 @@ void ATlocHumanPlayer::rotateHorizontally(float value)
 
 void ATlocHumanPlayer::attack()
 {
-	Attack(playerEquipment._weapon);
+	if (attacking)
+	{
+		GlobalConstants constants;
+		int damage = this->Attack(playerEquipment._weapon);
+		if (damage != constants.KMINUS_ONE)
+		{
+			ATlocEnemy* tlocEnemy = Cast<ATlocEnemy>(enemy);
+			tlocEnemy->ModifyLife(-damage);
+		}
+		attacking = false;
+		enemy = NULL;
+	}
 }
 

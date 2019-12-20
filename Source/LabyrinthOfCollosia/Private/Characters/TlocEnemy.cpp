@@ -3,6 +3,7 @@
 
 #include "TlocEnemy.h"
 #include "../Public/GlobalConstants.h"
+#include "ConstructorHelpers.h"
 
 
 // Sets default values
@@ -20,8 +21,48 @@ ATlocEnemy::ATlocEnemy()
 	_armor.reserve(constants.KMAXARMORS);
 	_gauntlet.reserve(constants.KMAXGAUNTLETS);
 
+	attacking = false;
 	defending = false;
 
+	//ID = idChrctr;
+	level = 1;
+	life = defaultLife = 50;
+	attack = 25;
+	defense = 15;
+	magicDef = 13;
+	criticalHit = 2;
+	criticalProb = 16;
+	luck = 75;
+	evasion = 25;
+	
+	for (int i = 0; i < std::size(defaultPosition); i++)
+	{
+		defaultPosition[i] = 0.0;
+	}
+
+	USceneComponent* _rootComponent = CreateDefaultSubobject<USceneComponent>("RootEnemy");
+
+	_charMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("enemyMesh"));
+	_charMesh->SetupAttachment(_rootComponent); 
+	_auxCharMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("auxEnemyMesh"));
+	_auxCharMesh->SetupAttachment(_rootComponent);
+
+
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshAsset(TEXT("/Game/Models/Characters/GuideMonk_Cube_000.GuideMonk_Cube_000"));
+
+	if (MeshAsset.Succeeded())
+	{
+		_charMesh->SetStaticMesh(MeshAsset.Object);
+		_charMesh->SetWorldScale3D(FVector(1.f));
+	}
+
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> auxMeshAsset(TEXT("/Game/Models/Characters/GuideMonk_Cube_001.GuideMonk_Cube_001"));
+
+	if (auxMeshAsset.Succeeded())
+	{
+		_auxCharMesh->SetStaticMesh(auxMeshAsset.Object);
+		_auxCharMesh->SetWorldScale3D(FVector(1.f));
+	}
 }
 
 ATlocEnemy::ATlocEnemy(int idChrctr, int lvl, int lif, int att, int def, int magdef, int crit, int critProb, int lck, int eva)
@@ -45,7 +86,10 @@ ATlocEnemy::~ATlocEnemy()
 	int size = 0;
 	for (size; size < _ingredients.size(); size++)
 	{
-		delete _ingredients[size];
+		for (int j = 0; j < _ingredients[size].size(); j++)
+		{
+			delete _ingredients[size][j];
+		}
 	}
 
 	size = 0;
@@ -105,6 +149,13 @@ ATlocEnemy::~ATlocEnemy()
 void ATlocEnemy::BeginPlay()
 {
 	Super::BeginPlay();
+
+	AddActorLocalOffset(FVector(0.0f, 0.0f, 0.0f), true);
+
+	_charMesh->SetRelativeLocation(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z - 90));
+	_charMesh->SetRelativeRotation(FRotator(GetActorRotation().Pitch, GetActorRotation().Yaw, GetActorRotation().Roll));
+	_auxCharMesh->SetRelativeLocation(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z - 90));
+	_auxCharMesh->SetRelativeRotation(FRotator(GetActorRotation().Pitch, GetActorRotation().Yaw, GetActorRotation().Roll));
 	
 }
 
@@ -112,6 +163,7 @@ void ATlocEnemy::BeginPlay()
 void ATlocEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
 
 }
 
@@ -205,5 +257,10 @@ void ATlocEnemy::Defend()
 bool ATlocEnemy::GetDefend()
 {
 	return defending;
+}
+
+int ATlocEnemy::GetLife()
+{
+	return life;
 }
 

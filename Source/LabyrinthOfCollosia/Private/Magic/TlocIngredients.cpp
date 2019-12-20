@@ -10,3 +10,7 @@ TlocIngredients::TlocIngredients()
 TlocIngredients::~TlocIngredients()
 {
 }
+int TlocIngredients::GetID()
+{
+	return ID;
+}

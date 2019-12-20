@@ -18,6 +18,7 @@ TlocPlayer::TlocPlayer()
 	_armor.reserve(constants.KMAXARMORS);	
 	_gauntlet.reserve(constants.KMAXGAUNTLETS);			
 
+	attacking = false;
 	defending = false;
 
 	//ID = idChrctr;
@@ -30,9 +31,15 @@ TlocPlayer::TlocPlayer()
 	criticalProb = 16;
 	luck = 75;
 	evasion = 25;
+	
+	for (int i = 0; i < std::size(defaultPosition); i++)
+	{
+		defaultPosition[i] = 0.0;
+	}
 
 	experience = 0;
 	nextLevel = 200;
+
 
 }
 
@@ -60,48 +67,94 @@ TlocPlayer::TlocPlayer()
 TlocPlayer::~TlocPlayer()
 {
 	int size = 0;
-	for (size; size < _ingredients.size(); size++)
-	{
-		delete _ingredients[size];
-	}
 
-	size = 0;
-	for (size; size < _learnedSpells.size(); size++)
+	if (!_ingredients.empty())
 	{
-		delete _learnedSpells[size];
-	}
-
-	size = 0;
-	for (size; size < _memorizedSpells.size(); size++)
-	{
-		delete _memorizedSpells[size];
-	}
-
-	size = 0;
-	for (size; size < _items.size(); size++)
-	{
-		for (int j = 0; j < _items[size].size(); j++)
+		for (size; size < _ingredients.size(); size++)
 		{
-			delete _items[size][j];
+			if (!_ingredients[size].empty())
+			{
+				for (int j = 0; j < _ingredients[size].size(); j++)
+				{
+					delete _ingredients[size][j];
+				}
+			}
 		}
 	}
 
 	size = 0;
-	for (size; size < _weapon.size(); size++)
+	if (!_learnedSpells.empty())
 	{
-		delete _weapon[size];
+		for (size; size < _learnedSpells.size(); size++)
+		{
+			if (_learnedSpells[size] != nullptr)
+			{
+				delete _learnedSpells[size];
+			}
+		}
 	}
 
 	size = 0;
-	for (size; size < _armor.size(); size++)
+	if (!_memorizedSpells.empty())
 	{
-		delete _armor[size];
+		for (size; size < _memorizedSpells.size(); size++)
+		{
+			if (_memorizedSpells[size] != nullptr)
+			{
+				delete _memorizedSpells[size];
+			}
+		}
 	}
 
 	size = 0;
-	for (size; size < _armor.size(); size++)
+	if (!_items.empty())
 	{
-		delete _gauntlet[size];
+		for (size; size < _items.size(); size++)
+		{
+			if (!_items[size].empty())
+			{
+				for (int j = 0; j < _items[size].size(); j++)
+				{
+					delete _items[size][j];
+				}
+			}
+		}
+	}
+
+	size = 0;
+	if (!_weapon.empty())
+	{
+		for (size; size < _weapon.size(); size++)
+		{
+			if (_weapon[size] != nullptr)
+			{
+				delete _weapon[size];
+			}
+		}
+	}
+
+	size = 0;
+	if (!_armor.empty())
+	{
+		for (size; size < _armor.size(); size++)
+		{
+			if (_armor[size] != nullptr)
+			{
+				delete _armor[size];
+			}
+		}
+	}
+
+	size = 0;
+	if (!_gauntlet.empty())
+	{
+		for (size; size < _gauntlet.size(); size++)
+		{
+			if (_gauntlet[size] != nullptr)
+			{
+				delete _gauntlet[size];
+			}
+		}
 	}
 
 	defending = false;
@@ -200,7 +253,7 @@ int TlocPlayer::Attack(TlocWeapon* _wp)
 		}
 	}
 
-	damage += rand() % 
+	damage += rand() % constants.KMAX_VARIABLE_DAMAGE + constants.KMIN_VARIABLE_DAMAGE;
 
 	return int(damage);
 }
@@ -226,9 +279,83 @@ void TlocPlayer::Defend()
 {
 }
 
+/************************** Take Object **************************
+***  Function that push the object taken from the game stage  ****
+***	into its correspondant array according to the object type ****
+******************************************************************
+*				In:
+*					ATlocObject* _obj  -> stage's taken object
+*
+*				Out:
+*
+*/
+void TlocPlayer::TakeObject(ATlocObject* _obj)
+{
+	if (_obj != nullptr)
+	{
+		//It obtains _obj's child class and identifies which one is it's child class
+		if (dynamic_cast<TlocWeapon*>(_obj))
+		{
+			TlocWeapon* _wpn = (TlocWeapon*)_obj;
+			_weapon.push_back(_wpn);
+		}
+		else if (dynamic_cast<TlocGauntlet*>(_obj))
+		{
+			TlocGauntlet* _glt = (TlocGauntlet*)_obj;
+			_gauntlet.push_back(_glt);
+		}
+		else if (dynamic_cast<TlocArmor*>(_obj))
+		{
+			TlocArmor* _arm = (TlocArmor*)_obj;
+			_armor.push_back(_arm);
+		}
+		else if (dynamic_cast<TlocIngredients*>(_obj))
+		{
+			TlocIngredients* _ing = (TlocIngredients*)_obj;
+			GlobalConstants constants;
+			int i = 0;
+			while (i < _ingredients.size())
+			{
+				if (_ingredients[i].front() != nullptr && _ingredients[i].front()->GetID() == _ing->GetID())
+				{
+					_ingredients[i].push_back(_ing);
+					i = _ingredients.size();
+				}
+				else
+				{
+					i++;
+				}
+			}
+		}
+		else if (dynamic_cast<TlocItem*>(_obj))
+		{
+			TlocItem* _itm = (TlocItem*)_obj;
+			GlobalConstants constants;
+			int i = 0;
+			while (i < _items.size())
+			{
+				if (_items[i].front() != nullptr && _items[i].front() == _itm)
+				{
+					_items[i].push_back(_itm);
+					i = _items.size();
+				}
+				else
+				{
+					i++;
+				}
+			}
+		}
+	}
+}
+
 bool TlocPlayer::GetDefend()
 {
 	return defending;
+}
+
+int TlocPlayer::GetLife()
+{
+	return life;
 }
 
 

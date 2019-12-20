@@ -4,6 +4,7 @@
 
 #include "TlocPlayer.h"
 
+#include <Runtime\Engine\Classes\GameFramework\SpringArmComponent.h>
 #include "GameFramework/Character.h"
 #include "TlocHumanPlayer.generated.h"
 
@@ -43,9 +44,16 @@ private:
 	};
 
 	Equipment playerEquipment;
+	AActor* enemy;
+
+
+	UPROPERTY(VisibleAnywhere)
+	UCameraComponent* _playerCamera; 
+	UPROPERTY(VisibleAnywhere)
+	USpringArmComponent* _playerCameraSpringArm;
 
 	//TEST
-	TSubclassOf<AActor> playerSpawn;
+	//TSubclassOf<AActor> playerSpawn;
 
 public:
 	// Called every frame
@@ -55,7 +63,9 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UFUNCTION()
-	void OnHumanActorHit(AActor* player, AActor* enemy);
+	void OnHumanActorHit(UPrimitiveComponent* _weaponMesh, AActor* Other, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& Hit);
+	UFUNCTION()
+	void OnHumanActorStopHit(UPrimitiveComponent* _weaponMesh, AActor* Other, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 	//Getters
 	Equipment GetPlayerEquipment();

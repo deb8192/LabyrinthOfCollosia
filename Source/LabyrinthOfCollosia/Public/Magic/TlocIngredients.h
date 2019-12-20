@@ -8,9 +8,13 @@
 /**
  * 
  */
-class LABYRINTHOFCOLLOSIA_API TlocIngredients
+class LABYRINTHOFCOLLOSIA_API TlocIngredients : public ATlocObject
 {
 public:
 	TlocIngredients();
 	~TlocIngredients();
+	int GetID();
+
+private:
+	int ID;
 };

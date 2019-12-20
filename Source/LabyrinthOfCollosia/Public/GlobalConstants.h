@@ -24,6 +24,8 @@ using GlobalConstants = struct Constants
 
 	const float KINVULNERABLE_TIME = 1.5;
 	const int KBASICDAMAGE = 2;
+	const int KMAX_VARIABLE_DAMAGE = 5;
+	const int KMIN_VARIABLE_DAMAGE = -2;
 
 
 	//Max number of

@@ -3,27 +3,57 @@
 
 #include "TlocGameMode.h"
 #include <iostream>
-#include "Engine/World.h"
 
 ATlocGameMode::ATlocGameMode()
 {
-	//humanPlayer = CreateNewObject;
-	DefaultPawnClass = ATlocHumanPlayer::StaticClass();
-	//DefaultPawnClass->
+	_world = GetWorld();								//Get the world to manage it
+	DefaultPawnClass = ATlocHumanPlayer::StaticClass();	//Associate player's pawn with player's default class
+
+	enemies.reserve(30);
+
+	PrimaryActorTick.bCanEverTick = true;
 }
 
 ATlocGameMode::~ATlocGameMode()
 {
+	PrimaryActorTick.bCanEverTick = false;
 }
 
 void ATlocGameMode::BeginPlay()
 {
 	Super::BeginPlay();
-	//GEngine->AddOnScreenDebugMessage(-1, -1, FColor::Red, TEXT("Actor Spawning"));
 
-	FTransform *SpawnLocation = new FTransform(FVector(20, 0, 0));
-	//humanPlayer = new ATlocHumanPlayer(0, 1, 50, 25, 20, 15, 0, 100, 2, 15, 75, 35);
-	GetWorld()->SpawnActor(ATlocHumanPlayer::StaticClass(), SpawnLocation);
+	const FActorSpawnParameters SpawnParam = FActorSpawnParameters();
+	const FVector SpawnLocation = FVector(600, 0, 130);
+
+	const FTransform transform = FTransform(FQuat(FRotator(0, -90, 0)), SpawnLocation, FVector(1, 1, 1));
+	
+	//_humanPlayer = DefaultPawnClass.GetDefaultObject();
+
+	enemies.push_back(_world->SpawnActor<ATlocEnemy>(ATlocEnemy::StaticClass(), transform, SpawnParam));
+
+
+
+	/*
+	PlayerControllerClass.GetDefaultObject()->UnPossess();
+	PlayerControllerClass.GetDefaultObject()->Possess(_humanPlayer);*/
+}
+
+// Called every frame
+void ATlocGameMode::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+
+	enemies[0]->AddActorWorldOffset(FVector(0.0f, 0.0f, 0.0f), true);
+
+	if (enemies[0]->GetLife() <= 0)
+	{
+		enemies[0]->Destroy();
+	}
+
+
+
 }
 
 

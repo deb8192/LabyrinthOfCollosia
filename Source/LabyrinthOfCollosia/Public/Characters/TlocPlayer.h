@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include "TlocCharacter.h"
+#include "Camera/CameraComponent.h"
 //#include "TlocEnemy.h"
 
 /**
@@ -29,6 +30,11 @@ public:
 	void Talk();
 	void Move();
 	void Defend();
+	// Getters
+	bool GetDefend();
+	int GetLife();
+
+	void TakeObject(ATlocObject *obj);
 
 private:
 	
@@ -36,8 +42,5 @@ private:
 	int nextLevel;				//Necessary experience to reach next level
 	int experience;				//Player experience
 
-public:
-
-	bool GetDefend();
 
 };
