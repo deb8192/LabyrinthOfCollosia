@@ -2,13 +2,12 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
 #include "TlocObject.h"
 
 /**
  * 
  */
-class LABYRINTHOFCOLLOSIA_API TlocWeapon
+class LABYRINTHOFCOLLOSIA_API TlocWeapon : public ATlocObject
 {
 private:
 	//Weapon privated functions

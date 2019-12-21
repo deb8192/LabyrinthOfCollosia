@@ -18,11 +18,34 @@ TlocPlayer::TlocPlayer()
 	_armor.reserve(constants.KMAXARMORS);	
 	_gauntlet.reserve(constants.KMAXGAUNTLETS);			
 
+	attacking = false;
 	defending = false;
+
+	//ID = idChrctr;
+	level = 1;
+	life = defaultLife = 75;
+	attack = 25;
+	defense = 15;
+	magicDef = 13;
+	criticalHit = 2;
+	criticalProb = 16;
+	luck = 75;
+	evasion = 25;
+	
+	for (int i = 0; i < std::size(defaultPosition); i++)
+	{
+		defaultPosition[i] = 0.0;
+	}
+
+	experience = 0;
+	nextLevel = 200;
+
 
 }
 
-TlocPlayer::TlocPlayer(int idChrctr, int lvl, int lif, int att, int def, int magdef, int exp, int nxtlvl, int crit, int critProb, int lck, int eva)
+//COMENTADO PARA EXPORTACIONES DE PROYECTO
+
+/*TlocPlayer::TlocPlayer(int idChrctr, int lvl, int lif, int att, int def, int magdef, int exp, int nxtlvl, int crit, int critProb, int lck, int eva)
 {
 	TlocPlayer();
 	ID = idChrctr;
@@ -39,18 +62,131 @@ TlocPlayer::TlocPlayer(int idChrctr, int lvl, int lif, int att, int def, int mag
 	experience = exp;
 	nextLevel = nxtlvl;
 
-}
+}*/
 
 TlocPlayer::~TlocPlayer()
 {
+	int size = 0;
+
+	if (!_ingredients.empty())
+	{
+		for (size; size < _ingredients.size(); size++)
+		{
+			if (!_ingredients[size].empty())
+			{
+				for (int j = 0; j < _ingredients[size].size(); j++)
+				{
+					delete _ingredients[size][j];
+				}
+			}
+		}
+	}
+
+	size = 0;
+	if (!_learnedSpells.empty())
+	{
+		for (size; size < _learnedSpells.size(); size++)
+		{
+			if (_learnedSpells[size] != nullptr)
+			{
+				delete _learnedSpells[size];
+			}
+		}
+	}
+
+	size = 0;
+	if (!_memorizedSpells.empty())
+	{
+		for (size; size < _memorizedSpells.size(); size++)
+		{
+			if (_memorizedSpells[size] != nullptr)
+			{
+				delete _memorizedSpells[size];
+			}
+		}
+	}
+
+	size = 0;
+	if (!_items.empty())
+	{
+		for (size; size < _items.size(); size++)
+		{
+			if (!_items[size].empty())
+			{
+				for (int j = 0; j < _items[size].size(); j++)
+				{
+					delete _items[size][j];
+				}
+			}
+		}
+	}
+
+	size = 0;
+	if (!_weapon.empty())
+	{
+		for (size; size < _weapon.size(); size++)
+		{
+			if (_weapon[size] != nullptr)
+			{
+				delete _weapon[size];
+			}
+		}
+	}
+
+	size = 0;
+	if (!_armor.empty())
+	{
+		for (size; size < _armor.size(); size++)
+		{
+			if (_armor[size] != nullptr)
+			{
+				delete _armor[size];
+			}
+		}
+	}
+
+	size = 0;
+	if (!_gauntlet.empty())
+	{
+		for (size; size < _gauntlet.size(); size++)
+		{
+			if (_gauntlet[size] != nullptr)
+			{
+				delete _gauntlet[size];
+			}
+		}
+	}
+
+	defending = false;
+
+	ID = 0;
+	level = 0;
+	life = defaultLife = 0;
+	attack = 0;
+	defense = 0;
+	magicDef = 0;
+	criticalHit = 0;
+	criticalProb = 0;
+	luck = 0;
+	evasion = 0;
+
+	experience = 0;
+	nextLevel = 0;
 }
 
 void TlocPlayer::ModifyLife(float quantity)
 {
 	life += quantity;
-	if (life < 0)
+	if (life <= 0)
 	{
+		//Se muere, se acaba la partida
 		life = 0;
+	}
+	else if (quantity < 0)
+	{
+		GlobalConstants constants;
+		invulnerable = true;
+		invulnerableTime = constants.KINVULNERABLE_TIME;
 	}
 	else if (life > defaultLife)
 	{
@@ -58,10 +194,18 @@ void TlocPlayer::ModifyLife(float quantity)
 	}
 }
 
-/*int TlocPlayer::Attack()
+int TlocPlayer::Attack()
 {
-	return 0;
-}*/
+	GlobalConstants constants;
+
+	//If hitProbability random value is bigger than luck, player will miss the attack
+	int hitProbability = rand() % constants.KPERCENT;
+	if (hitProbability >= luck)
+	{
+		return constants.KMINUS_ONE;
+	}
+	return constants.KZERO;
+}
 
 /************************** Attack **************************
 ***	Function that calculates the damage that player will ****
@@ -69,7 +213,6 @@ void TlocPlayer::ModifyLife(float quantity)
 *************************************************************
 *				In: 
 *					TlocWeapon* wp  -> player's equiped weapon
-*					ATlocEnemy* enm -> attacked enemy
 *
 *				Out:
 *					int damage -> attack damage
@@ -78,21 +221,39 @@ void TlocPlayer::ModifyLife(float quantity)
 int TlocPlayer::Attack(TlocWeapon* _wp)
 {
 	GlobalConstants constants;
-	float damage = constants.KBASICDAMAGE * (attack + _wp->GetAttack());
 
-	//If hitProbability random value is bigger than luck, player will miss the attack
-	int hitProbability = rand() % constants.KPERCENT;
-	if (hitProbability >= luck)
+	if(Attack() == constants.KMINUS_ONE)
 	{
-		return -1;
+		return constants.KMINUS_ONE;
 	}
 
-	//If critProbability random value is lower than criticalProb, player hit will be critical
+	float damage = constants.KBASICDAMAGE;
 	int critProbability = rand() % constants.KPERCENT;
-	if (critProbability < criticalProb * _wp->GetCriticalProbabilityInc())
+
+	//If player posses a weapon
+	if (_wp != nullptr)
 	{
-		damage *= (criticalHit * _wp->GetCriticalDamageInc());
+		damage *= (attack + _wp->GetAttack());
+		//If critProbability random value is lower than criticalProb, player hit will be critical
+		if (critProbability < criticalProb * _wp->GetCriticalProbabilityInc())
+		{
+			damage *= (criticalHit * _wp->GetCriticalDamageInc());
+		}
 	}
+
+
+	//If player don't posses any weapon
+	else
+	{
+		damage *= attack;
+		//If critProbability random value is lower than criticalProb, player hit will be critical
+		if (critProbability < criticalProb)
+		{
+			damage *= criticalHit;
+		}
+	}
+
+	damage += rand() % constants.KMAX_VARIABLE_DAMAGE + constants.KMIN_VARIABLE_DAMAGE;
 
 	return int(damage);
 }
@@ -122,4 +283,10 @@ bool TlocPlayer::GetDefend()
 {
 	return defending;
 }
+
+int TlocPlayer::GetLife()
+{
+	return life;
+}
+
 

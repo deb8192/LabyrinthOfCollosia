@@ -31,6 +31,7 @@ public:
 
 	//Getters
 	bool GetDefend();
+	int GetLife();
 
 protected:
 	// Called when the game starts or when spawned
@@ -42,5 +43,9 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+private:
+
+	UStaticMeshComponent* _auxCharMesh;
 
 };

@@ -4,12 +4,26 @@
 #include "../Public/Objects/TlocWeapon.h"
 #include "../Public/GlobalConstants.h"
 
-TlocWeapon::TlocWeapon()
+TlocWeapon::TlocWeapon() : ATlocObject()
 {
+	attack = 5;
+	level = 1;
+	experience = 0;
+	nextLevelExp = 100;
+	criticalDamageInc = 1.25;
+	criticalProbabilityInc = 10;
+	longRange = false;
 }
 
 TlocWeapon::~TlocWeapon()
 {
+	attack = 0;
+	level = 0;
+	experience = 0;
+	nextLevelExp = 0;
+	criticalDamageInc = 0.0;
+	criticalProbabilityInc = 0;
+	longRange = false;
 }
 void TlocWeapon::incLevel()
 {

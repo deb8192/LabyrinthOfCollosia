@@ -23,9 +23,10 @@ class LABYRINTHOFCOLLOSIA_API TlocCharacter
 public:
 
 	// Called when the game starts or when spawned
+	//virtual ~TlocCharacter() = 0;
 
 	virtual void ModifyLife(float quantity) = 0;				//Adds or substracts as many as quantity value is
-	//virtual int Attack() = 0;	//Calculates hit damage
+	virtual int Attack() = 0;									//Calculates hit damage
 	virtual int Magic() = 0;									//Calculates magic damage
 	virtual void Transact() = 0;								//Function for buying or selling objects
 	virtual void Talk() = 0;									//Function to talk with anyone
@@ -34,6 +35,7 @@ public:
 
 	// Getters
 	virtual bool GetDefend() = 0;
+	virtual int GetLife() = 0;
 
 
 protected:
@@ -50,7 +52,11 @@ protected:
 	int evasion;									//Character hit evade probability
 	int luck;										//Character hit probability
 	bool defending;									//Character defending state
-	std::vector<TlocIngredients*> _ingredients;		//Character ingredient list
+	bool attacking;									//Character attacking state
+	bool invulnerable;
+	float invulnerableTime;
+	float defaultPosition[3];
+	std::vector<std::vector<TlocIngredients*>> _ingredients;		//Character ingredient list
 	std::vector<TlocSpell*> _learnedSpells;			//Character learned spell list
 	std::vector<TlocSpell*> _memorizedSpells;		//Character memorized spell list from the learned spell list
 	std::vector<std::vector<TlocItem*>> _items;		//Character menu items
@@ -59,4 +65,9 @@ protected:
 	std::vector<TlocGauntlet*> _gauntlet;			//Character gauntlets
 	std::queue<int> _buffsAilments;					//Character active buffs or ailments
 	std::queue<float> buffsAilmentsTime;			//Character active buffs or ailments' time
+
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent *_charMesh;
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* _wpnMesh;
 };

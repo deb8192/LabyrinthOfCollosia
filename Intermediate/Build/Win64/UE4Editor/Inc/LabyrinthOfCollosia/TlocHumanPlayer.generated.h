@@ -8,13 +8,38 @@
 #include "UObject/ScriptMacros.h"
 
 PRAGMA_DISABLE_DEPRECATION_WARNINGS
+class AActor;
 #ifdef LABYRINTHOFCOLLOSIA_TlocHumanPlayer_generated_h
 #error "TlocHumanPlayer.generated.h already included, missing '#pragma once' in TlocHumanPlayer.h"
 #endif
 #define LABYRINTHOFCOLLOSIA_TlocHumanPlayer_generated_h
 
-#define LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_Characters_TlocHumanPlayer_h_13_RPC_WRAPPERS
-#define LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_Characters_TlocHumanPlayer_h_13_RPC_WRAPPERS_NO_PURE_DECLS
+#define LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_Characters_TlocHumanPlayer_h_13_RPC_WRAPPERS \
+ \
+	DECLARE_FUNCTION(execOnHumanActorHit) \
+	{ \
+		P_GET_OBJECT(AActor,Z_Param_player); \
+		P_GET_OBJECT(AActor,Z_Param_enemy); \
+		P_FINISH; \
+		P_NATIVE_BEGIN; \
+		P_THIS->OnHumanActorHit(Z_Param_player,Z_Param_enemy); \
+		P_NATIVE_END; \
+	}
+
+
+#define LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_Characters_TlocHumanPlayer_h_13_RPC_WRAPPERS_NO_PURE_DECLS \
+ \
+	DECLARE_FUNCTION(execOnHumanActorHit) \
+	{ \
+		P_GET_OBJECT(AActor,Z_Param_player); \
+		P_GET_OBJECT(AActor,Z_Param_enemy); \
+		P_FINISH; \
+		P_NATIVE_BEGIN; \
+		P_THIS->OnHumanActorHit(Z_Param_player,Z_Param_enemy); \
+		P_NATIVE_END; \
+	}
+
+
 #define LabyrinthOfCollosia_Source_LabyrinthOfCollosia_Public_Characters_TlocHumanPlayer_h_13_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesATlocHumanPlayer(); \

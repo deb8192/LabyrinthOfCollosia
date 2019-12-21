@@ -43,6 +43,11 @@ Generated\ Files/
 *.VisualState.xml
 TestResult.xml
 
+# Project temporary files
+[Bb]inaries\
+[Ii]ntermiediate\
+[Ss]aved\
+
 # Build Results of an ATL Project
 [Dd]ebugPS/
 [Rr]eleasePS/
@@ -338,3 +343,4 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+/Binaries/Win64
