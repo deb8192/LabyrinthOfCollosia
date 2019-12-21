@@ -18,7 +18,7 @@ ATlocHumanPlayer::ATlocHumanPlayer() : TlocPlayer()
 	playerEquipment._armor = NULL;
 	playerEquipment._gauntlet = NULL;
 
-	enemy = NULL;
+	_enemy = NULL;
 
 	//MESH
 	
@@ -97,6 +97,8 @@ void ATlocHumanPlayer::BeginPlay()
 
 	_wpnMesh->OnComponentBeginOverlap.AddDynamic(this, &ATlocHumanPlayer::OnHumanActorHit);
 	_wpnMesh->OnComponentEndOverlap.AddDynamic(this, &ATlocHumanPlayer::OnHumanActorStopHit);
+	OnActorBeginOverlap.AddDynamic(this, &ATlocHumanPlayer::OnHumanActorOverlap);
+	OnActorEndOverlap.AddDynamic(this, &ATlocHumanPlayer::OnHumanActorStopOverlap);
 }
 
 // Called every frame
@@ -123,6 +125,7 @@ void ATlocHumanPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAxis("MoveHorizontally", this, &ATlocHumanPlayer::moveHorizontally);
 	PlayerInputComponent->BindAxis("RotateHorizontally", this, &ATlocHumanPlayer::rotateHorizontally);
 
+	PlayerInputComponent->BindAction("PickUp", IE_Pressed, this, &ATlocHumanPlayer::takeObj);
 	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &ATlocHumanPlayer::attack);
 }
 
@@ -131,7 +134,7 @@ void ATlocHumanPlayer::OnHumanActorHit(UPrimitiveComponent* _weaponMesh, AActor*
 	if (!attacking)
 	{
 		attacking = true;
-		enemy = Other;
+		_enemy = Other;
 	}
 }
 
@@ -140,7 +143,25 @@ void ATlocHumanPlayer::OnHumanActorStopHit(UPrimitiveComponent* _weaponMesh, AAc
 	if (attacking)
 	{
 		attacking = false;
-		enemy = NULL;
+		_enemy = NULL;
+	}
+}
+
+void ATlocHumanPlayer::OnHumanActorOverlap(AActor* _player, AActor* _obj)
+{
+	if (!pickingUp)
+	{
+		pickingUp = true;
+		_object = _obj;
+	}
+}
+
+void ATlocHumanPlayer::OnHumanActorStopOverlap(AActor* _player, AActor* _obj)
+{
+	if (pickingUp)
+	{
+		pickingUp = false;
+		_object = NULL;
 	}
 }
 
@@ -175,11 +196,88 @@ void ATlocHumanPlayer::attack()
 		int damage = this->Attack(playerEquipment._weapon);
 		if (damage != constants.KMINUS_ONE)
 		{
-			ATlocEnemy* tlocEnemy = Cast<ATlocEnemy>(enemy);
+			ATlocEnemy* tlocEnemy = Cast<ATlocEnemy>(_enemy);
 			tlocEnemy->ModifyLife(-damage);
 		}
 		attacking = false;
-		enemy = NULL;
+		_enemy = NULL;
+	}
+}
+
+void ATlocHumanPlayer::takeObj()
+{
+	if (pickingUp && _object != NULL)
+	{
+		pickupObject();
+	}
+}
+
+/************************** pick up Object **************************
+***  Function that push the object taken from the game stage  ****
+***	into its correspondant array according to the object type ****
+******************************************************************
+*				In:
+*
+*				Out:
+*
+*/
+void ATlocHumanPlayer::pickupObject()
+{
+	if (_object != NULL)
+	{
+		//It obtains _object's child class and identifies which one is it's child class
+		if (dynamic_cast<TlocWeapon*>(_object))
+		{
+			TlocWeapon* _wpn = (TlocWeapon*)_object;
+			_weapon.push_back(_wpn);
+			UE_LOG(LogTemp, Warning, TEXT("You picked up a weapon."));
+		}
+		else if (dynamic_cast<TlocGauntlet*>(_object))
+		{
+			TlocGauntlet* _glt = (TlocGauntlet*)_object;
+			_gauntlet.push_back(_glt);
+		}
+		else if (dynamic_cast<TlocArmor*>(_object))
+		{
+			TlocArmor* _arm = (TlocArmor*)_object;
+			_armor.push_back(_arm);
+		}
+		else if (dynamic_cast<TlocIngredients*>(_object))
+		{
+			TlocIngredients* _ing = (TlocIngredients*)_object;
+			GlobalConstants constants;
+			int i = 0;
+			while (i < _ingredients.size())
+			{
+				if (_ingredients[i].front() != nullptr && _ingredients[i].front()->GetID() == _ing->GetID())
+				{
+					_ingredients[i].push_back(_ing);
+					i = _ingredients.size();
+				}
+				else
+				{
+					i++;
+				}
+			}
+		}
+		else if (dynamic_cast<TlocItem*>(_object))
+		{
+			TlocItem* _itm = (TlocItem*)_object;
+			GlobalConstants constants;
+			int i = 0;
+			while (i < _items.size())
+			{
+				if (_items[i].front() != nullptr && _items[i].front() == _itm)
+				{
+					_items[i].push_back(_itm);
+					i = _items.size();
+				}
+				else
+				{
+					i++;
+				}
+			}
+		}
 	}
 }
 

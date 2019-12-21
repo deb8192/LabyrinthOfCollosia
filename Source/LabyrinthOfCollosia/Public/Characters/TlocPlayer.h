@@ -34,8 +34,6 @@ public:
 	bool GetDefend();
 	int GetLife();
 
-	void TakeObject(ATlocObject *obj);
-
 private:
 	
 	//Variables

@@ -34,6 +34,8 @@ private:
 	void rotateHorizontally(float value);
 
 	void attack();
+	void takeObj();
+	void pickupObject();
 
 	//Variables
 	using Equipment = struct equipmentStructure
@@ -44,7 +46,9 @@ private:
 	};
 
 	Equipment playerEquipment;
-	AActor* enemy;
+	AActor* _enemy;
+	AActor* _object;
+	bool pickingUp;									//Character picking up state
 
 
 	UPROPERTY(VisibleAnywhere)
@@ -63,9 +67,13 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UFUNCTION()
-	void OnHumanActorHit(UPrimitiveComponent* _weaponMesh, AActor* Other, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& Hit);
+		void OnHumanActorHit(UPrimitiveComponent* _weaponMesh, AActor* Other, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& Hit);
 	UFUNCTION()
-	void OnHumanActorStopHit(UPrimitiveComponent* _weaponMesh, AActor* Other, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+		void OnHumanActorStopHit(UPrimitiveComponent* _weaponMesh, AActor* Other, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+	UFUNCTION()
+		void OnHumanActorOverlap(AActor* _player, AActor* _obj);
+	UFUNCTION()
+		void OnHumanActorStopOverlap(AActor* _player, AActor* _obj);
 
 	//Getters
 	Equipment GetPlayerEquipment();

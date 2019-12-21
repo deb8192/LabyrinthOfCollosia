@@ -4,6 +4,7 @@
 
 #include <vector>
 
+#include "Objects/TlocWeapon.h"
 #include "Characters/TlocEnemy.h"
 #include "Characters/TlocHumanPlayer.h"
 #include "Engine/World.h"

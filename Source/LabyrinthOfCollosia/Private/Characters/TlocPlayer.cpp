@@ -23,7 +23,7 @@ TlocPlayer::TlocPlayer()
 
 	//ID = idChrctr;
 	level = 1;
-	life = defaultLife = 50;
+	life = defaultLife = 75;
 	attack = 25;
 	defense = 15;
 	magicDef = 13;
@@ -277,75 +277,6 @@ void TlocPlayer::Move()
 
 void TlocPlayer::Defend()
 {
-}
-
-/************************** Take Object **************************
-***  Function that push the object taken from the game stage  ****
-***	into its correspondant array according to the object type ****
-******************************************************************
-*				In:
-*					ATlocObject* _obj  -> stage's taken object
-*
-*				Out:
-*
-*/
-void TlocPlayer::TakeObject(ATlocObject* _obj)
-{
-	if (_obj != nullptr)
-	{
-		//It obtains _obj's child class and identifies which one is it's child class
-		if (dynamic_cast<TlocWeapon*>(_obj))
-		{
-			TlocWeapon* _wpn = (TlocWeapon*)_obj;
-			_weapon.push_back(_wpn);
-		}
-		else if (dynamic_cast<TlocGauntlet*>(_obj))
-		{
-			TlocGauntlet* _glt = (TlocGauntlet*)_obj;
-			_gauntlet.push_back(_glt);
-		}
-		else if (dynamic_cast<TlocArmor*>(_obj))
-		{
-			TlocArmor* _arm = (TlocArmor*)_obj;
-			_armor.push_back(_arm);
-		}
-		else if (dynamic_cast<TlocIngredients*>(_obj))
-		{
-			TlocIngredients* _ing = (TlocIngredients*)_obj;
-			GlobalConstants constants;
-			int i = 0;
-			while (i < _ingredients.size())
-			{
-				if (_ingredients[i].front() != nullptr && _ingredients[i].front()->GetID() == _ing->GetID())
-				{
-					_ingredients[i].push_back(_ing);
-					i = _ingredients.size();
-				}
-				else
-				{
-					i++;
-				}
-			}
-		}
-		else if (dynamic_cast<TlocItem*>(_obj))
-		{
-			TlocItem* _itm = (TlocItem*)_obj;
-			GlobalConstants constants;
-			int i = 0;
-			while (i < _items.size())
-			{
-				if (_items[i].front() != nullptr && _items[i].front() == _itm)
-				{
-					_items[i].push_back(_itm);
-					i = _items.size();
-				}
-				else
-				{
-					i++;
-				}
-			}
-		}
-	}
 }
 
 bool TlocPlayer::GetDefend()

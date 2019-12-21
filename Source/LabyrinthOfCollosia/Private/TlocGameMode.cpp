@@ -2,12 +2,14 @@
 
 
 #include "TlocGameMode.h"
+#include "TlocGameState.h"
 #include <iostream>
 
 ATlocGameMode::ATlocGameMode()
 {
 	_world = GetWorld();								//Get the world to manage it
 	DefaultPawnClass = ATlocHumanPlayer::StaticClass();	//Associate player's pawn with player's default class
+	GameStateClass = ATlocGameState::StaticClass();
 
 	enemies.reserve(30);
 
@@ -31,6 +33,7 @@ void ATlocGameMode::BeginPlay()
 	//_humanPlayer = DefaultPawnClass.GetDefaultObject();
 
 	enemies.push_back(_world->SpawnActor<ATlocEnemy>(ATlocEnemy::StaticClass(), transform, SpawnParam));
+	_world->SpawnActor<TlocWeapon>(TlocWeapon::StaticClass(), FVector(-500, -70, 100), FRotator::ZeroRotator, SpawnParam);
 
 
 
@@ -47,9 +50,11 @@ void ATlocGameMode::Tick(float DeltaTime)
 
 	enemies[0]->AddActorWorldOffset(FVector(0.0f, 0.0f, 0.0f), true);
 
-	if (enemies[0]->GetLife() <= 0)
+	if (!enemies.empty() && enemies[0]->GetLife() <= 0)
 	{
 		enemies[0]->Destroy();
+		enemies.erase(enemies.begin());
+		UE_LOG(LogTemp, Warning, TEXT("You killed the enemy."));
 	}
 
 

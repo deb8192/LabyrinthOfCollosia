@@ -13,10 +13,14 @@ ATlocObject::ATlocObject()
 	PrimaryActorTick.bCanEverTick = true;
 
 	_interactionCollision = CreateDefaultSubobject<USphereComponent>(TEXT("InteractionCollision"));
+	_interactionCollision->SetSphereRadius(50.f, true);
 	_interactionCollision->SetupAttachment(GetRootComponent());
 
 	_wpnMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ObjectMesh"));
 	_wpnMesh->SetupAttachment(_interactionCollision);
+
+	_interactionCollision->SetRelativeLocation(FVector(0.0f, 0.0f, 45.0f));
+	_wpnMesh->SetRelativeLocation(FVector(0.0f, 0.0f, -45.0f));
 
 	fileRoot = TEXT("/Game/Models/Equipment/Weapons/Gladius.Gladius");
 

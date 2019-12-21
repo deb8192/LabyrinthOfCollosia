@@ -52,7 +52,7 @@ protected:
 	int evasion;									//Character hit evade probability
 	int luck;										//Character hit probability
 	bool defending;									//Character defending state
-	bool attacking;
+	bool attacking;									//Character attacking state
 	bool invulnerable;
 	float invulnerableTime;
 	float defaultPosition[3];

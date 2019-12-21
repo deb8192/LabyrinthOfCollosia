@@ -26,7 +26,7 @@ ATlocEnemy::ATlocEnemy()
 
 	//ID = idChrctr;
 	level = 1;
-	life = defaultLife = 50;
+	life = defaultLife = 150;
 	attack = 25;
 	defense = 15;
 	magicDef = 13;
@@ -186,6 +186,7 @@ void ATlocEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 */
 void ATlocEnemy::ModifyLife(float quantity)
 {
+	UE_LOG(LogTemp, Warning, TEXT("You hurt the enemy."));
 	life += quantity;
 	if (life <= 0)
 	{
