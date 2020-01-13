@@ -1,0 +1,3 @@
+{
+	"TlocWeapon":{ "chest":true, "position":[-930.0,-5400.0,0.0], "name":"gladius", "fileRoot":"/Game/Models/Equipment/Weapons/Gladius.Gladius", "price":50.25, "attack":15, "level":1, "experience":0, "nextLevel":100, "criticalDamageInc":1.25, "criticalProbabilityInc":10, "longRante":false }
+}

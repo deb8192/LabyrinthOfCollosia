@@ -40,6 +40,7 @@ TlocPlayer::TlocPlayer()
 	experience = 0;
 	nextLevel = 200;
 
+	_motor = ATlocMotorFacade::GetInstance();
 
 }
 

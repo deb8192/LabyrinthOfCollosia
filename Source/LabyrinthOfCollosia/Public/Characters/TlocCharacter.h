@@ -10,6 +10,7 @@
 #include "..\Public\Objects\TlocWeapon.h"
 #include "..\Public\Objects\TlocArmor.h"
 #include "..\Public\Objects\TlocGauntlet.h"
+#include "..\Public\Motor\TlocMotorFacade.h"
 //#include "TlocEnemy.h"
 
 #include "CoreMinimal.h"
@@ -66,8 +67,14 @@ protected:
 	std::queue<int> _buffsAilments;					//Character active buffs or ailments
 	std::queue<float> buffsAilmentsTime;			//Character active buffs or ailments' time
 
+	//Facade variables
+	ATlocMotorFacade* _motor;
+
+	//Unreal variables
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent *_charMesh;
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* _wpnMesh;
+
+	const TCHAR* _fileRoot;
 };

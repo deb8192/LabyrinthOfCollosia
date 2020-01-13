@@ -40,6 +40,10 @@ ATlocEnemy::ATlocEnemy()
 		defaultPosition[i] = 0.0;
 	}
 
+	_fileRoot = TEXT("/Game/Models/Characters/Hero-M.Hero-M");
+
+	_motor = ATlocMotorFacade::GetInstance();
+
 	USceneComponent* _rootComponent = CreateDefaultSubobject<USceneComponent>("RootEnemy");
 
 	_charMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("enemyMesh"));
@@ -63,6 +67,7 @@ ATlocEnemy::ATlocEnemy()
 		_auxCharMesh->SetStaticMesh(auxMeshAsset.Object);
 		_auxCharMesh->SetWorldScale3D(FVector(1.f));
 	}
+
 }
 
 ATlocEnemy::ATlocEnemy(int idChrctr, int lvl, int lif, int att, int def, int magdef, int crit, int critProb, int lck, int eva)

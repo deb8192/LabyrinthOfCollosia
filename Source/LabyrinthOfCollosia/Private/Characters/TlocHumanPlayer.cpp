@@ -18,22 +18,15 @@ ATlocHumanPlayer::ATlocHumanPlayer() : TlocPlayer()
 	playerEquipment._armor = NULL;
 	playerEquipment._gauntlet = NULL;
 
+	_fileRoot = TEXT("/Game/Models/Characters/Hero-M.Hero-M");
+
 	_enemy = NULL;
 
 	//MESH
 	
-	_charMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PlayerMesh"));
-	_charMesh->SetupAttachment(GetRootComponent());
-
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> PlayerMeshAsset(TEXT("/Game/Models/Characters/Hero-M.Hero-M"));
-
-	if (PlayerMeshAsset.Succeeded())
-	{
-		_charMesh->SetStaticMesh(PlayerMeshAsset.Object);
-		_charMesh->SetWorldScale3D(FVector(1.f));
-		_charMesh->SetRelativeLocation(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z - 90));
-		_charMesh->SetRelativeRotation(FRotator(GetActorRotation().Pitch, GetActorRotation().Yaw - 90, GetActorRotation().Roll));
-	}
+	_charMesh = _motor->SetMesh(TEXT("PlayerMesh"), _fileRoot, GetRootComponent(), this);
+	_charMesh->SetRelativeLocation(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z - 90));
+	_charMesh->SetRelativeRotation(FRotator(GetActorRotation().Pitch, GetActorRotation().Yaw - 90, GetActorRotation().Roll));
 
 	//CAMERA
 
