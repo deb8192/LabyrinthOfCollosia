@@ -33,14 +33,19 @@ public:
 
 	//Functions
 	UStaticMeshComponent* SetMesh(const TCHAR* _name, const TCHAR* _directory, USceneComponent* rootComponent, UObject *obj);
+	void RegisterMeshComponent(UStaticMeshComponent* _mesh);
+
+	void BeginPlay();
+
+	void Tick(float DeltaTime);
 
 private:
 	//clase singleton 
 	ATlocMotorFacade();
 	static ATlocMotorFacade* _unic_instance;
 
+	//fin clase singleton private
 	UPROPERTY(VisibleAnywhere)
 		UStaticMeshComponent* _mesh;
-	//fin clase singleton private
 
 };

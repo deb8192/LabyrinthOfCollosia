@@ -44,29 +44,36 @@ ATlocEnemy::ATlocEnemy()
 
 	_motor = ATlocMotorFacade::GetInstance();
 
-	USceneComponent* _rootComponent = CreateDefaultSubobject<USceneComponent>("RootEnemy");
+	//USceneComponent* _rootComponent = CreateDefaultSubobject<USceneComponent>("RootEnemy");
 
-	_charMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("enemyMesh"));
-	_charMesh->SetupAttachment(_rootComponent); 
-	_auxCharMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("auxEnemyMesh"));
+	_charMesh = _motor->SetMesh(TEXT("enemyMesh"), TEXT("/Game/Models/Characters/GuideMonk_Cube_000.GuideMonk_Cube_000"), GetRootComponent(), this);
+	_auxCharMesh = _motor->SetMesh(TEXT("coatEnemy"), TEXT("/Game/Models/Characters/GuideMonk_Cube_001.GuideMonk_Cube_001"), GetRootComponent(), this);
+
+
+	_charMesh->SetRelativeLocation(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z - 90));
+	_charMesh->SetRelativeRotation(FRotator(GetActorRotation().Pitch, GetActorRotation().Yaw, GetActorRotation().Roll));
+	_auxCharMesh->SetRelativeLocation(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z - 90));
+	_auxCharMesh->SetRelativeRotation(FRotator(GetActorRotation().Pitch, GetActorRotation().Yaw, GetActorRotation().Roll));
+	//_charMesh->SetupAttachment(_rootComponent); 
+	/*_auxCharMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("auxEnemyMesh"));
 	_auxCharMesh->SetupAttachment(_rootComponent);
 
 
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshAsset(TEXT("/Game/Models/Characters/GuideMonk_Cube_000.GuideMonk_Cube_000"));
+	/*static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshAsset(TEXT("/Game/Models/Characters/GuideMonk_Cube_000.GuideMonk_Cube_000"));
 
 	if (MeshAsset.Succeeded())
 	{
 		_charMesh->SetStaticMesh(MeshAsset.Object);
 		_charMesh->SetWorldScale3D(FVector(1.f));
-	}
+	}*/
 
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> auxMeshAsset(TEXT("/Game/Models/Characters/GuideMonk_Cube_001.GuideMonk_Cube_001"));
+	/*static ConstructorHelpers::FObjectFinder<UStaticMesh> auxMeshAsset(TEXT("/Game/Models/Characters/GuideMonk_Cube_001.GuideMonk_Cube_001"));
 
 	if (auxMeshAsset.Succeeded())
 	{
 		_auxCharMesh->SetStaticMesh(auxMeshAsset.Object);
 		_auxCharMesh->SetWorldScale3D(FVector(1.f));
-	}
+	}*/
 
 }
 
@@ -155,13 +162,9 @@ void ATlocEnemy::BeginPlay()
 {
 	Super::BeginPlay();
 
-	AddActorLocalOffset(FVector(0.0f, 0.0f, 0.0f), true);
-
-	_charMesh->SetRelativeLocation(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z - 90));
-	_charMesh->SetRelativeRotation(FRotator(GetActorRotation().Pitch, GetActorRotation().Yaw, GetActorRotation().Roll));
-	_auxCharMesh->SetRelativeLocation(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z - 90));
-	_auxCharMesh->SetRelativeRotation(FRotator(GetActorRotation().Pitch, GetActorRotation().Yaw, GetActorRotation().Roll));
-	
+	_charMesh->RegisterComponent();
+	_auxCharMesh->RegisterComponent();
+	//AddActorLocalOffset(FVector(0.0f, 0.0f, 0.0f), true);
 }
 
 // Called every frame

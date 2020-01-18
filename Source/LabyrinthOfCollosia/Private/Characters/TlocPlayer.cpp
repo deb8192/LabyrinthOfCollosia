@@ -77,7 +77,7 @@ TlocPlayer::~TlocPlayer()
 			{
 				for (int j = 0; j < _ingredients[size].size(); j++)
 				{
-					delete _ingredients[size][j];
+					_ingredients[size][j] = NULL;
 				}
 			}
 		}
@@ -88,10 +88,7 @@ TlocPlayer::~TlocPlayer()
 	{
 		for (size; size < _learnedSpells.size(); size++)
 		{
-			if (_learnedSpells[size] != nullptr)
-			{
-				delete _learnedSpells[size];
-			}
+			_learnedSpells[size] = NULL;
 		}
 	}
 
@@ -100,10 +97,7 @@ TlocPlayer::~TlocPlayer()
 	{
 		for (size; size < _memorizedSpells.size(); size++)
 		{
-			if (_memorizedSpells[size] != nullptr)
-			{
-				delete _memorizedSpells[size];
-			}
+			_memorizedSpells[size] = NULL;
 		}
 	}
 
@@ -116,7 +110,7 @@ TlocPlayer::~TlocPlayer()
 			{
 				for (int j = 0; j < _items[size].size(); j++)
 				{
-					delete _items[size][j];
+					_items[size][j] = NULL;
 				}
 			}
 		}
@@ -127,10 +121,7 @@ TlocPlayer::~TlocPlayer()
 	{
 		for (size; size < _weapon.size(); size++)
 		{
-			if (_weapon[size] != nullptr)
-			{
-				delete _weapon[size];
-			}
+			_weapon[size] = NULL;
 		}
 	}
 
@@ -139,10 +130,7 @@ TlocPlayer::~TlocPlayer()
 	{
 		for (size; size < _armor.size(); size++)
 		{
-			if (_armor[size] != nullptr)
-			{
-				delete _armor[size];
-			}
+			_armor[size] = NULL;
 		}
 	}
 
@@ -151,10 +139,7 @@ TlocPlayer::~TlocPlayer()
 	{
 		for (size; size < _gauntlet.size(); size++)
 		{
-			if (_gauntlet[size] != nullptr)
-			{
-				delete _gauntlet[size];
-			}
+			_gauntlet[size] = NULL;
 		}
 	}
 

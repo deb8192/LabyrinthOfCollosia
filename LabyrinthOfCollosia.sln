@@ -3,17 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28315.86
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Engine", "Engine", "{94A93723-A76A-405E-AB16-4525EF57F0D0}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Engine", "Engine", "{676D906D-90D8-4121-B8EA-83CB6DFC0485}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Games", "Games", "{374A54F2-8CCD-4619-9DAB-4EE823409D25}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Games", "Games", "{74931D9C-DDAF-45F2-BCE5-C3AC3C9CD273}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UE4", "Intermediate\ProjectFiles\UE4.vcxproj", "{F61F2FF6-2252-4A0D-9C3F-25D056FE84BB}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LabyrinthOfCollosia", "Intermediate\ProjectFiles\LabyrinthOfCollosia.vcxproj", "{F42F03E4-CB6F-4800-B040-B21D9E101187}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Visualizers", "Visualizers", "{6465C3AA-74FD-476E-8EA8-68E180169DA3}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Visualizers", "Visualizers", "{FFFC2846-43C4-44E3-9727-A7CDE46CF245}"
 	ProjectSection(SolutionItems) = preProject
-		..\..\..\..\..\Program Files\Epic Games\UE_4.23\Engine\Extras\VisualStudioDebugging\UE4.natvis = ..\..\..\..\..\Program Files\Epic Games\UE_4.23\Engine\Extras\VisualStudioDebugging\UE4.natvis
+		C:\Program Files\Epic Games\UE_4.23\Engine\Extras\VisualStudioDebugging\UE4.natvis = C:\Program Files\Epic Games\UE_4.23\Engine\Extras\VisualStudioDebugging\UE4.natvis
 	EndProjectSection
 EndProject
 Global
@@ -81,7 +81,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{F61F2FF6-2252-4A0D-9C3F-25D056FE84BB} = {94A93723-A76A-405E-AB16-4525EF57F0D0}
-		{F42F03E4-CB6F-4800-B040-B21D9E101187} = {374A54F2-8CCD-4619-9DAB-4EE823409D25}
+		{F61F2FF6-2252-4A0D-9C3F-25D056FE84BB} = {676D906D-90D8-4121-B8EA-83CB6DFC0485}
+		{F42F03E4-CB6F-4800-B040-B21D9E101187} = {74931D9C-DDAF-45F2-BCE5-C3AC3C9CD273}
 	EndGlobalSection
 EndGlobal

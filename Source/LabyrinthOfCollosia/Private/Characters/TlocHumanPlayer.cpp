@@ -14,7 +14,9 @@ ATlocHumanPlayer::ATlocHumanPlayer() : TlocPlayer()
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
+
 	playerEquipment._weapon = CreateDefaultSubobject<TlocWeapon>(TEXT("PlayerWeapon")); /* NewObject<TlocWeapon>();*/		//Calling the constructor to create a new TlocWeapon object
+	_weapon.push_back(playerEquipment._weapon);
 	playerEquipment._armor = NULL;
 	playerEquipment._gauntlet = NULL;
 
@@ -88,6 +90,7 @@ void ATlocHumanPlayer::BeginPlay()
 {
 	Super::BeginPlay();	
 
+	_motor->RegisterMeshComponent(_charMesh);
 	_wpnMesh->OnComponentBeginOverlap.AddDynamic(this, &ATlocHumanPlayer::OnHumanActorHit);
 	_wpnMesh->OnComponentEndOverlap.AddDynamic(this, &ATlocHumanPlayer::OnHumanActorStopHit);
 	OnActorBeginOverlap.AddDynamic(this, &ATlocHumanPlayer::OnHumanActorOverlap);
@@ -122,15 +125,17 @@ void ATlocHumanPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &ATlocHumanPlayer::attack);
 }
 
-void ATlocHumanPlayer::OnHumanActorHit(UPrimitiveComponent* _weaponMesh, AActor* Other, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& Hit)
+//Function to activate the player's attack
+void ATlocHumanPlayer::OnHumanActorHit(UPrimitiveComponent* _weaponMesh, AActor* _other, UPrimitiveComponent* _otherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& Hit)
 {
-	if (!attacking)
+	if (!attacking && dynamic_cast<ATlocEnemy*>(_other))
 	{
 		attacking = true;
-		_enemy = Other;
+		_enemy = _other;
 	}
 }
 
+//Function to deactivate the player's attack
 void ATlocHumanPlayer::OnHumanActorStopHit(UPrimitiveComponent* _weaponMesh, AActor* Other, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 	if (attacking)
@@ -140,15 +145,17 @@ void ATlocHumanPlayer::OnHumanActorStopHit(UPrimitiveComponent* _weaponMesh, AAc
 	}
 }
 
+//Function to activate the player's picking up function
 void ATlocHumanPlayer::OnHumanActorOverlap(AActor* _player, AActor* _obj)
 {
-	if (!pickingUp)
+	if (!pickingUp && dynamic_cast<ATlocObject*>(_obj))
 	{
 		pickingUp = true;
 		_object = _obj;
 	}
 }
 
+//Function to deactivate the player's picking up function
 void ATlocHumanPlayer::OnHumanActorStopOverlap(AActor* _player, AActor* _obj)
 {
 	if (pickingUp)
@@ -183,15 +190,21 @@ void ATlocHumanPlayer::rotateHorizontally(float value)
 
 void ATlocHumanPlayer::attack()
 {
+	//If player is attacking some enemy
 	if (attacking)
 	{
+		//It's calculated the attack damage
 		GlobalConstants constants;
 		int damage = this->Attack(playerEquipment._weapon);
+
+		//If hit doesn't miss
 		if (damage != constants.KMINUS_ONE)
 		{
+			//Enemy's life is modified with damage value
 			ATlocEnemy* tlocEnemy = Cast<ATlocEnemy>(_enemy);
 			tlocEnemy->ModifyLife(-damage);
 		}
+		//Stoping player's attack and erasing target enemy.
 		attacking = false;
 		_enemy = NULL;
 	}
@@ -201,7 +214,13 @@ void ATlocHumanPlayer::takeObj()
 {
 	if (pickingUp && _object != NULL)
 	{
+		//Calling function that saves the object in players inventory
 		pickupObject();
+		pickingUp = false;
+
+		//After keeping the object, it is destroyed from the stage
+		_object->Destroy();
+		_object = NULL;
 	}
 }
 
@@ -219,22 +238,26 @@ void ATlocHumanPlayer::pickupObject()
 	if (_object != NULL)
 	{
 		//It obtains _object's child class and identifies which one is it's child class
+		//WEAPONS
 		if (dynamic_cast<TlocWeapon*>(_object))
 		{
 			TlocWeapon* _wpn = (TlocWeapon*)_object;
 			_weapon.push_back(_wpn);
 			UE_LOG(LogTemp, Warning, TEXT("You picked up a weapon."));
 		}
+		//GAUNTLETS
 		else if (dynamic_cast<TlocGauntlet*>(_object))
 		{
 			TlocGauntlet* _glt = (TlocGauntlet*)_object;
 			_gauntlet.push_back(_glt);
 		}
+		//ARMORS
 		else if (dynamic_cast<TlocArmor*>(_object))
 		{
 			TlocArmor* _arm = (TlocArmor*)_object;
 			_armor.push_back(_arm);
 		}
+		//INGREDIENTS
 		else if (dynamic_cast<TlocIngredients*>(_object))
 		{
 			TlocIngredients* _ing = (TlocIngredients*)_object;
@@ -253,6 +276,7 @@ void ATlocHumanPlayer::pickupObject()
 				}
 			}
 		}
+		//ITEMS
 		else if (dynamic_cast<TlocItem*>(_object))
 		{
 			TlocItem* _itm = (TlocItem*)_object;
