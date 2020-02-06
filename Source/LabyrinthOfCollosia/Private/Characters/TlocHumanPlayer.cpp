@@ -22,14 +22,16 @@ ATlocHumanPlayer::ATlocHumanPlayer() : TlocPlayer()
 
 	_fileRoot = TEXT("/Game/Models/Characters/Hero-M.Hero-M");
 
+	_motor = ATlocMotorFacade::GetInstance(this);
+
 	_enemy = NULL;
 
 	//MESH
 	
-	_charMesh = _motor->SetMesh(TEXT("PlayerMesh"), _fileRoot, GetRootComponent(), this);
+	_charMesh = _motor->SetMesh(TEXT("PlayerMesh"), (const TCHAR*) _fileRoot, GetRootComponent(), this);
 	_charMesh->SetRelativeLocation(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z - 90));
 	_charMesh->SetRelativeRotation(FRotator(GetActorRotation().Pitch, GetActorRotation().Yaw - 90, GetActorRotation().Roll));
-
+	
 	//CAMERA
 
 	_playerCameraSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraSpringArm"));
@@ -45,9 +47,14 @@ ATlocHumanPlayer::ATlocHumanPlayer() : TlocPlayer()
 
 	//playerEquipment._weapon->GetMesh()->SetupAttachment(GetRootComponent());
 
-	_wpnMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PlayerWeaponMesh"));
+	_wpnMesh = _motor->SetMesh(TEXT("WeaponMesh"), (const TCHAR*)playerEquipment._weapon->GetMeshFileRoot(), GetRootComponent(), this);
+	_wpnMesh->SetRelativeLocation(FVector(0.0f, 0.0f, 25.0f));
+	_wpnMesh->SetRelativeRotation(FRotator(-90.f, 0.0f, 0.0f));
 
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> ObjectMeshAsset(playerEquipment._weapon->GetMeshFileRoot());
+	//_wpnMesh->SetRelativeLocation(FVector(0.0f, 0.0f, 45.0f));
+	//_wpnMesh->SetRelativeRotation(FRotator(-90.f, 0.0f, 0.0f));
+	_wpnMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
+	/*static ConstructorHelpers::FObjectFinder<UStaticMesh> ObjectMeshAsset((const TCHAR*)playerEquipment._weapon->GetMeshFileRoot());
 
 	if (ObjectMeshAsset.Succeeded())
 	{
@@ -57,7 +64,7 @@ ATlocHumanPlayer::ATlocHumanPlayer() : TlocPlayer()
 		_wpnMesh->SetRelativeLocation(FVector(0.0f, 0.0f, 45.0f));
 		_wpnMesh->SetRelativeRotation(FRotator(-90.f, 0.0f, 0.0f));
 		_wpnMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
-	}
+	}*/
 
 
 }
@@ -91,6 +98,7 @@ void ATlocHumanPlayer::BeginPlay()
 	Super::BeginPlay();	
 
 	_motor->RegisterMeshComponent(_charMesh);
+	_motor->RegisterMeshComponent(_wpnMesh);
 	_wpnMesh->OnComponentBeginOverlap.AddDynamic(this, &ATlocHumanPlayer::OnHumanActorHit);
 	_wpnMesh->OnComponentEndOverlap.AddDynamic(this, &ATlocHumanPlayer::OnHumanActorStopHit);
 	OnActorBeginOverlap.AddDynamic(this, &ATlocHumanPlayer::OnHumanActorOverlap);
@@ -298,3 +306,39 @@ void ATlocHumanPlayer::pickupObject()
 	}
 }
 
+
+void ATlocHumanPlayer::SetMesh(const TCHAR* fileRoot, int mesh)
+{
+	switch (mesh)
+	{
+		case 2:
+			_charMesh = _motor->SetMesh((const TCHAR*)_name, (const TCHAR*)_fileRoot, GetRootComponent(), this);
+				break;
+
+			/*case 3:
+				_auxCharMesh2 = _motor->SetMesh(TEXT("Auxiliar mesh 2"), (const TCHAR*)_fileRoot, GetRootComponent(), this);
+				break;
+				*/
+		default:
+			_charMesh = _motor->SetMesh((const TCHAR*)_name, (const TCHAR*)_fileRoot, GetRootComponent(), this);
+			break;
+			
+	}
+}
+
+void ATlocHumanPlayer::SetPosition(FVector newPosition)
+{
+	SetActorLocation(newPosition);
+	TlocPlayer::SetPosition(newPosition);
+}
+
+void ATlocHumanPlayer::SetRotation(FRotator newRotation)
+{
+	SetActorRotation(newRotation);
+	TlocPlayer::SetRotation(newRotation);
+}
+
+UStaticMeshComponent* ATlocHumanPlayer::GetMesh()
+{
+	return _wpnMesh;
+}

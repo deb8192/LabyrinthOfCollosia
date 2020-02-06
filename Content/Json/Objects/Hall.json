@@ -1,3 +1,50 @@
 {
-	"TlocWeapon":{ "chest":true, "position":[-930.0,-5400.0,0.0], "name":"gladius", "fileRoot":"/Game/Models/Equipment/Weapons/Gladius.Gladius", "price":50.25, "attack":15, "level":1, "experience":0, "nextLevel":100, "criticalDamageInc":1.25, "criticalProbabilityInc":10, "longRante":false }
+	"TlocSword": [{
+		"chest": true,
+		"position": [-1930, -5400, 100],
+		"rotation": [0, 0, -90],
+		"name": "gladius",
+		"fileDirectory": "/Game/Models/Equipment/Weapons/Gladius.Gladius",
+		"price": 50,
+		"attack": 15,
+		"criticalDamageInc": 25,
+		"criticalProbabilityInc": 10
+	},
+	{
+		"chest": true,
+		"position": [-200, 0, 100],
+		"rotation": [0, 0, -90],
+		"name": "pilum",
+		"fileDirectory": "/Game/Models/Equipment/Weapons/Pilum.Pilum",
+		"price": 50,
+		"attack": 15,
+		"criticalDamageInc": 25,
+		"criticalProbabilityInc": 10
+	}],
+	"TlocIngredient": [{
+		"chest": true,
+		"position": [-930, -5400, 0],
+		"name": "vinegar",
+		"fileDirectory": "/Game/Models/Sprites/Items/Icons-256/Petal-256.Petal-256",
+		"price": 25,
+		"ingredientID": 19
+	}],
+	"TlocHealtItem": [{
+		"chest": true,
+		"position": [1000, -5400, 0],
+		"name": "nectar",
+		"fileDirectory": "/Game/Models/Sprites/Items/Icons-256/Nectar-256.Nectar-256",
+		"price": 40,
+		"healthID": 1,
+		"healthRecovered": 120
+	}],
+	"TlocArmor": [{
+		"chest": true,
+		"position": [1870, -5400, 0],
+		"name": "linothorax",
+		"fileDirectory": "/Game/Models/Sprites/Items/Icons-256/Nectar-256.Nectar-256",
+		"price": 40,
+		"healthID": 1,
+		"healthRecovered": 120
+	}]
 }

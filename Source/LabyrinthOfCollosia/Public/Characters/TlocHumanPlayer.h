@@ -37,6 +37,15 @@ private:
 	void takeObj();
 	void pickupObject();
 
+
+	//Setters & Getters
+	void SetMesh(const TCHAR* fileRoot, int mesh);
+	void SetPosition(FVector newPosition);
+	void SetRotation(FRotator newRotation);
+
+
+	UStaticMeshComponent* GetMesh();
+
 	//Variables
 	using Equipment = struct equipmentStructure
 	{

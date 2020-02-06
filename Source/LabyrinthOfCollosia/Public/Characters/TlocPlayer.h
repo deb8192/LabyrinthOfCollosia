@@ -30,7 +30,13 @@ public:
 	void Talk();
 	void Move();
 	void Defend();
-	// Getters
+
+	//Setters & Getters
+	void SetPosition(FVector newPosition);
+	void SetRotation(FRotator newRotation);
+
+	FVector GetPosition();
+	FRotator GetRotation();
 	bool GetDefend();
 	int GetLife();
 

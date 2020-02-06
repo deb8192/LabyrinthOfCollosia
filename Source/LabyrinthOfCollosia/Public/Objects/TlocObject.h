@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Components/SphereComponent.h"
+#include "..\Public\Motor\TlocMotorFacade.h"
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
@@ -26,20 +27,30 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void replaceObject(FVector pos, FRotator rot, TCHAR* _path, UStaticMeshComponent* _mesh);
+
 	//Getters & Setters
 	void SetMesh(const TCHAR* fileRoot);
 	void SetAttributes();
 	void SetPosition(FVector newPosition);
+	void SetRotation(FRotator newRotation);
 	UStaticMeshComponent* GetMesh();
-	const TCHAR* GetMeshFileRoot();
+	FVector GetPosition();
+	FRotator GetRotation();
+	TCHAR* GetMeshFileRoot();
 
 private:
 
+	FVector position;
+	FRotator rotation;
+
 	int IDObject;
-	char *name;
-	const TCHAR * fileRoot;
+	TCHAR* _name;
+	TCHAR* _fileRoot;
 	float price;
 
+	//Facade variables
+	ATlocMotorFacade* _motor;
 
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* _wpnMesh;

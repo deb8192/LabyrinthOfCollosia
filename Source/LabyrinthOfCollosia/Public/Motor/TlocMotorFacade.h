@@ -23,10 +23,11 @@ public:
 	//clase singleton en public
 	~ATlocMotorFacade();
 
-	static ATlocMotorFacade* GetInstance() //esto se utiliza para crear el objeto una sola vez
+	static ATlocMotorFacade* GetInstance(UObject* _obj) //esto se utiliza para crear el objeto una sola vez
 	{
 		if (!_unic_instance)
-			_unic_instance = NewObject<ATlocMotorFacade>();
+			//We created an Unreal object, so we use NewObject<ObjClass>() (NewObject because this is not the constructor).
+			_unic_instance = NewObject<ATlocMotorFacade>(_obj, TEXT("Motor"));
 		return _unic_instance;
 	}
 	//fin singleton public
@@ -34,6 +35,8 @@ public:
 	//Functions
 	UStaticMeshComponent* SetMesh(const TCHAR* _name, const TCHAR* _directory, USceneComponent* rootComponent, UObject *obj);
 	void RegisterMeshComponent(UStaticMeshComponent* _mesh);
+
+	void DestroyMeshComponent(UStaticMeshComponent* _mesh);
 
 	void BeginPlay();
 

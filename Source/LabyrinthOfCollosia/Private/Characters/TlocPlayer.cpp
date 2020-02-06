@@ -32,15 +32,11 @@ TlocPlayer::TlocPlayer()
 	luck = 75;
 	evasion = 25;
 	
-	for (int i = 0; i < std::size(defaultPosition); i++)
-	{
-		defaultPosition[i] = 0.0;
-	}
+
+	position.X = position.Y = position.Z = 0.0;
 
 	experience = 0;
 	nextLevel = 200;
-
-	_motor = ATlocMotorFacade::GetInstance();
 
 }
 
@@ -210,6 +206,8 @@ int TlocPlayer::Attack(TlocWeapon* _wp)
 
 	if(Attack() == constants.KMINUS_ONE)
 	{
+
+		UE_LOG(LogTemp, Warning, TEXT("You missed the attack."));
 		return constants.KMINUS_ONE;
 	}
 
@@ -273,6 +271,28 @@ bool TlocPlayer::GetDefend()
 int TlocPlayer::GetLife()
 {
 	return life;
+}
+
+void TlocPlayer::SetPosition(FVector newPosition)
+{
+	position = newPosition;
+	_wpnMesh->SetRelativeLocation(newPosition);
+}
+
+void TlocPlayer::SetRotation(FRotator newRotation)
+{
+	rotation = newRotation;
+	_wpnMesh->SetRelativeRotation(newRotation);
+}
+
+FVector TlocPlayer::GetPosition()
+{
+	return position;
+}
+
+FRotator TlocPlayer::GetRotation()
+{
+	return rotation;
 }
 
 

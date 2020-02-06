@@ -35,8 +35,15 @@ public:
 	virtual void Defend() = 0;									//Function to activate or desactivate defense state
 
 	// Getters
+	virtual void SetMesh(const TCHAR* fileRoot, int mesh) = 0;
+	virtual void SetPosition(FVector newPosition) = 0;
+	virtual void SetRotation(FRotator newRotation) = 0;
+
 	virtual bool GetDefend() = 0;
 	virtual int GetLife() = 0;
+	virtual UStaticMeshComponent* GetMesh() = 0;
+	virtual FVector GetPosition() = 0;
+	virtual FRotator GetRotation() = 0;
 
 
 protected:
@@ -56,7 +63,6 @@ protected:
 	bool attacking;									//Character attacking state
 	bool invulnerable;
 	float invulnerableTime;
-	float defaultPosition[3];
 	std::vector<std::vector<TlocIngredients*>> _ingredients;		//Character ingredient list
 	std::vector<TlocSpell*> _learnedSpells;			//Character learned spell list
 	std::vector<TlocSpell*> _memorizedSpells;		//Character memorized spell list from the learned spell list
@@ -67,6 +73,10 @@ protected:
 	std::queue<int> _buffsAilments;					//Character active buffs or ailments
 	std::queue<float> buffsAilmentsTime;			//Character active buffs or ailments' time
 
+	TCHAR* _name;
+	FVector position;
+	FRotator rotation;
+
 	//Facade variables
 	ATlocMotorFacade* _motor;
 
@@ -76,5 +86,5 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* _wpnMesh;
 
-	const TCHAR* _fileRoot;
+	TCHAR* _fileRoot;
 };

@@ -2,13 +2,12 @@
 
 #pragma once
 
-#include <vector>
-
 #include "Objects/TlocWeapon.h"
 #include "Characters/TlocEnemy.h"
 #include "Characters/TlocHumanPlayer.h"
 #include "Engine/World.h"
 #include "Engine/Scene.h"
+#include "JsonReader/TlocStageLoader.h"
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameMode.h"
@@ -31,13 +30,20 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	void SpawnActorsOnStage();
+
 	void Tick(float DeltaTime);
 
 private:
 	ATlocHumanPlayer* _humanPlayer;
 	UWorld* _world;
+	TlocStageLoader* _stageLoader;
 	//UScene* _scene;
 
-	std::vector<ATlocEnemy*> enemies;
-	
+	//Level Objects
+	std::vector<ATlocEnemy*> _levelEnemies;
+	std::vector<ATlocObject*> _levelObjects;
+	std::vector<std::vector<ATlocEnemy*>> _createdEnemies;
+	std::vector<std::vector<ATlocObject*>> _createdObjects;
+	bool changingLevel; 
 };

@@ -24,8 +24,50 @@ using GlobalConstants = struct Constants
 
 	const float KINVULNERABLE_TIME = 1.5;
 	const int KBASICDAMAGE = 2;
+	const int KMAX_NUM_DIRECTORIES = 4;
 	const int KMAX_VARIABLE_DAMAGE = 5;
 	const int KMIN_VARIABLE_DAMAGE = -2;
+	const char* KEMPTY_STRING = "";
+	const char* KFIRST_LEVEL_NAME = "Hall";
+	const char* KEXTENSION_JSON = ".json";
+	const char* KDIR_JSON_OBJ = "Json/Objects/";
+	const char* KDIR_JSON_ENM = "Json/Enemies/";
+
+	//JSON objects
+	//	-Classes
+
+	const char* KOBJECT = "objects";
+	const char* KSWORD = "TlocSword";
+	const char* KSPEAR = "TlocSpear";
+	const char* KAXE = "TlocAxe";
+	const char* KARMOR = "TlocArmor";
+	const char* KGAUNTLET = "TlocGauntlet";
+	const char* KINGREDIENT = "TlocIngredients";
+	const char* KHEALT_ITEM = "TlocHealtItem";
+	const char* KCALL_BEAD_ITEN = "TlocCallBeadItem";
+	const char* KSTATUS_ITEM = "TlocStatusItem";
+
+	//JSON enemies
+
+	const char* KENEMY = "TlocEnemy";
+
+	//	-Name variables
+
+	const char* KCHEST = "chest";
+	const char* KPOSITION = "position";
+	const char* KROTATION = "rotation";
+	const char* KNAME = "name";
+	const char* KFILE_DIRECTORY = "fileDirectory";
+	const char* KPRICE = "price";
+	const char* KATTACK = "attack";
+	const char* KDEFENSE = "defense";
+	const char* KCRITICAL_DAMAGE_INC = "criticalDamageInc";
+	const char* KCRITICAL_PROBABILITY_INC = "criticalProbabilityInc";
+
+	const char* KINGREDIENTS_ID = "ingredientID";
+	const char* KHEALTH_ITEMS_ID = "healthID";
+
+	const char* KHEALTH_RECOVERED = "healthRecovered";
 
 
 	//Max number of

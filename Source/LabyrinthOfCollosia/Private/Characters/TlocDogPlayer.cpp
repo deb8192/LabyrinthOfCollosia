@@ -10,6 +10,15 @@ ATlocDogPlayer::ATlocDogPlayer()
 	//PrimaryActorTick.bCanEverTick = true;
 
 	_fileRoot = TEXT("/Game/Models/Characters/Hero-M.Hero-M");
+
+	_motor = ATlocMotorFacade::GetInstance(this);
+
+	//MESH
+
+	_charMesh = _motor->SetMesh(TEXT("DogPlayerMesh"), (const TCHAR*)_fileRoot, GetRootComponent(), this);
+	_charMesh->SetRelativeLocation(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z - 90));
+	_charMesh->SetRelativeRotation(FRotator(GetActorRotation().Pitch, GetActorRotation().Yaw - 90, GetActorRotation().Roll));
+
 }
 
 ATlocDogPlayer::~ATlocDogPlayer()
@@ -37,4 +46,43 @@ void ATlocDogPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 }
+
+void ATlocDogPlayer::SetMesh(const TCHAR* fileRoot, int mesh)
+{
+	_fileRoot = (TCHAR*)fileRoot;
+	fileRoot = NULL;
+	switch (mesh)
+	{
+		case 2:
+			_charMesh = _motor->SetMesh((const TCHAR*)_name, (const TCHAR*)_fileRoot, GetRootComponent(), this);
+			break;
+
+		/*case 3:
+			_auxCharMesh2 = _motor->SetMesh(TEXT("Auxiliar mesh 2"), (const TCHAR*)_fileRoot, GetRootComponent(), this);
+			break;
+			*/
+		default:
+			_charMesh = _motor->SetMesh((const TCHAR*)_name, (const TCHAR*)_fileRoot, GetRootComponent(), this);
+			break;
+
+	}
+}
+
+void ATlocDogPlayer::SetPosition(FVector newPosition)
+{
+	SetActorLocation(newPosition);
+	TlocPlayer::SetPosition(newPosition);
+}
+
+void ATlocDogPlayer::SetRotation(FRotator newRotation)
+{
+	SetActorRotation(newRotation);
+	TlocPlayer::SetRotation(newRotation);
+}
+
+UStaticMeshComponent* ATlocDogPlayer::GetMesh()
+{
+	return _wpnMesh;
+}
+
 

@@ -23,7 +23,6 @@ ATlocMotorFacade::~ATlocMotorFacade()
 
 UStaticMeshComponent* ATlocMotorFacade::SetMesh(const TCHAR* _name, const TCHAR* _directory, USceneComponent* rootComponent, UObject* obj)
 {
-	_mesh = NULL;
 	_mesh = NewObject<UStaticMeshComponent>(obj, _name);
 	_mesh->SetupAttachment(rootComponent);
 	UStaticMesh* _meshAsset = LoadObject<UStaticMesh>(NULL, _directory);
@@ -41,6 +40,11 @@ UStaticMeshComponent* ATlocMotorFacade::SetMesh(const TCHAR* _name, const TCHAR*
 void ATlocMotorFacade::RegisterMeshComponent(UStaticMeshComponent* _mesh)
 {
 	_mesh->RegisterComponent();
+}
+
+void ATlocMotorFacade::DestroyMeshComponent(UStaticMeshComponent* _mesh)
+{
+	_mesh->DestroyComponent();
 }
 
 // Called when the game starts or when spawned

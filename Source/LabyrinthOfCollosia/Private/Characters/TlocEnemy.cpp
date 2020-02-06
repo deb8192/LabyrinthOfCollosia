@@ -35,46 +35,27 @@ ATlocEnemy::ATlocEnemy()
 	luck = 75;
 	evasion = 25;
 	
-	for (int i = 0; i < std::size(defaultPosition); i++)
-	{
-		defaultPosition[i] = 0.0;
-	}
+	_motor = ATlocMotorFacade::GetInstance(this);
 
-	_fileRoot = TEXT("/Game/Models/Characters/Hero-M.Hero-M");
+	position.X = position.Y = position.Z = 0.0;
 
-	_motor = ATlocMotorFacade::GetInstance();
+	_fileRoot = TEXT("/Game/Models/Characters/GuideMonk_Cube_000.GuideMonk_Cube_000");
+	_auxFilePath = TEXT("/Game/Models/Characters/GuideMonk_Cube_001.GuideMonk_Cube_001");
+	_auxFilePath2 = TEXT("");
+	_name = TEXT("Enemy");
+
 
 	//USceneComponent* _rootComponent = CreateDefaultSubobject<USceneComponent>("RootEnemy");
 
-	_charMesh = _motor->SetMesh(TEXT("enemyMesh"), TEXT("/Game/Models/Characters/GuideMonk_Cube_000.GuideMonk_Cube_000"), GetRootComponent(), this);
-	_auxCharMesh = _motor->SetMesh(TEXT("coatEnemy"), TEXT("/Game/Models/Characters/GuideMonk_Cube_001.GuideMonk_Cube_001"), GetRootComponent(), this);
+	_charMesh = _motor->SetMesh(TEXT("enemyMesh"), (const TCHAR*)_fileRoot, GetRootComponent(), this);
+	_auxCharMesh = _motor->SetMesh(TEXT("coatEnemy"), (const TCHAR*) _auxFilePath, GetRootComponent(), this);
 
-
+	/*
 	_charMesh->SetRelativeLocation(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z - 90));
 	_charMesh->SetRelativeRotation(FRotator(GetActorRotation().Pitch, GetActorRotation().Yaw, GetActorRotation().Roll));
 	_auxCharMesh->SetRelativeLocation(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z - 90));
 	_auxCharMesh->SetRelativeRotation(FRotator(GetActorRotation().Pitch, GetActorRotation().Yaw, GetActorRotation().Roll));
-	//_charMesh->SetupAttachment(_rootComponent); 
-	/*_auxCharMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("auxEnemyMesh"));
-	_auxCharMesh->SetupAttachment(_rootComponent);
-
-
-	/*static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshAsset(TEXT("/Game/Models/Characters/GuideMonk_Cube_000.GuideMonk_Cube_000"));
-
-	if (MeshAsset.Succeeded())
-	{
-		_charMesh->SetStaticMesh(MeshAsset.Object);
-		_charMesh->SetWorldScale3D(FVector(1.f));
-	}*/
-
-	/*static ConstructorHelpers::FObjectFinder<UStaticMesh> auxMeshAsset(TEXT("/Game/Models/Characters/GuideMonk_Cube_001.GuideMonk_Cube_001"));
-
-	if (auxMeshAsset.Succeeded())
-	{
-		_auxCharMesh->SetStaticMesh(auxMeshAsset.Object);
-		_auxCharMesh->SetWorldScale3D(FVector(1.f));
-	}*/
-
+	*/
 }
 
 ATlocEnemy::ATlocEnemy(int idChrctr, int lvl, int lif, int att, int def, int magdef, int crit, int critProb, int lck, int eva)
@@ -100,7 +81,7 @@ ATlocEnemy::~ATlocEnemy()
 	{
 		for (int j = 0; j < _ingredients[size].size(); j++)
 		{
-			delete _ingredients[size][j];
+			_ingredients[size][j] = NULL;
 		}
 	}
 
@@ -121,26 +102,26 @@ ATlocEnemy::~ATlocEnemy()
 	{
 		for (int j = 0; j < _items[size].size(); j++)
 		{
-			delete _items[size][j];
+			_items[size][j] = NULL;
 		}
 	}
 
 	size = 0;
 	for (size; size < _weapon.size(); size++)
 	{
-		delete _weapon[size];
+		_weapon[size] = NULL;
 	}
 
 	size = 0;
 	for (size; size < _armor.size(); size++)
 	{
-		delete _armor[size];
+		_armor[size] = NULL;
 	}
 
 	size = 0;
 	for (size; size < _armor.size(); size++)
 	{
-		delete _gauntlet[size];
+		_gauntlet[size] = NULL;
 	}
 
 	defending = false;
@@ -162,8 +143,8 @@ void ATlocEnemy::BeginPlay()
 {
 	Super::BeginPlay();
 
-	_charMesh->RegisterComponent();
-	_auxCharMesh->RegisterComponent();
+	//_motor->RegisterMeshComponent(_charMesh);
+	//_motor->RegisterMeshComponent(_auxCharMesh);
 	//AddActorLocalOffset(FVector(0.0f, 0.0f, 0.0f), true);
 }
 
@@ -173,6 +154,45 @@ void ATlocEnemy::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 
+}
+
+void ATlocEnemy::replaceEnemy(FVector pos, FRotator rot, TArray<TCHAR*> _paths, UStaticMeshComponent* _mesh)
+{
+	position = pos;
+	rotation = rot;
+	SetActorLocationAndRotation(pos, rot);
+	_fileRoot = _paths[0];
+	_auxFilePath = _paths[1];
+	_auxFilePath2 = _paths[2];
+	if (_charMesh != NULL)
+	{
+		_motor->DestroyMeshComponent(_charMesh);
+		_charMesh = NULL;
+	}
+	if (_auxCharMesh != NULL)
+	{
+		_motor->DestroyMeshComponent(_auxCharMesh);
+		_auxCharMesh = NULL;
+	}
+	if (_auxCharMesh2 != NULL)
+	{
+		_motor->DestroyMeshComponent(_auxCharMesh2);
+		_auxCharMesh2 = NULL;
+	}
+	GetCapsuleComponent();
+	_charMesh = _motor->SetMesh((const TCHAR*)_name, (const TCHAR*)_fileRoot, GetRootComponent(), this);
+	_auxCharMesh = _motor->SetMesh(TEXT("Auxiliar mesh"), (const TCHAR*)_auxFilePath, GetRootComponent(), this);
+	_auxCharMesh2 = _motor->SetMesh(TEXT("Auxiliar mesh 2"), (const TCHAR*)_auxFilePath2, GetRootComponent(), this);
+	_motor->RegisterMeshComponent(_charMesh);
+	if (_auxCharMesh)
+	{
+		_motor->RegisterMeshComponent(_auxCharMesh);
+	}
+	if (_auxCharMesh2)
+	{
+		_motor->RegisterMeshComponent(_auxCharMesh2);
+	}
+	//_charMesh->SetRelativeLocationAndRotation(pos, rot);
 }
 
 // Called to bind functionality to input
@@ -198,7 +218,7 @@ void ATlocEnemy::ModifyLife(float quantity)
 	life += quantity;
 	if (life <= 0)
 	{
-		//Se muere
+		//He/she dies
 		life = 0;
 	}
 	else if (quantity < 0)
@@ -263,6 +283,45 @@ void ATlocEnemy::Defend()
 {
 }
 
+void ATlocEnemy::SetMesh(const TCHAR* fileRoot, int mesh)
+{
+	switch (mesh)
+	{
+		case 2:
+			_auxFilePath = (TCHAR*)fileRoot;
+			fileRoot = NULL;
+			_auxCharMesh = _motor->SetMesh(TEXT("Auxiliar mesh"), (const TCHAR*)_auxFilePath, GetRootComponent(), this);
+			break;
+
+		case 3:
+			_auxFilePath2 = (TCHAR*)fileRoot;
+			fileRoot = NULL;
+			_auxCharMesh2 = _motor->SetMesh(TEXT("Auxiliar mesh 2"), (const TCHAR*)_auxFilePath2, GetRootComponent(), this);
+			break;
+
+		default:
+			_fileRoot = (TCHAR*)fileRoot;
+			fileRoot = NULL;
+			_charMesh = _motor->SetMesh((const TCHAR*)_name, (const TCHAR*)_fileRoot, GetRootComponent(), this);
+			break;
+
+	}
+}
+
+void ATlocEnemy::SetPosition(FVector newPosition)
+{
+	position = newPosition;
+	SetActorLocation(newPosition);
+	_charMesh->SetRelativeLocation(newPosition);
+}
+
+void ATlocEnemy::SetRotation(FRotator newRotation)
+{
+	rotation = newRotation;
+	SetActorRotation(newRotation);
+	_charMesh->SetRelativeRotation(newRotation);
+}
+
 bool ATlocEnemy::GetDefend()
 {
 	return defending;
@@ -271,5 +330,34 @@ bool ATlocEnemy::GetDefend()
 int ATlocEnemy::GetLife()
 {
 	return life;
+}
+
+UStaticMeshComponent* ATlocEnemy::GetMesh()
+{
+	return _charMesh;
+}
+
+FVector ATlocEnemy::GetPosition()
+{
+	return position;
+}
+
+FRotator ATlocEnemy::GetRotation()
+{
+	return rotation;
+}
+
+TCHAR* ATlocEnemy::GetMeshFileRoot()
+{
+	return _fileRoot;
+}
+
+TArray<TCHAR*> ATlocEnemy::GetMeshesFileRoot()
+{
+	TArray<TCHAR*> paths;
+	paths.Push(_fileRoot);
+	paths.Push(_auxFilePath);
+	paths.Push(_auxFilePath2);
+	return paths;
 }
 

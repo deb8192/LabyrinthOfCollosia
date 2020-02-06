@@ -29,7 +29,18 @@ public:
 	void Move();
 	void Defend();
 
-	//Getters
+	//Setters & Getters
+	void SetMesh(const TCHAR* fileRoot, int mesh);
+	void SetPosition(FVector newPosition);
+	void SetRotation(FRotator newRotation);
+
+	UStaticMeshComponent* GetMesh();
+	FVector GetPosition();
+	FRotator GetRotation();
+
+	TCHAR* GetMeshFileRoot();
+	TArray<TCHAR*> GetMeshesFileRoot();
+
 	bool GetDefend();
 	int GetLife();
 
@@ -41,11 +52,17 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void replaceEnemy(FVector pos, FRotator rot, TArray<TCHAR*> _paths, UStaticMeshComponent* _mesh);
+
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
 
 	UStaticMeshComponent* _auxCharMesh;
+	UStaticMeshComponent* _auxCharMesh2;
+
+	TCHAR* _auxFilePath;
+	TCHAR* _auxFilePath2;
 
 };
