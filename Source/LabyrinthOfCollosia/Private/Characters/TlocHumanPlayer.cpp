@@ -2,6 +2,7 @@
 
 #include "../Public/Characters/TlocHumanPlayer.h"
 #include "../Public/Characters/TlocEnemy.h"
+#include "../Public/Objects/TlocChest.h"
 #include "Engine/World.h"
 #include "../Public/GlobalConstants.h"
 #include "ConstructorHelpers.h"
@@ -29,6 +30,7 @@ ATlocHumanPlayer::ATlocHumanPlayer() : TlocPlayer()
 	//MESH
 	
 	_charMesh = _motor->SetMesh(TEXT("PlayerMesh"), (const TCHAR*) _fileRoot, GetRootComponent(), this);
+	_charMesh->SetupAttachment(GetRootComponent());
 	_charMesh->SetRelativeLocation(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z - 90));
 	_charMesh->SetRelativeRotation(FRotator(GetActorRotation().Pitch, GetActorRotation().Yaw - 90, GetActorRotation().Roll));
 	
@@ -48,6 +50,8 @@ ATlocHumanPlayer::ATlocHumanPlayer() : TlocPlayer()
 	//playerEquipment._weapon->GetMesh()->SetupAttachment(GetRootComponent());
 
 	_wpnMesh = _motor->SetMesh(TEXT("WeaponMesh"), (const TCHAR*)playerEquipment._weapon->GetMeshFileRoot(), GetRootComponent(), this);
+	_wpnMesh->SetupAttachment(GetRootComponent());
+
 	_wpnMesh->SetRelativeLocation(FVector(0.0f, 0.0f, 25.0f));
 	_wpnMesh->SetRelativeRotation(FRotator(-90.f, 0.0f, 0.0f));
 
@@ -245,30 +249,31 @@ void ATlocHumanPlayer::pickupObject()
 {
 	if (_object != NULL)
 	{
-		//It obtains _object's child class and identifies which one is it's child class
+		ATlocObject* _obj = checkChest();
+		//It obtains _obj's child class and identifies which one is it's child class
 		//WEAPONS
-		if (dynamic_cast<TlocWeapon*>(_object))
+		if (dynamic_cast<TlocWeapon*>(_obj))
 		{
-			TlocWeapon* _wpn = (TlocWeapon*)_object;
+			TlocWeapon* _wpn = (TlocWeapon*)_obj;
 			_weapon.push_back(_wpn);
 			UE_LOG(LogTemp, Warning, TEXT("You picked up a weapon."));
 		}
 		//GAUNTLETS
-		else if (dynamic_cast<TlocGauntlet*>(_object))
+		else if (dynamic_cast<TlocGauntlet*>(_obj))
 		{
-			TlocGauntlet* _glt = (TlocGauntlet*)_object;
+			TlocGauntlet* _glt = (TlocGauntlet*)_obj;
 			_gauntlet.push_back(_glt);
 		}
 		//ARMORS
-		else if (dynamic_cast<TlocArmor*>(_object))
+		else if (dynamic_cast<TlocArmor*>(_obj))
 		{
-			TlocArmor* _arm = (TlocArmor*)_object;
+			TlocArmor* _arm = (TlocArmor*)_obj;
 			_armor.push_back(_arm);
 		}
 		//INGREDIENTS
-		else if (dynamic_cast<TlocIngredients*>(_object))
+		else if (dynamic_cast<TlocIngredients*>(_obj))
 		{
-			TlocIngredients* _ing = (TlocIngredients*)_object;
+			TlocIngredients* _ing = (TlocIngredients*)_obj;
 			GlobalConstants constants;
 			int i = 0;
 			while (i < _ingredients.size())
@@ -285,9 +290,9 @@ void ATlocHumanPlayer::pickupObject()
 			}
 		}
 		//ITEMS
-		else if (dynamic_cast<TlocItem*>(_object))
+		else if (dynamic_cast<TlocItem*>(_obj))
 		{
-			TlocItem* _itm = (TlocItem*)_object;
+			TlocItem* _itm = (TlocItem*)_obj;
 			GlobalConstants constants;
 			int i = 0;
 			while (i < _items.size())
@@ -306,6 +311,17 @@ void ATlocHumanPlayer::pickupObject()
 	}
 }
 
+ATlocObject* ATlocHumanPlayer::checkChest()
+{
+	if (dynamic_cast<TlocChest*>(_object) && !dynamic_cast<TlocChest*>(_object)->GetOpened())
+	{
+		return dynamic_cast<TlocChest*>(_object)->GetObject();
+	}
+	else
+	{
+		return dynamic_cast<ATlocObject*>(_object);
+	}
+}
 
 void ATlocHumanPlayer::SetMesh(const TCHAR* fileRoot, int mesh)
 {

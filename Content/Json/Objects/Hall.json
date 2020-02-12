@@ -1,7 +1,7 @@
 {
 	"TlocSword": [{
 		"chest": true,
-		"position": [-1930, -5400, 100],
+		"position": [-1930, -5400, 45],
 		"rotation": [0, 0, -90],
 		"name": "gladius",
 		"fileDirectory": "/Game/Models/Equipment/Weapons/Gladius.Gladius",
@@ -12,7 +12,7 @@
 	},
 	{
 		"chest": true,
-		"position": [-200, 0, 100],
+		"position": [-200, 0, 45],
 		"rotation": [0, 0, -90],
 		"name": "pilum",
 		"fileDirectory": "/Game/Models/Equipment/Weapons/Pilum.Pilum",

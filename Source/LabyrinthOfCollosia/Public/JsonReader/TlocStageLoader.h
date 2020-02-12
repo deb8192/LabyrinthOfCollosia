@@ -35,4 +35,5 @@ private:
 	TlocStageLoader();
 	static TlocStageLoader* _unic_instance;
 	//fin clase singleton
+
 };

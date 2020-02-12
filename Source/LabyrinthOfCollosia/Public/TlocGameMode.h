@@ -6,6 +6,7 @@
 #include "Characters/TlocEnemy.h"
 #include "Characters/TlocHumanPlayer.h"
 #include "Engine/World.h"
+#include "Engine/Level.h"
 #include "Engine/Scene.h"
 #include "JsonReader/TlocStageLoader.h"
 
@@ -37,6 +38,7 @@ protected:
 private:
 	ATlocHumanPlayer* _humanPlayer;
 	UWorld* _world;
+	ULevel* _defaultLevel;
 	TlocStageLoader* _stageLoader;
 	//UScene* _scene;
 

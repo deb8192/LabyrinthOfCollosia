@@ -16,6 +16,7 @@ ATlocDogPlayer::ATlocDogPlayer()
 	//MESH
 
 	_charMesh = _motor->SetMesh(TEXT("DogPlayerMesh"), (const TCHAR*)_fileRoot, GetRootComponent(), this);
+	_charMesh->SetupAttachment(GetRootComponent());
 	_charMesh->SetRelativeLocation(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z - 90));
 	_charMesh->SetRelativeRotation(FRotator(GetActorRotation().Pitch, GetActorRotation().Yaw - 90, GetActorRotation().Roll));
 
@@ -55,14 +56,20 @@ void ATlocDogPlayer::SetMesh(const TCHAR* fileRoot, int mesh)
 	{
 		case 2:
 			_charMesh = _motor->SetMesh((const TCHAR*)_name, (const TCHAR*)_fileRoot, GetRootComponent(), this);
+			//_charMesh->SetupAttachment(rootComponent);
+
 			break;
 
 		/*case 3:
 			_auxCharMesh2 = _motor->SetMesh(TEXT("Auxiliar mesh 2"), (const TCHAR*)_fileRoot, GetRootComponent(), this);
+			_auxCharMesh2->SetupAttachment(rootComponent);
+
 			break;
 			*/
 		default:
 			_charMesh = _motor->SetMesh((const TCHAR*)_name, (const TCHAR*)_fileRoot, GetRootComponent(), this);
+			//_charMesh->SetupAttachment(rootComponent);
+
 			break;
 
 	}

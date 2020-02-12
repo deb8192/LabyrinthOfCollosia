@@ -28,7 +28,16 @@ public:
 	//Weapon functions
 	void IncExperience(int quantity);
 
-	//Getters
+	//Setters & Getters
+
+	void SetAttack(int att);
+	void SetLevel(int lvl);
+	void SetExperience(int exp);
+	void SetNextLevel(int nxt);
+	void SetCriticalDamageInc(float dam);
+	void SetCriticalProbabilityInc(float prob);
+	void SetLongRange(bool lrang);
+
 	int GetAttack();
 	int GetLevel();
 	int GetExperience();

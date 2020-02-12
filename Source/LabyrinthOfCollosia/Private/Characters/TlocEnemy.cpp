@@ -48,7 +48,13 @@ ATlocEnemy::ATlocEnemy()
 	//USceneComponent* _rootComponent = CreateDefaultSubobject<USceneComponent>("RootEnemy");
 
 	_charMesh = _motor->SetMesh(TEXT("enemyMesh"), (const TCHAR*)_fileRoot, GetRootComponent(), this);
+
+	//_wpnMesh->SetupAttachment(_interactionCollision);
+	_charMesh->SetupAttachment(GetRootComponent());
 	_auxCharMesh = _motor->SetMesh(TEXT("coatEnemy"), (const TCHAR*) _auxFilePath, GetRootComponent(), this);
+	_auxCharMesh->SetupAttachment(GetRootComponent());
+	//_auxCharMesh2->SetupAttachment(GetRootComponent());
+
 
 	/*
 	_charMesh->SetRelativeLocation(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z - 90));
@@ -156,14 +162,15 @@ void ATlocEnemy::Tick(float DeltaTime)
 
 }
 
-void ATlocEnemy::replaceEnemy(FVector pos, FRotator rot, TArray<TCHAR*> _paths, UStaticMeshComponent* _mesh)
+void ATlocEnemy::replaceEnemy(ATlocEnemy* _enm)
 {
-	position = pos;
-	rotation = rot;
-	SetActorLocationAndRotation(pos, rot);
-	_fileRoot = _paths[0];
-	_auxFilePath = _paths[1];
-	_auxFilePath2 = _paths[2];
+	position = _enm->GetPosition();
+	rotation = _enm->GetRotation();
+	SetActorLocationAndRotation(position, rotation);
+	TArray<TCHAR*> paths = _enm->GetMeshesFileRoot();
+	_fileRoot = paths[0];
+	_auxFilePath = paths[1];
+	_auxFilePath2 = paths[2];
 	if (_charMesh != NULL)
 	{
 		_motor->DestroyMeshComponent(_charMesh);
@@ -179,18 +186,20 @@ void ATlocEnemy::replaceEnemy(FVector pos, FRotator rot, TArray<TCHAR*> _paths, 
 		_motor->DestroyMeshComponent(_auxCharMesh2);
 		_auxCharMesh2 = NULL;
 	}
-	GetCapsuleComponent();
 	_charMesh = _motor->SetMesh((const TCHAR*)_name, (const TCHAR*)_fileRoot, GetRootComponent(), this);
-	_auxCharMesh = _motor->SetMesh(TEXT("Auxiliar mesh"), (const TCHAR*)_auxFilePath, GetRootComponent(), this);
-	_auxCharMesh2 = _motor->SetMesh(TEXT("Auxiliar mesh 2"), (const TCHAR*)_auxFilePath2, GetRootComponent(), this);
+	_charMesh->SetupAttachment(GetRootComponent());
 	_motor->RegisterMeshComponent(_charMesh);
-	if (_auxCharMesh)
+	if (*_auxFilePath !=  _T('\0'))
 	{
+		_auxCharMesh = _motor->SetMesh(TEXT("Auxiliar mesh"), (const TCHAR*)_auxFilePath, GetRootComponent(), this);
+		_auxCharMesh->SetupAttachment(GetRootComponent());
 		_motor->RegisterMeshComponent(_auxCharMesh);
-	}
-	if (_auxCharMesh2)
-	{
-		_motor->RegisterMeshComponent(_auxCharMesh2);
+		if (*_auxFilePath2 != _T('\0'))
+		{
+			_auxCharMesh2 = _motor->SetMesh(TEXT("Auxiliar mesh 2"), (const TCHAR*)_auxFilePath2, GetRootComponent(), this);
+			_motor->RegisterMeshComponent(_auxCharMesh2);
+			_auxCharMesh2->SetupAttachment(GetRootComponent());
+		}
 	}
 	//_charMesh->SetRelativeLocationAndRotation(pos, rot);
 }

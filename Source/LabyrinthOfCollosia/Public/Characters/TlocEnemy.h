@@ -52,7 +52,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void replaceEnemy(FVector pos, FRotator rot, TArray<TCHAR*> _paths, UStaticMeshComponent* _mesh);
+	void replaceEnemy(ATlocEnemy* _enm);
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

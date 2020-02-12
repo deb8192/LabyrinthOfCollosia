@@ -8,6 +8,7 @@ using GlobalConstants = struct Constants
 
 	const int KUNITY = 1;
 	const int KPERCENT = 100;
+	size_t KCHAR_SIZE = 32;
 
 
 	//Speeds
@@ -32,11 +33,14 @@ using GlobalConstants = struct Constants
 	const char* KEXTENSION_JSON = ".json";
 	const char* KDIR_JSON_OBJ = "Json/Objects/";
 	const char* KDIR_JSON_ENM = "Json/Enemies/";
+	const char* KDIR_CHEST_MESH = "/Game/Models/Stages/Stages-objects/Vessel_Cube.Vessel_Cube";
+	const char* KDIR_CHEST_AUX_MESH = "/Game/Models/Stages/Stages-objects/Vessel_Sphere.Vessel_Sphere";
 
 	//JSON objects
 	//	-Classes
 
 	const char* KOBJECT = "objects";
+	const char* KWEAPON = "TlocWeapon";
 	const char* KSWORD = "TlocSword";
 	const char* KSPEAR = "TlocSpear";
 	const char* KAXE = "TlocAxe";
@@ -46,6 +50,11 @@ using GlobalConstants = struct Constants
 	const char* KHEALT_ITEM = "TlocHealtItem";
 	const char* KCALL_BEAD_ITEN = "TlocCallBeadItem";
 	const char* KSTATUS_ITEM = "TlocStatusItem";
+	const char* KCHEST_CLASS = "TlocChest";
+
+	//	-Properties
+
+	const char* KCHEST = "chest";
 
 	//JSON enemies
 
@@ -53,7 +62,6 @@ using GlobalConstants = struct Constants
 
 	//	-Name variables
 
-	const char* KCHEST = "chest";
 	const char* KPOSITION = "position";
 	const char* KROTATION = "rotation";
 	const char* KNAME = "name";

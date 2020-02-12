@@ -27,25 +27,38 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void replaceObject(FVector pos, FRotator rot, TCHAR* _path, UStaticMeshComponent* _mesh);
+	void ReplaceObject(ATlocObject* _obj);
+	void ReplaceMesh(const TCHAR* fileRoot);
+
+	void RegisterMeshComponent();
+	void DestroyMeshComponent();
 
 	//Getters & Setters
+	void SetMeshFileRoot(const TCHAR* fileRoot);
 	void SetMesh(const TCHAR* fileRoot);
+	void SetClassName(const TCHAR* _clsNm);
 	void SetAttributes();
 	void SetPosition(FVector newPosition);
 	void SetRotation(FRotator newRotation);
+
+	int GetIDObject();
+	TCHAR* GetName();
+	TCHAR* GetClassName();
+	float GetPrice();
 	UStaticMeshComponent* GetMesh();
+	USphereComponent* GetInteractionCollision();
 	FVector GetPosition();
 	FRotator GetRotation();
 	TCHAR* GetMeshFileRoot();
 
-private:
+protected:
 
 	FVector position;
 	FRotator rotation;
 
 	int IDObject;
 	TCHAR* _name;
+	TCHAR* _className;
 	TCHAR* _fileRoot;
 	float price;
 

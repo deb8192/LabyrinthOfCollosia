@@ -10,6 +10,7 @@
 
 #include "UObject/UObjectGlobals.h"
 
+#include "../Public/Objects/TlocChest.h"
 #include "../Public/Objects/TlocArmor.h"
 #include "../Public/Objects/TlocGauntlet.h"
 #include "../Public/Objects/TlocWeapon.h"
@@ -57,28 +58,53 @@ std::vector<ATlocObject*> TlocStageLoader::ObjectsLoader(const char* _name)
 		{
 			TArray<TSharedPtr<FJsonValue>> objectsArray = jsonParser->GetArrayField(constants.KSWORD);
 			TlocWeapon* _wpn;
+			TlocChest* _chst;
 			FString *_filePath;
+			FString* _fPath;
+			FString* _clsNm;
 			FVector *_pos;
 			FRotator *_rot;
 			for (short i = 0; i < objectsArray.Num(); i++)
 			{
 				_filePath = new FString();
+				_fPath = new FString();
+				_clsNm = new FString();
+				bool chest = false;
+				_chst = NewObject<TlocChest>();
 				_wpn = NewObject<TlocWeapon>();
 				TSharedPtr<FJsonObject> jsonObject = objectsArray[i]->AsObject();
 				TArray<FString> posRot;
 				jsonObject->TryGetStringArrayField(constants.KPOSITION, posRot);
 				_pos = new FVector{  FCString::Atof(*posRot[0]), 
 								  FCString::Atof(*posRot[1]), 
-								  FCString::Atof(*posRot[2]), };;
+								  FCString::Atof(*posRot[2]), };
 				jsonObject->TryGetStringArrayField(constants.KROTATION, posRot);
 				_rot = new FRotator{ FCString::Atof(*posRot[3]),
 								  FCString::Atof(*posRot[4]),
 								  FCString::Atof(*posRot[5]), };
 				jsonObject->TryGetStringField(constants.KFILE_DIRECTORY, *_filePath);
-				_wpn->SetMesh(**_filePath);
-				_wpn->SetPosition(*_pos);
-				_wpn->SetRotation(*_rot);
-				levelObjects.push_back(_wpn);
+				_wpn->SetMeshFileRoot(**_filePath);
+				jsonObject->TryGetBoolField(constants.KCHEST, chest);
+				if (chest)
+				{
+					*_fPath = constants.KDIR_CHEST_MESH;
+					*_clsNm = constants.KCHEST_CLASS; 
+
+					_chst->SetMeshFileRoot(**_fPath);
+					_chst->SetObject(_wpn);
+					_chst->SetClassName(**_clsNm);
+					_chst->SetPosition(*_pos);
+					//_chst->SetRotation(*_rot);
+					levelObjects.push_back(_chst);
+				}
+				else
+				{
+					*_clsNm = constants.KWEAPON;
+					_wpn->SetClassName(**_clsNm);
+					_wpn->SetPosition(*_pos);
+					_wpn->SetRotation(*_rot);
+					levelObjects.push_back(_wpn);
+				}
 			}
 		}
 		if (jsonParser->Values.Contains(constants.KARMOR))

@@ -36,6 +36,7 @@ private:
 	void attack();
 	void takeObj();
 	void pickupObject();
+	ATlocObject* checkChest();
 
 
 	//Setters & Getters

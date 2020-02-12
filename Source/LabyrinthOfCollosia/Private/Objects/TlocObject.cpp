@@ -7,6 +7,13 @@
 #include "Engine/Scene.h"
 #include "./GlobalConstants.h"
 
+#include "..\Public\Magic\TlocIngredients.h"
+#include "..\Public\Objects\TlocItem.h"
+#include "..\Public\Objects\TlocWeapon.h"
+#include "..\Public\Objects\TlocArmor.h"
+#include "..\Public\Objects\TlocGauntlet.h"
+#include "..\Public\Objects\TlocChest.h"
+
 // Sets default values
 ATlocObject::ATlocObject()
 {
@@ -16,11 +23,12 @@ ATlocObject::ATlocObject()
 	_motor = ATlocMotorFacade::GetInstance(this);
 
 	_interactionCollision = CreateDefaultSubobject<USphereComponent>(TEXT("InteractionCollision"));
-	_interactionCollision->SetSphereRadius(50.f, true);
-	_interactionCollision->SetupAttachment(GetRootComponent());
+	_interactionCollision->SetSphereRadius(75.f, true);
+	SetRootComponent(_interactionCollision);
 
 	_fileRoot = TEXT("/Game/Models/Equipment/Weapons/Gladius.Gladius");
 	_name = TEXT("object");
+	_className = TEXT("ATlocObject");
 
 	_wpnMesh = _motor->SetMesh(_name, (const TCHAR*)_fileRoot, GetRootComponent(), this);
 	_wpnMesh->SetupAttachment(_interactionCollision);
@@ -47,23 +55,147 @@ void ATlocObject::Tick(float DeltaTime)
 
 }
 
-void ATlocObject::replaceObject(FVector pos, FRotator rot, TCHAR* _path, UStaticMeshComponent* _mesh)
+void ATlocObject::ReplaceObject(ATlocObject* _obj)
 {
-	position = pos;
-	rotation = rot;
-	SetActorLocationAndRotation(pos, rot);
-	_fileRoot = _path;
-	_wpnMesh = NULL;
+	GlobalConstants constants;
+	position = _obj->GetPosition();
+	rotation = _obj->GetRotation();
+	SetActorLocationAndRotation(position, rotation);
+	_fileRoot = _obj->GetMeshFileRoot();
+
+	
+	_wpnMesh = _motor->SetMesh((const TCHAR*)_name, (const TCHAR*)_fileRoot, GetRootComponent(), this);
+	//_wpnMesh->SetupAttachment(_interactionCollision);
+	_motor->RegisterMeshComponent(_wpnMesh);
+
+	char* _objName = (char*)malloc(constants.KCHAR_SIZE);
+	TCHAR* _gotObjName = _obj->GetClassName();
+	size_t   x;
+	wcstombs_s(&x, _objName, constants.KCHAR_SIZE, _gotObjName, constants.KCHAR_SIZE);
+
+	//Child features
+	
+	//WEAPONS
+	if (strcmp(_objName, constants.KWEAPON) == 0)
+	{
+		TlocWeapon* _wpn = (TlocWeapon*)_obj;
+		TlocWeapon* _wpnThis = (TlocWeapon*)this;
+
+		_wpnThis->SetAttack(_wpn->GetAttack());
+		_wpnThis->SetLevel(_wpn->GetLevel());
+		_wpnThis->SetExperience(_wpn->GetExperience());
+		_wpnThis->SetNextLevel(_wpn->GetNextLevel());
+		_wpnThis->SetCriticalDamageInc(_wpn->GetCriticalDamageInc());
+		_wpnThis->SetCriticalProbabilityInc(_wpn->GetCriticalProbabilityInc());
+		_wpnThis->SetLongRange(_wpn->GetLongRange());
+
+	}
+
+	else if (strcmp(_objName, constants.KCHEST_CLASS) == 0)
+	{
+		TlocChest* _chst = (TlocChest*)_obj;
+		TlocChest* _chstThis = (TlocChest*)this;
+
+
+		_chstThis->SetOpened(_chst->GetOpened());
+		_chstThis->SetObject(_chst->GetObject());
+
+
+	}
+	/*//GAUNTLETS
+	else if (dynamic_cast<TlocGauntlet*>(_obj))
+	{
+		TlocGauntlet* _glt = (TlocGauntlet*)_obj;
+		_gauntlet.push_back(_glt);
+	}
+	//ARMORS
+	else if (dynamic_cast<TlocArmor*>(_obj))
+	{
+		TlocArmor* _arm = (TlocArmor*)_obj;
+		_armor.push_back(_arm);
+	}
+	//INGREDIENTS
+	else if (dynamic_cast<TlocIngredients*>(_obj))
+	{
+		TlocIngredients* _ing = (TlocIngredients*)_obj;
+		GlobalConstants constants;
+		int i = 0;
+		while (i < _ingredients.size())
+		{
+			if (_ingredients[i].front() != nullptr && _ingredients[i].front()->GetID() == _ing->GetID())
+			{
+				_ingredients[i].push_back(_ing);
+				i = _ingredients.size();
+			}
+			else
+			{
+				i++;
+			}
+		}
+	}
+	//ITEMS
+	else if (dynamic_cast<TlocItem*>(_obj))
+	{
+		TlocItem* _itm = (TlocItem*)_obj;
+		GlobalConstants constants;
+		int i = 0;
+		while (i < _items.size())
+		{
+			if (_items[i].front() != nullptr && _items[i].front() == _itm)
+			{
+				_items[i].push_back(_itm);
+				i = _items.size();
+			}
+			else
+			{
+				i++;
+			}
+		}
+	}
+	*/
+	
+}
+void ATlocObject::ReplaceMesh(const TCHAR* fileRoot)
+{
+	if (_wpnMesh != NULL)
+	{
+		_motor->DestroyMeshComponent(_wpnMesh);
+		_wpnMesh = NULL;
+	}
 	_wpnMesh = _motor->SetMesh((const TCHAR*)_name, (const TCHAR*)_fileRoot, GetRootComponent(), this);
 	_motor->RegisterMeshComponent(_wpnMesh);
-	//_wpnMesh->SetRelativeLocationAndRotation(pos, rot);
+}
+void ATlocObject::RegisterMeshComponent()
+{
+	if (_wpnMesh)
+	{
+		_motor->RegisterMeshComponent(_wpnMesh);
+	}
+}
+
+void ATlocObject::DestroyMeshComponent()
+{
+	if (_wpnMesh != NULL)
+	{
+		_motor->DestroyMeshComponent(_wpnMesh);
+		_wpnMesh = NULL;
+	}
+}
+
+void ATlocObject::SetMeshFileRoot(const TCHAR* fileRoot)
+{
+	_fileRoot = (TCHAR*) fileRoot;
 }
 
 void ATlocObject::SetMesh(const TCHAR* fileRoot)
 {
-	_fileRoot = (TCHAR*) fileRoot;
-	fileRoot = NULL;
+	SetMeshFileRoot(fileRoot);
 	_wpnMesh = _motor->SetMesh((const TCHAR*) _name, (const TCHAR*) _fileRoot, GetRootComponent(), this);
+}
+
+void ATlocObject::SetClassName(const TCHAR* _clsNm)
+{
+	_className = (TCHAR*) _clsNm;
 }
 
 void ATlocObject::SetAttributes()
@@ -84,9 +216,34 @@ void ATlocObject::SetRotation(FRotator newRotation)
 	_wpnMesh->SetRelativeRotation(newRotation);
 }
 
+int ATlocObject::GetIDObject()
+{
+	return IDObject;
+}
+
+TCHAR* ATlocObject::GetName()
+{
+	return _name;
+}
+
+TCHAR* ATlocObject::GetClassName()
+{
+	return _className;
+}
+
+float ATlocObject::GetPrice()
+{
+	return price;
+}
+
 UStaticMeshComponent* ATlocObject::GetMesh()
 {
 	return _wpnMesh;
+}
+
+USphereComponent* ATlocObject::GetInteractionCollision()
+{
+	return _interactionCollision;
 }
 
 FVector ATlocObject::GetPosition()

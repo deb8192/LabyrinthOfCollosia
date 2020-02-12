@@ -45,6 +45,34 @@ void TlocWeapon::IncExperience(int quantity)
 		}
 	}
 }
+void TlocWeapon::SetAttack(int att)
+{
+	attack = att;
+}
+void TlocWeapon::SetLevel(int lvl)
+{
+	level = lvl;
+}
+void TlocWeapon::SetExperience(int exp)
+{
+	experience = exp;
+}
+void TlocWeapon::SetNextLevel(int nxt)
+{
+	nextLevelExp = nxt;
+}
+void TlocWeapon::SetCriticalDamageInc(float dam)
+{
+	criticalDamageInc = dam;
+}
+void TlocWeapon::SetCriticalProbabilityInc(float prob)
+{
+	criticalProbabilityInc = prob;
+}
+void TlocWeapon::SetLongRange(bool lrang)
+{
+	longRange = lrang;
+}
 int TlocWeapon::GetAttack()
 {
 	return attack;

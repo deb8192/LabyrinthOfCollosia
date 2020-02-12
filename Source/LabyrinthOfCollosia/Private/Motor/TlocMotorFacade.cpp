@@ -24,7 +24,6 @@ ATlocMotorFacade::~ATlocMotorFacade()
 UStaticMeshComponent* ATlocMotorFacade::SetMesh(const TCHAR* _name, const TCHAR* _directory, USceneComponent* rootComponent, UObject* obj)
 {
 	_mesh = NewObject<UStaticMeshComponent>(obj, _name);
-	_mesh->SetupAttachment(rootComponent);
 	UStaticMesh* _meshAsset = LoadObject<UStaticMesh>(NULL, _directory);
 	
 	//static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshAsset(_directory);
