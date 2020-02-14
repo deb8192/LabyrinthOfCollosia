@@ -31,6 +31,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	void SpawnLevels(int _lvlNum);
 	void SpawnActorsOnStage();
 
 	void Tick(float DeltaTime);
@@ -38,7 +39,8 @@ protected:
 private:
 	ATlocHumanPlayer* _humanPlayer;
 	UWorld* _world;
-	ULevel* _defaultLevel;
+	//ULevel* _defaultLevel;
+	std::vector<ULevel*> _levels;
 	TlocStageLoader* _stageLoader;
 	//UScene* _scene;
 

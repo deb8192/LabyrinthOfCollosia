@@ -21,6 +21,14 @@ public:
 	//ATlocHumanPlayer(int idChrctr, int lvl, int lif, int att, int def, int magdef, int exp, int nxtlvl, int crit, int critProb, int lck, int eva);
 	~ATlocHumanPlayer();
 
+	//Setters & Getters
+	void SetMesh(const TCHAR* fileRoot, int mesh);
+	void SetPosition(FVector newPosition);
+	void SetRotation(FRotator newRotation);
+
+
+	UStaticMeshComponent* GetMesh();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -37,15 +45,6 @@ private:
 	void takeObj();
 	void pickupObject();
 	ATlocObject* checkChest();
-
-
-	//Setters & Getters
-	void SetMesh(const TCHAR* fileRoot, int mesh);
-	void SetPosition(FVector newPosition);
-	void SetRotation(FRotator newRotation);
-
-
-	UStaticMeshComponent* GetMesh();
 
 	//Variables
 	using Equipment = struct equipmentStructure

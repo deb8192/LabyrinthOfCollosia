@@ -4,31 +4,34 @@
 
 using GlobalConstants = struct Constants
 {
-	//Cardinals for calculus
+	/*** Cardinals for calculus ***/
 
 	const int KUNITY = 1;
 	const int KPERCENT = 100;
 	size_t KCHAR_SIZE = 32;
 
 
-	//Speeds
+	/*** Speeds ***/
 
 	const int KROTATIONSPEED = 15;
 
-	//Return vlues
+	/*** Return vlues ***/
 
 	const int KZERO = 0;
 	const int KMINUS_ONE = -1;
 
 
-	//Default values
+	/*** Default values ***/
 
+	const int KLEVEL_NUM = 6;
 	const float KINVULNERABLE_TIME = 1.5;
 	const int KBASICDAMAGE = 2;
 	const int KMAX_NUM_DIRECTORIES = 4;
 	const int KMAX_VARIABLE_DAMAGE = 5;
 	const int KMIN_VARIABLE_DAMAGE = -2;
 	const char* KEMPTY_STRING = "";
+
+	//	-Directory
 	const char* KFIRST_LEVEL_NAME = "Hall";
 	const char* KEXTENSION_JSON = ".json";
 	const char* KDIR_JSON_OBJ = "Json/Objects/";
@@ -36,7 +39,14 @@ using GlobalConstants = struct Constants
 	const char* KDIR_CHEST_MESH = "/Game/Models/Stages/Stages-objects/Vessel_Cube.Vessel_Cube";
 	const char* KDIR_CHEST_AUX_MESH = "/Game/Models/Stages/Stages-objects/Vessel_Sphere.Vessel_Sphere";
 
-	//JSON objects
+	const char* KEXTENSION_UMAP = ".umap";
+	const char* KDIR_LEVELS = "Models/Stages";
+	const char* KDIR_HALL = "Hall/";
+	const char* KDIR_MINITAURUS_STAGE = "Stage-PreMinitaurus/";
+	const char* KNAME_HALL = "Hall";
+	const char* KNAME_MINITAURUS_STAGE = "Stage-PreMinitaurus";
+
+	/*** JSON objects ***/
 	//	-Classes
 
 	const char* KOBJECT = "objects";
@@ -56,7 +66,7 @@ using GlobalConstants = struct Constants
 
 	const char* KCHEST = "chest";
 
-	//JSON enemies
+	/*** JSON enemies ***/
 
 	const char* KENEMY = "TlocEnemy";
 
@@ -78,7 +88,7 @@ using GlobalConstants = struct Constants
 	const char* KHEALTH_RECOVERED = "healthRecovered";
 
 
-	//Max number of
+	/*** Max number of ***/
 
 	const int KMAXUSES = 100;
 	const int KMAXACTIVE_BUFFS_AILMENTS = 4;
@@ -94,7 +104,7 @@ using GlobalConstants = struct Constants
 	const int KMAXEQUIPEMENT_LEVEL = 10;
 
 
-	//Buffs & Ailments
+	/*** Buffs & Ailments ***/
 	
 	const int KEXTRALIFE = 0;
 	const int KDEFEND = 1;
