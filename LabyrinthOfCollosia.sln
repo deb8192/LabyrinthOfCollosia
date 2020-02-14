@@ -10,6 +10,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UE4", "Intermediate\ProjectFiles\UE4.vcxproj", "{F61F2FF6-2252-4A0D-9C3F-25D056FE84BB}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LabyrinthOfCollosia", "Intermediate\ProjectFiles\LabyrinthOfCollosia.vcxproj", "{F42F03E4-CB6F-4800-B040-B21D9E101187}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F61F2FF6-2252-4A0D-9C3F-25D056FE84BB} = {F61F2FF6-2252-4A0D-9C3F-25D056FE84BB}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Visualizers", "Visualizers", "{FFFC2846-43C4-44E3-9727-A7CDE46CF245}"
 	ProjectSection(SolutionItems) = preProject
@@ -83,5 +86,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{F61F2FF6-2252-4A0D-9C3F-25D056FE84BB} = {676D906D-90D8-4121-B8EA-83CB6DFC0485}
 		{F42F03E4-CB6F-4800-B040-B21D9E101187} = {74931D9C-DDAF-45F2-BCE5-C3AC3C9CD273}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CE650B3E-3B29-4DEE-86FD-3BC539CECBD2}
 	EndGlobalSection
 EndGlobal

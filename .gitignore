@@ -344,3 +344,4 @@ ASALocalRun/
 # BeatPulse healthcheck temp database
 healthchecksdb
 /Binaries/Win64
+/Intermediate
