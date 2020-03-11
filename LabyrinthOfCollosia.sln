@@ -3,18 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28315.86
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Engine", "Engine", "{676D906D-90D8-4121-B8EA-83CB6DFC0485}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Engine", "Engine", "{02FEEA6D-09DE-4B72-93CE-24DF62E51634}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Games", "Games", "{74931D9C-DDAF-45F2-BCE5-C3AC3C9CD273}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Games", "Games", "{B4ECA1C4-0553-4A5D-86BF-560C42EEC3F4}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UE4", "Intermediate\ProjectFiles\UE4.vcxproj", "{F61F2FF6-2252-4A0D-9C3F-25D056FE84BB}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LabyrinthOfCollosia", "Intermediate\ProjectFiles\LabyrinthOfCollosia.vcxproj", "{F42F03E4-CB6F-4800-B040-B21D9E101187}"
-	ProjectSection(ProjectDependencies) = postProject
-		{F61F2FF6-2252-4A0D-9C3F-25D056FE84BB} = {F61F2FF6-2252-4A0D-9C3F-25D056FE84BB}
-	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Visualizers", "Visualizers", "{FFFC2846-43C4-44E3-9727-A7CDE46CF245}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Visualizers", "Visualizers", "{56F5593F-F9D5-4775-B964-F9D768BC0076}"
 	ProjectSection(SolutionItems) = preProject
 		C:\Program Files\Epic Games\UE_4.23\Engine\Extras\VisualStudioDebugging\UE4.natvis = C:\Program Files\Epic Games\UE_4.23\Engine\Extras\VisualStudioDebugging\UE4.natvis
 	EndProjectSection
@@ -84,10 +81,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{F61F2FF6-2252-4A0D-9C3F-25D056FE84BB} = {676D906D-90D8-4121-B8EA-83CB6DFC0485}
-		{F42F03E4-CB6F-4800-B040-B21D9E101187} = {74931D9C-DDAF-45F2-BCE5-C3AC3C9CD273}
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {CE650B3E-3B29-4DEE-86FD-3BC539CECBD2}
+		{F61F2FF6-2252-4A0D-9C3F-25D056FE84BB} = {02FEEA6D-09DE-4B72-93CE-24DF62E51634}
+		{F42F03E4-CB6F-4800-B040-B21D9E101187} = {B4ECA1C4-0553-4A5D-86BF-560C42EEC3F4}
 	EndGlobalSection
 EndGlobal

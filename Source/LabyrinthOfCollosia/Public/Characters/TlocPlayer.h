@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include "TlocCharacter.h"
+#include "..\UserInterfaces\TlocIngameMenu.h"
 #include "Camera/CameraComponent.h"
 //#include "TlocEnemy.h"
 
@@ -39,6 +40,7 @@ public:
 	FRotator GetRotation();
 	bool GetDefend();
 	int GetLife();
+
 
 private:
 	

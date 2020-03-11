@@ -3,7 +3,6 @@
 #pragma once
 
 #include "TlocPlayer.h"
-
 #include <Runtime\Engine\Classes\GameFramework\SpringArmComponent.h>
 #include "GameFramework/Character.h"
 #include "TlocHumanPlayer.generated.h"
@@ -29,9 +28,22 @@ public:
 
 	UStaticMeshComponent* GetMesh();
 
+	FORCEINLINE class UTlocIngameMenu* GetIngameMenu() const
+	{
+		return IngameMenu;
+	}
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	// Human player ingame menu
+	TSubclassOf<class UUserWidget> IngameMenuUIClass;
+
+	UPROPERTY(BlueprintReadWrite, Category = "UI")
+		class UTlocIngameMenu* IngameMenu;
+
+	bool openMenu;
 
 private:
 
@@ -40,6 +52,16 @@ private:
 	void moveVertically(float value);
 	void moveHorizontally(float value);
 	void rotateHorizontally(float value);
+
+	//Functions to open & close menu
+
+	void loadInGameUI();
+	void closeInGameUI();
+	void checkMenu();
+
+	//Functions to use menu
+	void rotateMenuLeft();
+	void rotateMenuRight();
 
 	void attack();
 	void takeObj();
@@ -83,6 +105,7 @@ public:
 		void OnHumanActorOverlap(AActor* _player, AActor* _obj);
 	UFUNCTION()
 		void OnHumanActorStopOverlap(AActor* _player, AActor* _obj);
+
 
 	//Getters
 	Equipment GetPlayerEquipment();

@@ -2,6 +2,7 @@
 
 
 #include "../Public/Characters/TlocPlayer.h"
+#include "../Public/Characters/TlocHumanPlayer.h"
 #include "../Public/GlobalConstants.h"
 
 #include <stdlib.h>
@@ -37,6 +38,7 @@ TlocPlayer::TlocPlayer()
 
 	experience = 0;
 	nextLevel = 200;
+
 
 }
 

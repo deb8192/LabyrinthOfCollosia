@@ -55,20 +55,19 @@ ATlocHumanPlayer::ATlocHumanPlayer() : TlocPlayer()
 	_wpnMesh->SetRelativeLocation(FVector(0.0f, 0.0f, 25.0f));
 	_wpnMesh->SetRelativeRotation(FRotator(-90.f, 0.0f, 0.0f));
 
-	//_wpnMesh->SetRelativeLocation(FVector(0.0f, 0.0f, 45.0f));
-	//_wpnMesh->SetRelativeRotation(FRotator(-90.f, 0.0f, 0.0f));
 	_wpnMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
-	/*static ConstructorHelpers::FObjectFinder<UStaticMesh> ObjectMeshAsset((const TCHAR*)playerEquipment._weapon->GetMeshFileRoot());
 
-	if (ObjectMeshAsset.Succeeded())
+
+
+	static ConstructorHelpers::FClassFinder<UUserWidget> IngameMenuUIBPClass(TEXT("/Game/UserInterface/Menu/TlocInGameMenuBP"));
+
+	if (IngameMenuUIBPClass.Class != nullptr)
 	{
-		_wpnMesh->SetStaticMesh(ObjectMeshAsset.Object);
-		_wpnMesh->SetWorldScale3D(FVector(1.f));
-		_wpnMesh->SetupAttachment(GetRootComponent());
-		_wpnMesh->SetRelativeLocation(FVector(0.0f, 0.0f, 45.0f));
-		_wpnMesh->SetRelativeRotation(FRotator(-90.f, 0.0f, 0.0f));
-		_wpnMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
-	}*/
+		IngameMenuUIClass = IngameMenuUIBPClass.Class;
+	}
+
+	openMenu = false;
+	
 
 
 }
@@ -112,18 +111,7 @@ void ATlocHumanPlayer::BeginPlay()
 // Called every frame
 void ATlocHumanPlayer::Tick(float DeltaTime)
 {
-	//AddActorWorldOffset(FVector(0, 0, 0));
-	//AddActorLocalOffset(FVector(1, 0, 0));
 	Super::Tick(DeltaTime);
-
-	/*if (playerEquipment._weapon != NULL)
-	{
-		playerEquipment._weapon->SetPosition(GetActorLocation());
-	}*/
-
-	
-
-
 }
 
 // Called to bind functionality to input
@@ -135,7 +123,11 @@ void ATlocHumanPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 	PlayerInputComponent->BindAction("PickUp", IE_Pressed, this, &ATlocHumanPlayer::takeObj);
 	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &ATlocHumanPlayer::attack);
+	PlayerInputComponent->BindAction("OpenMenu", IE_Pressed, this, &ATlocHumanPlayer::checkMenu);
+	PlayerInputComponent->BindAction("RotLeftMenu", IE_Pressed, this, &ATlocHumanPlayer::rotateMenuLeft);
+	PlayerInputComponent->BindAction("RotRightMenu", IE_Pressed, this, &ATlocHumanPlayer::rotateMenuRight);
 }
+
 
 //Function to activate the player's attack
 void ATlocHumanPlayer::OnHumanActorHit(UPrimitiveComponent* _weaponMesh, AActor* _other, UPrimitiveComponent* _otherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& Hit)
@@ -198,6 +190,54 @@ void ATlocHumanPlayer::rotateHorizontally(float value)
 	GlobalConstants constants;
 
 	AddControllerYawInput(value * constants.KROTATIONSPEED * GetWorld()->GetDeltaSeconds());
+}
+
+
+
+void ATlocHumanPlayer::loadInGameUI()
+{
+	if (IngameMenuUIClass == nullptr) return;
+
+	IngameMenu = CreateWidget<UTlocIngameMenu>(GetWorld(), IngameMenuUIClass);
+	if (IngameMenu == nullptr) return;
+
+	IngameMenu->AddToViewport();
+}
+
+void ATlocHumanPlayer::closeInGameUI()
+{
+	IngameMenu->RemoveFromViewport();
+	IngameMenu = nullptr;
+}
+
+void ATlocHumanPlayer::checkMenu()
+{
+	if (openMenu)
+	{
+		openMenu = false;
+		closeInGameUI();
+	}
+	else
+	{
+		openMenu = true;
+		loadInGameUI();
+	}
+}
+
+void ATlocHumanPlayer::rotateMenuLeft()
+{
+	if (openMenu)
+	{
+		IngameMenu->RotateMenu(false);
+	}
+}
+
+void ATlocHumanPlayer::rotateMenuRight()
+{
+	if (openMenu)
+	{
+		IngameMenu->RotateMenu(true);
+	}
 }
 
 void ATlocHumanPlayer::attack()
