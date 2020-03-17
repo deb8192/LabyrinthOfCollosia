@@ -73,6 +73,16 @@ using GlobalConstants = struct Constants
 	const char* KNAME_WINGS_128 = "Wings-128px.Wings-128px";
 	const char* KNAME_WINGS = "Wings";
 
+	//	-HUD directories
+
+	const char* KDIR_PLAYERS = "/Game/Sprites/HUD/HUD-512px-pictures/";
+	const char* KNAME_HUMAN_PLAYER = "HumanPlayer";
+	const char* KNAME_DOG_PLAYER = "DogPlayer";
+	const char* KNAME_HUMAN_PLAYER_M = "HumanPlayerPic.HumanPlayerPic";
+	const char* KNAME_HUMAN_PLAYER_F = "HumanPlayerPicF.HumanPlayerPicF";
+
+
+
 	//	-Stages directories
 
 	const char* KEXTENSION_UMAP = ".umap";

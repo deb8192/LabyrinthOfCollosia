@@ -66,6 +66,13 @@ ATlocHumanPlayer::ATlocHumanPlayer() : TlocPlayer()
 		IngameMenuUIClass = IngameMenuUIBPClass.Class;
 	}
 
+	static ConstructorHelpers::FClassFinder<UUserWidget> PlayerHudUIBPClass(TEXT("/Game/UserInterface/HUD/HUD-BP"));
+
+	if (IngameMenuUIBPClass.Class != nullptr)
+	{
+		PlayerHudUIClass = PlayerHudUIBPClass.Class;
+	}
+
 	openMenu = false;
 	
 
@@ -100,6 +107,8 @@ void ATlocHumanPlayer::BeginPlay()
 {
 	Super::BeginPlay();	
 
+	LoadPlayer();
+
 	_motor->RegisterMeshComponent(_charMesh);
 	_motor->RegisterMeshComponent(_wpnMesh);
 	_wpnMesh->OnComponentBeginOverlap.AddDynamic(this, &ATlocHumanPlayer::OnHumanActorHit);
@@ -121,7 +130,7 @@ void ATlocHumanPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAxis("MoveHorizontally", this, &ATlocHumanPlayer::moveHorizontally);
 	PlayerInputComponent->BindAxis("RotateHorizontally", this, &ATlocHumanPlayer::rotateHorizontally);
 
-	PlayerInputComponent->BindAction("PickUp", IE_Pressed, this, &ATlocHumanPlayer::takeObj);
+	PlayerInputComponent->BindAction("PickUp", IE_Pressed, this, &ATlocHumanPlayer::modifyHudLife);
 	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &ATlocHumanPlayer::attack);
 	PlayerInputComponent->BindAction("OpenMenu", IE_Pressed, this, &ATlocHumanPlayer::checkMenu);
 	PlayerInputComponent->BindAction("RotLeftMenu", IE_Pressed, this, &ATlocHumanPlayer::rotateMenuLeft);
@@ -169,6 +178,12 @@ void ATlocHumanPlayer::OnHumanActorStopOverlap(AActor* _player, AActor* _obj)
 	}
 }
 
+void ATlocHumanPlayer::LoadPlayer()
+{
+	loadHud();
+	PlayerHud->SetPlayerPic(player);
+}
+
 ATlocHumanPlayer::Equipment ATlocHumanPlayer::GetPlayerEquipment()
 {
 	return playerEquipment;
@@ -191,8 +206,6 @@ void ATlocHumanPlayer::rotateHorizontally(float value)
 
 	AddControllerYawInput(value * constants.KROTATIONSPEED * GetWorld()->GetDeltaSeconds());
 }
-
-
 
 void ATlocHumanPlayer::loadInGameUI()
 {
@@ -237,6 +250,35 @@ void ATlocHumanPlayer::rotateMenuRight()
 	if (openMenu)
 	{
 		IngameMenu->RotateMenu(true);
+	}
+}
+
+
+void ATlocHumanPlayer::loadHud()
+{
+	if (PlayerHudUIClass == nullptr) return;
+
+	PlayerHud = CreateWidget<UTlocHud>(GetWorld(), PlayerHudUIClass);
+	if (PlayerHud == nullptr) return;
+
+	PlayerHud->AddToViewport();
+}
+
+void ATlocHumanPlayer::modifyHudLife(/*float quantity*/)
+{
+	//TEST
+	ModifyLife(-25);
+	float percent = life / defaultLife;
+	PlayerHud->ModifyLifeBar(percent);
+	modifyHudMaster(-25/defaultLife);
+}
+
+void ATlocHumanPlayer::modifyHudMaster(float quantity)
+{
+	GlobalConstants constants;
+	if (quantity < constants.KZERO_F)
+	{
+		PlayerHud->ModifyMasterBar(abs(quantity));
 	}
 }
 

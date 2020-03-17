@@ -27,6 +27,7 @@ ATlocEnemy::ATlocEnemy()
 	//ID = idChrctr;
 	level = 1;
 	life = defaultLife = 150;
+	master = defaultMaster = 100;
 	attack = 25;
 	defense = 15;
 	magicDef = 13;

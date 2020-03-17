@@ -24,7 +24,8 @@ TlocPlayer::TlocPlayer()
 
 	//ID = idChrctr;
 	level = 1;
-	life = defaultLife = 75;
+	life = defaultLife = 250;
+	master = defaultMaster = 100;
 	attack = 25;
 	defense = 15;
 	magicDef = 13;
@@ -38,6 +39,7 @@ TlocPlayer::TlocPlayer()
 
 	experience = 0;
 	nextLevel = 200;
+	player = 0;
 
 
 }
@@ -146,6 +148,7 @@ TlocPlayer::~TlocPlayer()
 	ID = 0;
 	level = 0;
 	life = defaultLife = 0;
+	master = defaultMaster = 0;
 	attack = 0;
 	defense = 0;
 	magicDef = 0;

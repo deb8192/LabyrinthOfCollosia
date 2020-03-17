@@ -28,10 +28,19 @@ public:
 
 	UStaticMeshComponent* GetMesh();
 
+	// Human player ingame menu
 	FORCEINLINE class UTlocIngameMenu* GetIngameMenu() const
 	{
 		return IngameMenu;
 	}
+	// !Human player ingame menu
+
+	// Players HUDs
+	FORCEINLINE class UTlocHud* GetHud() const
+	{
+		return PlayerHud;
+	}
+	// !Players HUDs
 
 protected:
 	// Called when the game starts or when spawned
@@ -42,6 +51,14 @@ protected:
 
 	UPROPERTY(BlueprintReadWrite, Category = "UI")
 		class UTlocIngameMenu* IngameMenu;
+	// !Human player ingame menu
+
+	//Players HUDs
+	TSubclassOf<class UUserWidget> PlayerHudUIClass;
+
+	UPROPERTY(BlueprintReadWrite, Category = "UI")
+		class UTlocHud* PlayerHud;
+	// !Players HUDs
 
 	bool openMenu;
 
@@ -63,6 +80,11 @@ private:
 	void rotateMenuLeft();
 	void rotateMenuRight();
 
+	//Function to load Player's HUD
+	void loadHud();
+
+	void modifyHudLife(/*float quantity*/);
+	void modifyHudMaster(float quantity);
 	void attack();
 	void takeObj();
 	void pickupObject();
@@ -105,6 +127,9 @@ public:
 		void OnHumanActorOverlap(AActor* _player, AActor* _obj);
 	UFUNCTION()
 		void OnHumanActorStopOverlap(AActor* _player, AActor* _obj);
+
+	//Called to load human player default values
+	void LoadPlayer();
 
 
 	//Getters
