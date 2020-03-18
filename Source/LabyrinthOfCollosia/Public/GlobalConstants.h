@@ -45,6 +45,7 @@ using GlobalConstants = struct Constants
 	//	-Directory
 	const char* KFIRST_LEVEL_NAME = "Hall";
 	const char* KEXTENSION_JSON = ".json";
+	const char* KDIR_JSON_NEW_GAME = "Json/New_Game/Player";
 	const char* KDIR_JSON_OBJ = "Json/Objects/";
 	const char* KDIR_JSON_ENM = "Json/Enemies/";
 	const char* KDIR_CHEST_MESH = "/Game/Models/Stages/Stages-objects/Vessel_Cube.Vessel_Cube";
@@ -112,8 +113,11 @@ using GlobalConstants = struct Constants
 
 	const char* KCHEST = "chest";
 
-	/*** JSON enemies ***/
+	/*** JSON characters ***/
 
+	const char* KPLAYER = "TlocPlayer";
+	const char* KHUMAN_PLAYER = "TlocHumanPlayer";
+	const char* KDOG_PLAYER = "TlocDogPlayer";
 	const char* KENEMY = "TlocEnemy";
 
 	//	-Name variables
@@ -163,4 +167,11 @@ using GlobalConstants = struct Constants
 	const int KREFLECT = 8;
 	const int KENERGIZE = 9;
 	const int KSHIELD = 10;
+	const int KPOISON = 11;
+	const int KPLAGE = 12;
+	const int KHYPNOTIZED = 13;
+	const int KSTOP = 14;
+	const int KCORROSION = 15;
+	const int KBURNED = 16;
+	const int KDISRUPT = 17;
 };

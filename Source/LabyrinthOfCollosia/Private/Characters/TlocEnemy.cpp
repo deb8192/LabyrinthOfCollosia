@@ -35,6 +35,8 @@ ATlocEnemy::ATlocEnemy()
 	criticalProb = 16;
 	luck = 75;
 	evasion = 25;
+
+	jewels = 0;
 	
 	_motor = ATlocMotorFacade::GetInstance(this);
 
@@ -88,7 +90,7 @@ ATlocEnemy::~ATlocEnemy()
 	{
 		for (int j = 0; j < _ingredients[size].size(); j++)
 		{
-			_ingredients[size][j] = NULL;
+			_ingredients[size][j] = nullptr;
 		}
 	}
 
@@ -109,26 +111,26 @@ ATlocEnemy::~ATlocEnemy()
 	{
 		for (int j = 0; j < _items[size].size(); j++)
 		{
-			_items[size][j] = NULL;
+			_items[size][j] = nullptr;
 		}
 	}
 
 	size = 0;
 	for (size; size < _weapon.size(); size++)
 	{
-		_weapon[size] = NULL;
+		_weapon[size] = nullptr;
 	}
 
 	size = 0;
 	for (size; size < _armor.size(); size++)
 	{
-		_armor[size] = NULL;
+		_armor[size] = nullptr;
 	}
 
 	size = 0;
 	for (size; size < _armor.size(); size++)
 	{
-		_gauntlet[size] = NULL;
+		_gauntlet[size] = nullptr;
 	}
 
 	defending = false;
@@ -172,20 +174,20 @@ void ATlocEnemy::replaceEnemy(ATlocEnemy* _enm)
 	_fileRoot = paths[0];
 	_auxFilePath = paths[1];
 	_auxFilePath2 = paths[2];
-	if (_charMesh != NULL)
+	if (_charMesh != nullptr)
 	{
 		_motor->DestroyMeshComponent(_charMesh);
-		_charMesh = NULL;
+		_charMesh = nullptr;
 	}
-	if (_auxCharMesh != NULL)
+	if (_auxCharMesh != nullptr)
 	{
 		_motor->DestroyMeshComponent(_auxCharMesh);
-		_auxCharMesh = NULL;
+		_auxCharMesh = nullptr;
 	}
-	if (_auxCharMesh2 != NULL)
+	if (_auxCharMesh2 != nullptr)
 	{
 		_motor->DestroyMeshComponent(_auxCharMesh2);
-		_auxCharMesh2 = NULL;
+		_auxCharMesh2 = nullptr;
 	}
 	_charMesh = _motor->SetMesh((const TCHAR*)_name, (const TCHAR*)_fileRoot, GetRootComponent(), this);
 	_charMesh->SetupAttachment(GetRootComponent());
@@ -299,19 +301,19 @@ void ATlocEnemy::SetMesh(const TCHAR* fileRoot, int mesh)
 	{
 		case 2:
 			_auxFilePath = (TCHAR*)fileRoot;
-			fileRoot = NULL;
+			fileRoot = nullptr;
 			_auxCharMesh = _motor->SetMesh(TEXT("Auxiliar mesh"), (const TCHAR*)_auxFilePath, GetRootComponent(), this);
 			break;
 
 		case 3:
 			_auxFilePath2 = (TCHAR*)fileRoot;
-			fileRoot = NULL;
+			fileRoot = nullptr;
 			_auxCharMesh2 = _motor->SetMesh(TEXT("Auxiliar mesh 2"), (const TCHAR*)_auxFilePath2, GetRootComponent(), this);
 			break;
 
 		default:
 			_fileRoot = (TCHAR*)fileRoot;
-			fileRoot = NULL;
+			fileRoot = nullptr;
 			_charMesh = _motor->SetMesh((const TCHAR*)_name, (const TCHAR*)_fileRoot, GetRootComponent(), this);
 			break;
 

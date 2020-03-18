@@ -52,8 +52,9 @@ void ATlocGameMode::BeginPlay()
 			_world->GetLevel(i)->GetName();
 		}
 	}
+	spawnPlayers(true);
 	SpawnActorsOnStage();
-
+	
 
 	/*
 	PlayerControllerClass.GetDefaultObject()->UnPossess();
@@ -159,6 +160,20 @@ void ATlocGameMode::Tick(float DeltaTime)
 
 
 
+}
+
+void ATlocGameMode::spawnPlayers(bool newGame)
+{
+	std::vector<TlocPlayer*> players;
+	if (newGame)
+	{
+		players = _gameLoader->NewGameLoader();
+	}
+	else
+	{
+		players = _gameLoader->NewGameLoader();
+	}
+	//_humanPlayer = dynamic_cast<ATlocHumanPlayer*, TlocPlayer>(players[0]);
 }
 
 

@@ -21,6 +21,10 @@ public:
 	~ATlocHumanPlayer();
 
 	//Setters & Getters
+
+	void SetWeapon(TlocWeapon* _wpn);
+	void SetArmor(TlocArmor* _armr);
+	void SetGauntlet(TlocGauntlet* _gntlt);
 	void SetMesh(const TCHAR* fileRoot, int mesh);
 	void SetPosition(FVector newPosition);
 	void SetRotation(FRotator newRotation);
@@ -46,19 +50,27 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	// THEY ARE PROTECTED BECAUSE THEY DEPEND ON BLUEPRINTS
+
 	// Human player ingame menu
+
+	// Ingame menu class
 	TSubclassOf<class UUserWidget> IngameMenuUIClass;
 
+	// Ingame menu object
 	UPROPERTY(BlueprintReadWrite, Category = "UI")
 		class UTlocIngameMenu* IngameMenu;
 	// !Human player ingame menu
 
-	//Players HUDs
+	// Player's HUD
+
+	// Ingame HUD class
 	TSubclassOf<class UUserWidget> PlayerHudUIClass;
 
+	// Ingame HUD object
 	UPROPERTY(BlueprintReadWrite, Category = "UI")
 		class UTlocHud* PlayerHud;
-	// !Players HUDs
+	// !Player's HUD
 
 	bool openMenu;
 
@@ -80,11 +92,12 @@ private:
 	void rotateMenuLeft();
 	void rotateMenuRight();
 
-	//Function to load Player's HUD
+	//Functions to load Player's HUD and use it
 	void loadHud();
-
 	void modifyHudLife(/*float quantity*/);
 	void modifyHudMaster(float quantity);
+
+	//Functions to eject player's actions
 	void attack();
 	void takeObj();
 	void pickupObject();
@@ -98,11 +111,10 @@ private:
 		TlocGauntlet* _gauntlet;
 	};
 
-	Equipment playerEquipment;
-	AActor* _enemy;
-	AActor* _object;
-	bool pickingUp;									//Character picking up state
-
+	Equipment playerEquipment;						//Character's set of armor, gauntlet and weapon
+	AActor* _enemy;									//Character's objective
+	AActor* _object;								//Character's picking object
+	bool pickingUp;
 
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* _playerCamera; 

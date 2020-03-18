@@ -7,7 +7,7 @@
 #include "..\Public\Magic\TlocSpell.h"
 #include "..\Public\Magic\TlocIngredients.h"
 #include "..\Public\Objects\TlocItem.h"
-#include "..\Public\Objects\TlocWeapon.h"
+#include "..\Public\Objects\Weapons\TlocWeapon.h"
 #include "..\Public\Objects\TlocArmor.h"
 #include "..\Public\Objects\TlocGauntlet.h"
 #include "..\Public\Motor\TlocMotorFacade.h"
@@ -24,7 +24,7 @@ class LABYRINTHOFCOLLOSIA_API TlocCharacter
 public:
 
 	// Called when the game starts or when spawned
-	//virtual ~TlocCharacter() = 0;
+	//virtual ~TlocCharacter();
 
 	virtual void ModifyLife(float quantity) = 0;				//Adds or substracts as many as quantity value is
 	virtual int Attack() = 0;									//Calculates hit damage
@@ -57,12 +57,15 @@ protected:
 	int attack;										//Character's attack
 	int defense;									//Character's defense
 	int magicDef;									//Character's magic defense
-	int criticalHit;								//Character's critical hit damage
-	int criticalProb;								//Character's critical hit probability
+	float criticalHit;								//Character's critical hit damage
+	float criticalProb;								//Character's critical hit probability
 	int evasion;									//Character's hit evade probability
 	int luck;										//Character's hit probability
 	bool defending;									//Character's defending state
-	bool attacking;									//Character's attacking state
+	bool attacking;									//Character's attacking state									//Character's picking up state
+	//int talons;									//Character's Prehistoria money
+	int jewels;										//Character's Antiqua money
+	//int credits;									//Character's Onmitopia money
 	bool invulnerable;
 	float invulnerableTime;
 	std::vector<std::vector<TlocIngredients*>> _ingredients;		//Character's ingredient list

@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "../Public/Objects/TlocWeapon.h"
+#include "../Public/Objects/Weapons/TlocWeapon.h"
 #include "../Public/GlobalConstants.h"
 
 TlocWeapon::TlocWeapon() : ATlocObject()

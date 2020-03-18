@@ -34,6 +34,7 @@ TlocPlayer::TlocPlayer()
 	luck = 75;
 	evasion = 25;
 	
+	jewels = 0;
 
 	position.X = position.Y = position.Z = 0.0;
 
@@ -77,7 +78,7 @@ TlocPlayer::~TlocPlayer()
 			{
 				for (int j = 0; j < _ingredients[size].size(); j++)
 				{
-					_ingredients[size][j] = NULL;
+					_ingredients[size][j] = nullptr;
 				}
 			}
 		}
@@ -88,7 +89,7 @@ TlocPlayer::~TlocPlayer()
 	{
 		for (size; size < _learnedSpells.size(); size++)
 		{
-			_learnedSpells[size] = NULL;
+			_learnedSpells[size] = nullptr;
 		}
 	}
 
@@ -97,7 +98,7 @@ TlocPlayer::~TlocPlayer()
 	{
 		for (size; size < _memorizedSpells.size(); size++)
 		{
-			_memorizedSpells[size] = NULL;
+			_memorizedSpells[size] = nullptr;
 		}
 	}
 
@@ -110,7 +111,7 @@ TlocPlayer::~TlocPlayer()
 			{
 				for (int j = 0; j < _items[size].size(); j++)
 				{
-					_items[size][j] = NULL;
+					_items[size][j] = nullptr;
 				}
 			}
 		}
@@ -121,7 +122,7 @@ TlocPlayer::~TlocPlayer()
 	{
 		for (size; size < _weapon.size(); size++)
 		{
-			_weapon[size] = NULL;
+			_weapon[size] = nullptr;
 		}
 	}
 
@@ -130,7 +131,7 @@ TlocPlayer::~TlocPlayer()
 	{
 		for (size; size < _armor.size(); size++)
 		{
-			_armor[size] = NULL;
+			_armor[size] = nullptr;
 		}
 	}
 
@@ -139,7 +140,7 @@ TlocPlayer::~TlocPlayer()
 	{
 		for (size; size < _gauntlet.size(); size++)
 		{
-			_gauntlet[size] = NULL;
+			_gauntlet[size] = nullptr;
 		}
 	}
 

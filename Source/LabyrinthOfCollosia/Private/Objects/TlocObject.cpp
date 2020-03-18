@@ -9,7 +9,7 @@
 
 #include "..\Public\Magic\TlocIngredients.h"
 #include "..\Public\Objects\TlocItem.h"
-#include "..\Public\Objects\TlocWeapon.h"
+#include "..\Public\Objects\Weapons\TlocWeapon.h"
 #include "..\Public\Objects\TlocArmor.h"
 #include "..\Public\Objects\TlocGauntlet.h"
 #include "..\Public\Objects\TlocChest.h"

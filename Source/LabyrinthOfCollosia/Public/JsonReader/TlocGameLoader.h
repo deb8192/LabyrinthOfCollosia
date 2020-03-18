@@ -3,6 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "../Public/Characters/TlocHumanPlayer.h"
+#include "../Public/Characters/TlocDogPlayer.h"
+
+#include <vector>
 
 /**
  * 
@@ -10,6 +14,26 @@
 class LABYRINTHOFCOLLOSIA_API TlocGameLoader
 {
 public:
-	TlocGameLoader();
+	//clase singleton
 	~TlocGameLoader();
+	static TlocGameLoader* GetInstance()
+	{
+		if (!_unic_instance)
+		{
+			//We can call the default "new" constructor because this is not an Unreal object
+			_unic_instance = new TlocGameLoader();
+		}
+		return _unic_instance;
+	}
+	//fin clase singleton
+
+	std::vector<TlocPlayer*> NewGameLoader();
+	//std::vector<ATlocObject*> ObjectsLoader(const char* _name);
+	//std::vector<ATlocEnemy*> EnemiesLoader(const char* _name);
+
+private:
+	//clase sigleton
+	TlocGameLoader();
+	static TlocGameLoader* _unic_instance;
+	//fin clase singleton
 };

@@ -16,19 +16,21 @@ ATlocHumanPlayer::ATlocHumanPlayer() : TlocPlayer()
 	PrimaryActorTick.bCanEverTick = true;
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 
+	//Player equip and motor
 	playerEquipment._weapon = CreateDefaultSubobject<TlocWeapon>(TEXT("PlayerWeapon")); /* NewObject<TlocWeapon>();*/		//Calling the constructor to create a new TlocWeapon object
 	_weapon.push_back(playerEquipment._weapon);
 	playerEquipment._armor = NULL;
 	playerEquipment._gauntlet = NULL;
 
-	_fileRoot = TEXT("/Game/Models/Characters/Hero-M.Hero-M");
-
 	_motor = ATlocMotorFacade::GetInstance(this);
 
 	_enemy = NULL;
 
+	//---- MEGA IMPORTANT: THERE ARE SOME CODE SENTENCES THAT CAN BE WRITTEN IN MOTOR ----
+
 	//MESH
-	
+
+	_fileRoot = TEXT("/Game/Models/Characters/Hero-M.Hero-M");
 	_charMesh = _motor->SetMesh(TEXT("PlayerMesh"), (const TCHAR*) _fileRoot, GetRootComponent(), this);
 	_charMesh->SetupAttachment(GetRootComponent());
 	_charMesh->SetRelativeLocation(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z - 90));
@@ -98,6 +100,29 @@ ATlocHumanPlayer::~ATlocHumanPlayer()
 	//delete playerEquipment._gauntlet;
 	playerEquipment._gauntlet = NULL;
 
+	_enemy = nullptr;
+	_object = nullptr;
+	pickingUp = false;
+
+	//Delete UI
+	if (IngameMenu && PlayerHud->IsInViewport())
+	{
+		IngameMenu->RemoveFromViewport();
+	}
+	IngameMenu = nullptr;
+	IngameMenuUIClass = nullptr;
+	openMenu = false;
+
+	if (PlayerHud && PlayerHud->IsInViewport())
+	{
+		PlayerHud->RemoveFromViewport();
+	}
+	PlayerHud = nullptr;
+	PlayerHudUIClass = nullptr;
+
+	_playerCamera = nullptr;
+
+	_playerCameraSpringArm = nullptr;
 
 }
 
@@ -403,6 +428,21 @@ ATlocObject* ATlocHumanPlayer::checkChest()
 	{
 		return dynamic_cast<ATlocObject*>(_object);
 	}
+}
+
+void ATlocHumanPlayer::SetWeapon(TlocWeapon* _wpn)
+{
+	playerEquipment._weapon = _wpn;
+}
+
+void ATlocHumanPlayer::SetArmor(TlocArmor* _armr)
+{
+	playerEquipment._armor = _armr;
+}
+
+void ATlocHumanPlayer::SetGauntlet(TlocGauntlet* _gntlt)
+{
+	playerEquipment._gauntlet = _gntlt;
 }
 
 void ATlocHumanPlayer::SetMesh(const TCHAR* fileRoot, int mesh)
