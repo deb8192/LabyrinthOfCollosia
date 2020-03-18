@@ -7,7 +7,7 @@
 #include "..\Public\Magic\TlocSpell.h"
 #include "..\Public\Magic\TlocIngredients.h"
 #include "..\Public\Objects\TlocItem.h"
-#include "..\Public\Objects\TlocWeapon.h"
+#include "..\Public\Objects\Weapons\TlocWeapon.h"
 #include "..\Public\Objects\TlocArmor.h"
 #include "..\Public\Objects\TlocGauntlet.h"
 #include "..\Public\Motor\TlocMotorFacade.h"
@@ -24,7 +24,7 @@ class LABYRINTHOFCOLLOSIA_API TlocCharacter
 public:
 
 	// Called when the game starts or when spawned
-	//virtual ~TlocCharacter() = 0;
+	//virtual ~TlocCharacter();
 
 	virtual void ModifyLife(float quantity) = 0;				//Adds or substracts as many as quantity value is
 	virtual int Attack() = 0;									//Calculates hit damage
@@ -48,30 +48,35 @@ public:
 
 protected:
 	// Variables
-	int ID;											//Character ID
-	int level;										//Character level
-	int life;										//Character life
-	int defaultLife;								//Character whole life
-	int attack;										//Character attack
-	int defense;									//Character defense
-	int magicDef;									//Character magic defense
-	int criticalHit;								//Character critical hit damage
-	int criticalProb;								//Character critical hit probability
-	int evasion;									//Character hit evade probability
-	int luck;										//Character hit probability
-	bool defending;									//Character defending state
-	bool attacking;									//Character attacking state
+	int ID;											//Character's ID
+	int level;										//Character's level
+	float life;										//Character's life
+	float defaultLife;								//Character's whole life
+	float master;									//Character's spetial attack points
+	float defaultMaster;							//Character's special attack max points
+	int attack;										//Character's attack
+	int defense;									//Character's defense
+	int magicDef;									//Character's magic defense
+	float criticalHit;								//Character's critical hit damage
+	float criticalProb;								//Character's critical hit probability
+	int evasion;									//Character's hit evade probability
+	int luck;										//Character's hit probability
+	bool defending;									//Character's defending state
+	bool attacking;									//Character's attacking state									//Character's picking up state
+	//int talons;									//Character's Prehistoria money
+	int jewels;										//Character's Antiqua money
+	//int credits;									//Character's Onmitopia money
 	bool invulnerable;
 	float invulnerableTime;
-	std::vector<std::vector<TlocIngredients*>> _ingredients;		//Character ingredient list
-	std::vector<TlocSpell*> _learnedSpells;			//Character learned spell list
-	std::vector<TlocSpell*> _memorizedSpells;		//Character memorized spell list from the learned spell list
-	std::vector<std::vector<TlocItem*>> _items;		//Character menu items
-	std::vector<TlocWeapon*> _weapon;				//Character weapons
-	std::vector<TlocArmor*> _armor;					//Character armors
-	std::vector<TlocGauntlet*> _gauntlet;			//Character gauntlets
-	std::queue<int> _buffsAilments;					//Character active buffs or ailments
-	std::queue<float> buffsAilmentsTime;			//Character active buffs or ailments' time
+	std::vector<std::vector<TlocIngredients*>> _ingredients;		//Character's ingredient list
+	std::vector<TlocSpell*> _learnedSpells;			//Character's learned spell list
+	std::vector<TlocSpell*> _memorizedSpells;		//Character's memorized spell list from the learned spell list
+	std::vector<std::vector<TlocItem*>> _items;		//Character's menu items
+	std::vector<TlocWeapon*> _weapon;				//Character's weapons
+	std::vector<TlocArmor*> _armor;					//Character's armors
+	std::vector<TlocGauntlet*> _gauntlet;			//Character's gauntlets
+	std::queue<int> _buffsAilments;					//Character's active buffs or ailments
+	std::queue<float> buffsAilmentsTime;			//Character's active buffs or ailments' time
 
 	TCHAR* _name;
 	FVector position;

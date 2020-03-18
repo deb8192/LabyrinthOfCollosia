@@ -3,7 +3,6 @@
 #pragma once
 
 #include "TlocPlayer.h"
-
 #include <Runtime\Engine\Classes\GameFramework\SpringArmComponent.h>
 #include "GameFramework/Character.h"
 #include "TlocHumanPlayer.generated.h"
@@ -22,6 +21,10 @@ public:
 	~ATlocHumanPlayer();
 
 	//Setters & Getters
+
+	void SetWeapon(TlocWeapon* _wpn);
+	void SetArmor(TlocArmor* _armr);
+	void SetGauntlet(TlocGauntlet* _gntlt);
 	void SetMesh(const TCHAR* fileRoot, int mesh);
 	void SetPosition(FVector newPosition);
 	void SetRotation(FRotator newRotation);
@@ -29,9 +32,47 @@ public:
 
 	UStaticMeshComponent* GetMesh();
 
+	// Human player ingame menu
+	FORCEINLINE class UTlocIngameMenu* GetIngameMenu() const
+	{
+		return IngameMenu;
+	}
+	// !Human player ingame menu
+
+	// Players HUDs
+	FORCEINLINE class UTlocHud* GetHud() const
+	{
+		return PlayerHud;
+	}
+	// !Players HUDs
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	// THEY ARE PROTECTED BECAUSE THEY DEPEND ON BLUEPRINTS
+
+	// Human player ingame menu
+
+	// Ingame menu class
+	TSubclassOf<class UUserWidget> IngameMenuUIClass;
+
+	// Ingame menu object
+	UPROPERTY(BlueprintReadWrite, Category = "UI")
+		class UTlocIngameMenu* IngameMenu;
+	// !Human player ingame menu
+
+	// Player's HUD
+
+	// Ingame HUD class
+	TSubclassOf<class UUserWidget> PlayerHudUIClass;
+
+	// Ingame HUD object
+	UPROPERTY(BlueprintReadWrite, Category = "UI")
+		class UTlocHud* PlayerHud;
+	// !Player's HUD
+
+	bool openMenu;
 
 private:
 
@@ -41,6 +82,22 @@ private:
 	void moveHorizontally(float value);
 	void rotateHorizontally(float value);
 
+	//Functions to open & close menu
+
+	void loadInGameUI();
+	void closeInGameUI();
+	void checkMenu();
+
+	//Functions to use menu
+	void rotateMenuLeft();
+	void rotateMenuRight();
+
+	//Functions to load Player's HUD and use it
+	void loadHud();
+	void modifyHudLife(/*float quantity*/);
+	void modifyHudMaster(float quantity);
+
+	//Functions to eject player's actions
 	void attack();
 	void takeObj();
 	void pickupObject();
@@ -54,11 +111,10 @@ private:
 		TlocGauntlet* _gauntlet;
 	};
 
-	Equipment playerEquipment;
-	AActor* _enemy;
-	AActor* _object;
-	bool pickingUp;									//Character picking up state
-
+	Equipment playerEquipment;						//Character's set of armor, gauntlet and weapon
+	AActor* _enemy;									//Character's objective
+	AActor* _object;								//Character's picking object
+	bool pickingUp;
 
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* _playerCamera; 
@@ -83,6 +139,10 @@ public:
 		void OnHumanActorOverlap(AActor* _player, AActor* _obj);
 	UFUNCTION()
 		void OnHumanActorStopOverlap(AActor* _player, AActor* _obj);
+
+	//Called to load human player default values
+	void LoadPlayer();
+
 
 	//Getters
 	Equipment GetPlayerEquipment();

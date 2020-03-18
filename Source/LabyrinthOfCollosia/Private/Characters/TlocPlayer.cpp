@@ -2,6 +2,7 @@
 
 
 #include "../Public/Characters/TlocPlayer.h"
+#include "../Public/Characters/TlocHumanPlayer.h"
 #include "../Public/GlobalConstants.h"
 
 #include <stdlib.h>
@@ -23,7 +24,8 @@ TlocPlayer::TlocPlayer()
 
 	//ID = idChrctr;
 	level = 1;
-	life = defaultLife = 75;
+	life = defaultLife = 250;
+	master = defaultMaster = 100;
 	attack = 25;
 	defense = 15;
 	magicDef = 13;
@@ -32,11 +34,14 @@ TlocPlayer::TlocPlayer()
 	luck = 75;
 	evasion = 25;
 	
+	jewels = 0;
 
 	position.X = position.Y = position.Z = 0.0;
 
 	experience = 0;
 	nextLevel = 200;
+	player = 0;
+
 
 }
 
@@ -73,7 +78,7 @@ TlocPlayer::~TlocPlayer()
 			{
 				for (int j = 0; j < _ingredients[size].size(); j++)
 				{
-					_ingredients[size][j] = NULL;
+					_ingredients[size][j] = nullptr;
 				}
 			}
 		}
@@ -84,7 +89,7 @@ TlocPlayer::~TlocPlayer()
 	{
 		for (size; size < _learnedSpells.size(); size++)
 		{
-			_learnedSpells[size] = NULL;
+			_learnedSpells[size] = nullptr;
 		}
 	}
 
@@ -93,7 +98,7 @@ TlocPlayer::~TlocPlayer()
 	{
 		for (size; size < _memorizedSpells.size(); size++)
 		{
-			_memorizedSpells[size] = NULL;
+			_memorizedSpells[size] = nullptr;
 		}
 	}
 
@@ -106,7 +111,7 @@ TlocPlayer::~TlocPlayer()
 			{
 				for (int j = 0; j < _items[size].size(); j++)
 				{
-					_items[size][j] = NULL;
+					_items[size][j] = nullptr;
 				}
 			}
 		}
@@ -117,7 +122,7 @@ TlocPlayer::~TlocPlayer()
 	{
 		for (size; size < _weapon.size(); size++)
 		{
-			_weapon[size] = NULL;
+			_weapon[size] = nullptr;
 		}
 	}
 
@@ -126,7 +131,7 @@ TlocPlayer::~TlocPlayer()
 	{
 		for (size; size < _armor.size(); size++)
 		{
-			_armor[size] = NULL;
+			_armor[size] = nullptr;
 		}
 	}
 
@@ -135,7 +140,7 @@ TlocPlayer::~TlocPlayer()
 	{
 		for (size; size < _gauntlet.size(); size++)
 		{
-			_gauntlet[size] = NULL;
+			_gauntlet[size] = nullptr;
 		}
 	}
 
@@ -144,6 +149,7 @@ TlocPlayer::~TlocPlayer()
 	ID = 0;
 	level = 0;
 	life = defaultLife = 0;
+	master = defaultMaster = 0;
 	attack = 0;
 	defense = 0;
 	magicDef = 0;

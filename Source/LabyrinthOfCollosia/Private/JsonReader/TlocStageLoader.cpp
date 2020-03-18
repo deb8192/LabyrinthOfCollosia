@@ -13,16 +13,16 @@
 #include "../Public/Objects/TlocChest.h"
 #include "../Public/Objects/TlocArmor.h"
 #include "../Public/Objects/TlocGauntlet.h"
-#include "../Public/Objects/TlocWeapon.h"
+#include "../Public/Objects/Weapons/TlocWeapon.h"
 #include "../Public/Objects/TlocItem.h"
 #include "../Public/Magic/TlocIngredients.h"
 #include "../Public/GlobalConstants.h"
 
 #include <string>
 
-//para clases singleton deben tener un indicador de que se ha creado el unico objeto
+//Singleton classes must have an indicator that means it's been created a single object
 TlocStageLoader* TlocStageLoader::_unic_instance = 0;
-//fin indicador clase singleton
+//End singleton class indicator
 
 TlocStageLoader::TlocStageLoader()
 {

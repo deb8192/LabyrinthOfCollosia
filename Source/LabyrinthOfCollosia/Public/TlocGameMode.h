@@ -2,13 +2,14 @@
 
 #pragma once
 
-#include "Objects/TlocWeapon.h"
+#include "Objects/Weapons/TlocWeapon.h"
 #include "Characters/TlocEnemy.h"
 #include "Characters/TlocHumanPlayer.h"
 #include "Engine/World.h"
 #include "Engine/Level.h"
 #include "Engine/Scene.h"
 #include "JsonReader/TlocStageLoader.h"
+#include "JsonReader/TlocGameLoader.h"
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameMode.h"
@@ -37,10 +38,14 @@ protected:
 	void Tick(float DeltaTime);
 
 private:
+
+	void spawnPlayers(bool newGame);
+
 	ATlocHumanPlayer* _humanPlayer;
 	UWorld* _world;
 	//ULevel* _defaultLevel;
 	std::vector<ULevel*> _levels;
+	TlocGameLoader* _gameLoader;
 	TlocStageLoader* _stageLoader;
 	//UScene* _scene;
 

@@ -3,6 +3,7 @@
 
 #include "TlocGameMode.h"
 #include "TlocGameState.h"
+#include "TlocIngameMenu.h"
 #include "../Public/GlobalConstants.h"
 #include "Misc/FileHelper.h"
 #include "FileHelpers.h"
@@ -16,6 +17,7 @@ ATlocGameMode::ATlocGameMode()
 	_world = GetWorld();								//Get the world to manage it
 	//_defaultLevel = _world->GetPersistentLevel();
 	DefaultPawnClass = ATlocHumanPlayer::StaticClass();	//Associate player's pawn with player's default class
+	HUDClass = UTlocIngameMenu::StaticClass();
 	GameStateClass = ATlocGameState::StaticClass();
 
 
@@ -50,8 +52,9 @@ void ATlocGameMode::BeginPlay()
 			_world->GetLevel(i)->GetName();
 		}
 	}
+	spawnPlayers(true);
 	SpawnActorsOnStage();
-
+	
 
 	/*
 	PlayerControllerClass.GetDefaultObject()->UnPossess();
@@ -157,6 +160,20 @@ void ATlocGameMode::Tick(float DeltaTime)
 
 
 
+}
+
+void ATlocGameMode::spawnPlayers(bool newGame)
+{
+	std::vector<TlocPlayer*> players;
+	if (newGame)
+	{
+		players = _gameLoader->NewGameLoader();
+	}
+	else
+	{
+		players = _gameLoader->NewGameLoader();
+	}
+	//_humanPlayer = dynamic_cast<ATlocHumanPlayer*, TlocPlayer>(players[0]);
 }
 
 

@@ -1,0 +1,54 @@
+{
+	"TlocPlayer":[{
+		"TlocHumanPlayer": {
+			"ID": 0,
+			"level": 1,
+			"life": 30,
+			"master": 100,
+			"attack": 17,
+			"defense": 5,
+			"magicDef": 5,
+			"evasion": 34,
+			"luck": 30,
+			"criticalHit": 2,
+			"criticalProb": 15,
+			"experience": 0,
+			"nextLevel": 20,
+			"TlocWeapon": {
+				"class": "sword",
+				"name": "Femur",
+				"fileDirectory": "/Game/Models/Equipment/Weapons/Femur.Femur",
+				"price": 5,
+				"attack": 10,
+				"criticalDamageInc": 10,
+				"criticalProbabilityInc": 10
+			}
+			
+		},
+		
+		"TlocDogPlayer": {
+			"ID": 1,
+			"level": 1,
+			"life": 36,
+			"master": 100,
+			"attack": 17,
+			"defense": 10,
+			"magicDef": 4,
+			"evasion": 38,
+			"luck": 33,
+			"criticalHit": 2,
+			"criticalProb": 12,
+			"experience": 0,
+			"nextLevel": 35,
+			"TlocWeapon": {
+				"class": "badge",
+				"name": "Femur",
+				"fileDirectory": "/Game/Models/Equipment/Weapons/Badge.Badge",
+				"price": 5,
+				"attack": 10,
+				"criticalDamageInc": 10,
+				"criticalProbabilityInc": 10
+			}
+		}
+	}]
+}

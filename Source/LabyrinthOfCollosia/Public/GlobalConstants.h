@@ -10,16 +10,27 @@ using GlobalConstants = struct Constants
 	const int KPERCENT = 100;
 	size_t KCHAR_SIZE = 32;
 
+	/*** Trigonometric calculus ***/
+
+	const int KPI_RADIAN = 180;
+	const int K3_2PI_RADIAN = 270;
+	const int K2PI_RADIAN = 360;
+	const int K1_2PI_RADIAN = 90;
+	const int K1_4PI_RADIAN = 45;
 
 	/*** Speeds ***/
 
 	const int KROTATIONSPEED = 15;
 
-	/*** Return vlues ***/
+	/*** Return values ***/
 
 	const int KZERO = 0;
 	const int KMINUS_ONE = -1;
 
+	/*** Float values ***/
+
+	const float KZERO_F = 0.0f;
+	const float KONE_F = 1.0f;
 
 	/*** Default values ***/
 
@@ -34,10 +45,46 @@ using GlobalConstants = struct Constants
 	//	-Directory
 	const char* KFIRST_LEVEL_NAME = "Hall";
 	const char* KEXTENSION_JSON = ".json";
+	const char* KDIR_JSON_NEW_GAME = "Json/New_Game/Player";
 	const char* KDIR_JSON_OBJ = "Json/Objects/";
 	const char* KDIR_JSON_ENM = "Json/Enemies/";
 	const char* KDIR_CHEST_MESH = "/Game/Models/Stages/Stages-objects/Vessel_Cube.Vessel_Cube";
 	const char* KDIR_CHEST_AUX_MESH = "/Game/Models/Stages/Stages-objects/Vessel_Sphere.Vessel_Sphere";
+
+	//	-Menu directories
+
+	const char* KDIR_ITEMS = "/Game/Sprites/Items/";
+	const char* KDIR_ITEMS_128 = "Icons-128/";
+	const char* KNAME_PETAL_128 = "Petal-128px.Petal-128px";
+	const char* KNAME_PETAL = "Petal";
+	const char* KNAME_NECTAR_128 = "Nectar-128px.Nectar-128px";
+	const char* KNAME_NECTAR = "Nectar";
+	const char* KNAME_HONEY_128 = "Honey-128px.Honey-128px";
+	const char* KNAME_HONEY = "Honey";
+	const char* KNAME_BISQUIT_128 = "Bisquit-128px.Bisquit-128px";
+	const char* KNAME_BISQUIT = "Bisquit";
+	const char* KNAME_ELIXIR_128 = "Elixir-128px.Elixir-128px";
+	const char* KNAME_ELIXIR = "Elixir";
+	const char* KNAME_PIXIEDUST_128 = "PixieDust-128px.PixieDust-128px";
+	const char* KNAME_PIXIEDUST = "PixieDust";
+	const char* KNAME_CALLBEAD_128 = "CallBead-128px.CallBead-128px";
+	const char* KNAME_CALLBEAD = "CallBead";
+	const char* KNAME_POUCH_128 = "Pouch-128px.Pouch-128px";
+	const char* KNAME_POUCH = "Pouch";
+	const char* KNAME_WINGS_128 = "Wings-128px.Wings-128px";
+	const char* KNAME_WINGS = "Wings";
+
+	//	-HUD directories
+
+	const char* KDIR_PLAYERS = "/Game/Sprites/HUD/HUD-512px-pictures/";
+	const char* KNAME_HUMAN_PLAYER = "HumanPlayer";
+	const char* KNAME_DOG_PLAYER = "DogPlayer";
+	const char* KNAME_HUMAN_PLAYER_M = "HumanPlayerPic.HumanPlayerPic";
+	const char* KNAME_HUMAN_PLAYER_F = "HumanPlayerPicF.HumanPlayerPicF";
+
+
+
+	//	-Stages directories
 
 	const char* KEXTENSION_UMAP = ".umap";
 	const char* KDIR_LEVELS = "Models/Stages";
@@ -66,8 +113,11 @@ using GlobalConstants = struct Constants
 
 	const char* KCHEST = "chest";
 
-	/*** JSON enemies ***/
+	/*** JSON characters ***/
 
+	const char* KPLAYER = "TlocPlayer";
+	const char* KHUMAN_PLAYER = "TlocHumanPlayer";
+	const char* KDOG_PLAYER = "TlocDogPlayer";
 	const char* KENEMY = "TlocEnemy";
 
 	//	-Name variables
@@ -117,4 +167,11 @@ using GlobalConstants = struct Constants
 	const int KREFLECT = 8;
 	const int KENERGIZE = 9;
 	const int KSHIELD = 10;
+	const int KPOISON = 11;
+	const int KPLAGE = 12;
+	const int KHYPNOTIZED = 13;
+	const int KSTOP = 14;
+	const int KCORROSION = 15;
+	const int KBURNED = 16;
+	const int KDISRUPT = 17;
 };

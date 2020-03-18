@@ -5,6 +5,8 @@
 
 #include <iostream>
 #include "TlocCharacter.h"
+#include "..\UserInterfaces\TlocIngameMenu.h"
+#include "..\UserInterfaces\TlocHUD.h"
 #include "Camera/CameraComponent.h"
 //#include "TlocEnemy.h"
 
@@ -13,7 +15,9 @@
  */
 class LABYRINTHOFCOLLOSIA_API TlocPlayer : public TlocCharacter
 {
+
 public:
+
 	// Sets default values for this actor's properties
 	TlocPlayer();
 	//NO ES INCORRECTO, PERO NO ES FUNCIONAL EN UNREAL ENGINE
@@ -39,12 +43,13 @@ public:
 	FRotator GetRotation();
 	bool GetDefend();
 	int GetLife();
-
-private:
 	
+protected:
+
 	//Variables
 	int nextLevel;				//Necessary experience to reach next level
 	int experience;				//Player experience
+	int player;					//Int that identifies if player is boy, girls or dog
 
 
 };

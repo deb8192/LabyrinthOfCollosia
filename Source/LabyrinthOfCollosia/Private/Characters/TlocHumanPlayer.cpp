@@ -16,19 +16,21 @@ ATlocHumanPlayer::ATlocHumanPlayer() : TlocPlayer()
 	PrimaryActorTick.bCanEverTick = true;
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 
+	//Player equip and motor
 	playerEquipment._weapon = CreateDefaultSubobject<TlocWeapon>(TEXT("PlayerWeapon")); /* NewObject<TlocWeapon>();*/		//Calling the constructor to create a new TlocWeapon object
 	_weapon.push_back(playerEquipment._weapon);
 	playerEquipment._armor = NULL;
 	playerEquipment._gauntlet = NULL;
 
-	_fileRoot = TEXT("/Game/Models/Characters/Hero-M.Hero-M");
-
 	_motor = ATlocMotorFacade::GetInstance(this);
 
 	_enemy = NULL;
 
+	//---- MEGA IMPORTANT: THERE ARE SOME CODE SENTENCES THAT CAN BE WRITTEN IN MOTOR ----
+
 	//MESH
-	
+
+	_fileRoot = TEXT("/Game/Models/Characters/Hero-M.Hero-M");
 	_charMesh = _motor->SetMesh(TEXT("PlayerMesh"), (const TCHAR*) _fileRoot, GetRootComponent(), this);
 	_charMesh->SetupAttachment(GetRootComponent());
 	_charMesh->SetRelativeLocation(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z - 90));
@@ -55,20 +57,26 @@ ATlocHumanPlayer::ATlocHumanPlayer() : TlocPlayer()
 	_wpnMesh->SetRelativeLocation(FVector(0.0f, 0.0f, 25.0f));
 	_wpnMesh->SetRelativeRotation(FRotator(-90.f, 0.0f, 0.0f));
 
-	//_wpnMesh->SetRelativeLocation(FVector(0.0f, 0.0f, 45.0f));
-	//_wpnMesh->SetRelativeRotation(FRotator(-90.f, 0.0f, 0.0f));
 	_wpnMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
-	/*static ConstructorHelpers::FObjectFinder<UStaticMesh> ObjectMeshAsset((const TCHAR*)playerEquipment._weapon->GetMeshFileRoot());
 
-	if (ObjectMeshAsset.Succeeded())
+
+
+	static ConstructorHelpers::FClassFinder<UUserWidget> IngameMenuUIBPClass(TEXT("/Game/UserInterface/Menu/TlocInGameMenuBP"));
+
+	if (IngameMenuUIBPClass.Class != nullptr)
 	{
-		_wpnMesh->SetStaticMesh(ObjectMeshAsset.Object);
-		_wpnMesh->SetWorldScale3D(FVector(1.f));
-		_wpnMesh->SetupAttachment(GetRootComponent());
-		_wpnMesh->SetRelativeLocation(FVector(0.0f, 0.0f, 45.0f));
-		_wpnMesh->SetRelativeRotation(FRotator(-90.f, 0.0f, 0.0f));
-		_wpnMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
-	}*/
+		IngameMenuUIClass = IngameMenuUIBPClass.Class;
+	}
+
+	static ConstructorHelpers::FClassFinder<UUserWidget> PlayerHudUIBPClass(TEXT("/Game/UserInterface/HUD/HUD-BP"));
+
+	if (IngameMenuUIBPClass.Class != nullptr)
+	{
+		PlayerHudUIClass = PlayerHudUIBPClass.Class;
+	}
+
+	openMenu = false;
+	
 
 
 }
@@ -92,6 +100,29 @@ ATlocHumanPlayer::~ATlocHumanPlayer()
 	//delete playerEquipment._gauntlet;
 	playerEquipment._gauntlet = NULL;
 
+	_enemy = nullptr;
+	_object = nullptr;
+	pickingUp = false;
+
+	//Delete UI
+	if (IngameMenu && PlayerHud->IsInViewport())
+	{
+		IngameMenu->RemoveFromViewport();
+	}
+	IngameMenu = nullptr;
+	IngameMenuUIClass = nullptr;
+	openMenu = false;
+
+	if (PlayerHud && PlayerHud->IsInViewport())
+	{
+		PlayerHud->RemoveFromViewport();
+	}
+	PlayerHud = nullptr;
+	PlayerHudUIClass = nullptr;
+
+	_playerCamera = nullptr;
+
+	_playerCameraSpringArm = nullptr;
 
 }
 
@@ -100,6 +131,8 @@ ATlocHumanPlayer::~ATlocHumanPlayer()
 void ATlocHumanPlayer::BeginPlay()
 {
 	Super::BeginPlay();	
+
+	LoadPlayer();
 
 	_motor->RegisterMeshComponent(_charMesh);
 	_motor->RegisterMeshComponent(_wpnMesh);
@@ -112,18 +145,7 @@ void ATlocHumanPlayer::BeginPlay()
 // Called every frame
 void ATlocHumanPlayer::Tick(float DeltaTime)
 {
-	//AddActorWorldOffset(FVector(0, 0, 0));
-	//AddActorLocalOffset(FVector(1, 0, 0));
 	Super::Tick(DeltaTime);
-
-	/*if (playerEquipment._weapon != NULL)
-	{
-		playerEquipment._weapon->SetPosition(GetActorLocation());
-	}*/
-
-	
-
-
 }
 
 // Called to bind functionality to input
@@ -133,9 +155,13 @@ void ATlocHumanPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAxis("MoveHorizontally", this, &ATlocHumanPlayer::moveHorizontally);
 	PlayerInputComponent->BindAxis("RotateHorizontally", this, &ATlocHumanPlayer::rotateHorizontally);
 
-	PlayerInputComponent->BindAction("PickUp", IE_Pressed, this, &ATlocHumanPlayer::takeObj);
+	PlayerInputComponent->BindAction("PickUp", IE_Pressed, this, &ATlocHumanPlayer::modifyHudLife);
 	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &ATlocHumanPlayer::attack);
+	PlayerInputComponent->BindAction("OpenMenu", IE_Pressed, this, &ATlocHumanPlayer::checkMenu);
+	PlayerInputComponent->BindAction("RotLeftMenu", IE_Pressed, this, &ATlocHumanPlayer::rotateMenuLeft);
+	PlayerInputComponent->BindAction("RotRightMenu", IE_Pressed, this, &ATlocHumanPlayer::rotateMenuRight);
 }
+
 
 //Function to activate the player's attack
 void ATlocHumanPlayer::OnHumanActorHit(UPrimitiveComponent* _weaponMesh, AActor* _other, UPrimitiveComponent* _otherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& Hit)
@@ -177,6 +203,12 @@ void ATlocHumanPlayer::OnHumanActorStopOverlap(AActor* _player, AActor* _obj)
 	}
 }
 
+void ATlocHumanPlayer::LoadPlayer()
+{
+	loadHud();
+	PlayerHud->SetPlayerPic(player);
+}
+
 ATlocHumanPlayer::Equipment ATlocHumanPlayer::GetPlayerEquipment()
 {
 	return playerEquipment;
@@ -198,6 +230,81 @@ void ATlocHumanPlayer::rotateHorizontally(float value)
 	GlobalConstants constants;
 
 	AddControllerYawInput(value * constants.KROTATIONSPEED * GetWorld()->GetDeltaSeconds());
+}
+
+void ATlocHumanPlayer::loadInGameUI()
+{
+	if (IngameMenuUIClass == nullptr) return;
+
+	IngameMenu = CreateWidget<UTlocIngameMenu>(GetWorld(), IngameMenuUIClass);
+	if (IngameMenu == nullptr) return;
+
+	IngameMenu->AddToViewport();
+}
+
+void ATlocHumanPlayer::closeInGameUI()
+{
+	IngameMenu->RemoveFromViewport();
+	IngameMenu = nullptr;
+}
+
+void ATlocHumanPlayer::checkMenu()
+{
+	if (openMenu)
+	{
+		openMenu = false;
+		closeInGameUI();
+	}
+	else
+	{
+		openMenu = true;
+		loadInGameUI();
+	}
+}
+
+void ATlocHumanPlayer::rotateMenuLeft()
+{
+	if (openMenu)
+	{
+		IngameMenu->RotateMenu(false);
+	}
+}
+
+void ATlocHumanPlayer::rotateMenuRight()
+{
+	if (openMenu)
+	{
+		IngameMenu->RotateMenu(true);
+	}
+}
+
+
+void ATlocHumanPlayer::loadHud()
+{
+	if (PlayerHudUIClass == nullptr) return;
+
+	PlayerHud = CreateWidget<UTlocHud>(GetWorld(), PlayerHudUIClass);
+	if (PlayerHud == nullptr) return;
+
+	PlayerHud->AddToViewport();
+}
+
+void ATlocHumanPlayer::modifyHudLife(/*float quantity*/)
+{
+	//TEST
+	ModifyLife(-25);
+	float percent = life / defaultLife;
+	PlayerHud->ModifyLifeBar(percent);
+	modifyHudMaster(-25/defaultLife);
+}
+
+void ATlocHumanPlayer::modifyHudMaster(float quantity)
+{
+	GlobalConstants constants;
+	if (quantity < constants.KZERO_F)
+	{
+		PlayerHud->ModifyMasterBar(abs(quantity));
+	}
 }
 
 void ATlocHumanPlayer::attack()
@@ -321,6 +428,21 @@ ATlocObject* ATlocHumanPlayer::checkChest()
 	{
 		return dynamic_cast<ATlocObject*>(_object);
 	}
+}
+
+void ATlocHumanPlayer::SetWeapon(TlocWeapon* _wpn)
+{
+	playerEquipment._weapon = _wpn;
+}
+
+void ATlocHumanPlayer::SetArmor(TlocArmor* _armr)
+{
+	playerEquipment._armor = _armr;
+}
+
+void ATlocHumanPlayer::SetGauntlet(TlocGauntlet* _gntlt)
+{
+	playerEquipment._gauntlet = _gntlt;
 }
 
 void ATlocHumanPlayer::SetMesh(const TCHAR* fileRoot, int mesh)
