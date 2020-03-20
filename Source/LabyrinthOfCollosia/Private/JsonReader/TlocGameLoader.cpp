@@ -39,21 +39,8 @@ std::vector<TlocPlayer*> TlocGameLoader::NewGameLoader()
 	std::vector<TlocPlayer*> players;
 	players.reserve(2);
 
-	/*//We obtain the full path of the content project
-	FString fileName = FPaths::ProjectContentDir();
-	//We add json directory, file name and file extension
-	fileName += constants.KDIR_JSON_NEW_GAME;
-	fileName += constants.KEXTENSION_JSON;*/
-
 	//It's called motor loader to get JSON's route to load new game
 	FString fileName = _motorLoader->GetJsonRoute((char*) constants.KVOID, (char*) constants.KDIR_JSON_NEW_GAME, (char*)constants.KEXTENSION_JSON);
-
-	/*//We save json content file inside jsonStr
-	FString jsonStr;
-	FFileHelper::LoadFileToString(jsonStr, *fileName);
-
-	TSharedPtr<FJsonObject> jsonParser = MakeShareable(new FJsonObject());
-	TSharedRef<TJsonReader<TCHAR>> jsonReader = TJsonReaderFactory<TCHAR>::Create(jsonStr);*/
 
 	//It's called motor loader to parsing the target JSON file pointed by fileName
 	TSharedPtr<FJsonObject> jsonParser = _motorLoader->ParsingJson(fileName);
@@ -64,7 +51,7 @@ std::vector<TlocPlayer*> TlocGameLoader::NewGameLoader()
 		{
 			TArray<TSharedPtr<FJsonValue>> playersArray = jsonParser->GetArrayField(constants.KPLAYER);
 			ATlocHumanPlayer* _hPlayer;
-			//ATlocDogPlayer* _dPlayer;
+			ATlocDogPlayer* _dPlayer;
 			TlocSword* _swrd;
 			FString* _filePath = nullptr;
 			FString _objName = "";
@@ -110,14 +97,24 @@ std::vector<TlocPlayer*> TlocGameLoader::NewGameLoader()
 						players.push_back(_hPlayer);
 					}
 					//The objetct is the dog player
-					/*else if(_clsNm != nullptr && strcmp(TCHAR_TO_ANSI(*_clsNm), constants.KDOG_PLAYER) == 0)
+					else if (strcmp(_clsNm, constants.KDOG_PLAYER) == 0)
 					{
-						_dPlayer = NewObject<ATlocHumanPlayer>();
-						_wpn = NewObject<TlocWeapon>();
-						_filePath = new FString();
-						_clsNm = new FString();
-						TSharedPtr<FJsonObject> jsonObject = playersArray[i]->AsObject();
-					}*/
+						_dPlayer = NewObject<ATlocDogPlayer>();
+						//_dPlayer->SetClassName(*jsonObject->GetStringField(constants.KCLASS_NAME));
+						_dPlayer->SetID(jsonObject->GetNumberField(constants.KID));
+						_dPlayer->SetLevel(jsonObject->GetNumberField(constants.KLEVEL));
+						_dPlayer->SetInitialLife(jsonObject->GetNumberField(constants.KLIFE));
+						_dPlayer->SetInitialMaster(jsonObject->GetNumberField(constants.KMASTER));
+						_dPlayer->SetAttack(jsonObject->GetNumberField(constants.KATTACK));
+						_dPlayer->SetDefense(jsonObject->GetNumberField(constants.KDEFENSE));
+						_dPlayer->SetMagicDefense(jsonObject->GetNumberField(constants.KMAGIC_DEFENSE));
+						_dPlayer->SetEvasion(jsonObject->GetNumberField(constants.KEVASION));
+						_dPlayer->SetCriticalHit(jsonObject->GetNumberField(constants.KCRITICAL_HIT));
+						_dPlayer->SetCriticalProb(jsonObject->GetNumberField(constants.KCRITICAL_PROB));
+						_dPlayer->SetExperience(jsonObject->GetNumberField(constants.KEXPERIENCE));
+						_dPlayer->SetNextLevel(jsonObject->GetNumberField(constants.KNEXT_LEVEL));
+						players.push_back(_dPlayer);
+					}
 				}
 			}
 		}

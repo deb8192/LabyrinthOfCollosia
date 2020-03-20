@@ -24,6 +24,7 @@ ATlocGameMode::ATlocGameMode()
 	_stageLoader = TlocStageLoader::GetInstance();
 	
 	_humanPlayer = DefaultPawnClass->GetDefaultObject<ATlocHumanPlayer>();
+	_dogPlayer = CreateDefaultSubobject<ATlocDogPlayer>("Dog");
 	_levels.reserve(constants.KLEVEL_NUM);
 	_levelEnemies.reserve(30);
 	_levelObjects.reserve(30);
@@ -134,7 +135,7 @@ void ATlocGameMode::SetPlayersFeatures(int& plyr, std::vector<TlocPlayer*> &play
 	switch (plyr)
 	{
 	case 1:
-		/*_dogPlayer->SetID(players[constants.KZERO]->GetID());
+		_dogPlayer->SetID(players[constants.KZERO]->GetID());
 		_dogPlayer->SetLevel(players[constants.KZERO]->GetLevel());
 		_dogPlayer->SetInitialLife(players[constants.KZERO]->GetDefaultLife());
 		_dogPlayer->SetAttack(players[constants.KZERO]->GetAttack());
@@ -146,7 +147,7 @@ void ATlocGameMode::SetPlayersFeatures(int& plyr, std::vector<TlocPlayer*> &play
 		_dogPlayer->SetCriticalProb(players[constants.KZERO]->GetCriticalProb());
 		_dogPlayer->SetExperience(players[constants.KZERO]->GetExperience());
 		_dogPlayer->SetNextLevel(players[constants.KZERO]->GetNextLevel());
-		_dogPlayer->SetWeapon(Cast<ATlocHumanPlayer>(players[constants.KZERO])->GetWeapon());*/
+		//_dogPlayer->SetWeapon(Cast<ATlocHumanPlayer>(players[constants.KZERO])->GetWeapon());
 		break;
 
 	default:

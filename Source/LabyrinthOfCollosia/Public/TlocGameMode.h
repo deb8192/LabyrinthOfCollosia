@@ -46,7 +46,7 @@ private:
 	void spawnPlayers(bool newGame);
 
 	ATlocHumanPlayer* _humanPlayer;
-	//ATlocDogPlayer* _dogPlayer;
+	ATlocDogPlayer* _dogPlayer;
 	UWorld* _world;
 	//ULevel* _defaultLevel;
 	std::vector<ULevel*> _levels;
