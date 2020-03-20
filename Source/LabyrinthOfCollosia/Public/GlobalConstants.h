@@ -4,6 +4,10 @@
 
 using GlobalConstants = struct Constants
 {
+	/*** Booleans ***/
+	const bool KTRUE = true;
+	const bool KFALSE = false;
+
 	/*** Cardinals for calculus ***/
 
 	const int KUNITY = 1;
@@ -43,11 +47,14 @@ using GlobalConstants = struct Constants
 	const char* KEMPTY_STRING = "";
 
 	//	-Directory
+
+	const char* KVOID = "";
 	const char* KFIRST_LEVEL_NAME = "Hall";
 	const char* KEXTENSION_JSON = ".json";
 	const char* KDIR_JSON_NEW_GAME = "Json/New_Game/Player";
 	const char* KDIR_JSON_OBJ = "Json/Objects/";
 	const char* KDIR_JSON_ENM = "Json/Enemies/";
+	const char* KDIR_GLADIUS_MESH = "/Game/Models/Stages/Stages-objects/Gladius.Gladius";
 	const char* KDIR_CHEST_MESH = "/Game/Models/Stages/Stages-objects/Vessel_Cube.Vessel_Cube";
 	const char* KDIR_CHEST_AUX_MESH = "/Game/Models/Stages/Stages-objects/Vessel_Sphere.Vessel_Sphere";
 
@@ -104,37 +111,42 @@ using GlobalConstants = struct Constants
 	const char* KARMOR = "TlocArmor";
 	const char* KGAUNTLET = "TlocGauntlet";
 	const char* KINGREDIENT = "TlocIngredients";
+	const char* KITEM = "TlocItem";
 	const char* KHEALT_ITEM = "TlocHealtItem";
 	const char* KCALL_BEAD_ITEN = "TlocCallBeadItem";
 	const char* KSTATUS_ITEM = "TlocStatusItem";
 	const char* KCHEST_CLASS = "TlocChest";
-
-	//	-Properties
-
-	const char* KCHEST = "chest";
-
-	/*** JSON characters ***/
-
 	const char* KPLAYER = "TlocPlayer";
 	const char* KHUMAN_PLAYER = "TlocHumanPlayer";
 	const char* KDOG_PLAYER = "TlocDogPlayer";
 	const char* KENEMY = "TlocEnemy";
 
-	//	-Name variables
+	//	-Properties
 
-	const char* KPOSITION = "position";
-	const char* KROTATION = "rotation";
-	const char* KNAME = "name";
-	const char* KFILE_DIRECTORY = "fileDirectory";
-	const char* KPRICE = "price";
+	const char* KID = "ID";
+	const char* KLEVEL = "level";
+	const char* KLIFE = "life";
+	const char* KMASTER = "master";
 	const char* KATTACK = "attack";
 	const char* KDEFENSE = "defense";
+	const char* KMAGIC_DEFENSE = "magicDef";
+	const char* KEVASION = "evasion";
+	const char* KLUCK = "luck";
+	const char* KCRITICAL_HIT = "criticalHit";
+	const char* KCRITICAL_PROB = "criticalProb";
 	const char* KCRITICAL_DAMAGE_INC = "criticalDamageInc";
 	const char* KCRITICAL_PROBABILITY_INC = "criticalProbabilityInc";
-
+	const char* KEXPERIENCE = "experience";
+	const char* KNEXT_LEVEL = "nextLevel";
+	const char* KNAME = "name";
+	const char* KPRICE = "price";
+	const char* KCLASS_NAME = "className";
+	const char* KFILE_DIRECTORY = "fileDirectory";
+	const char* KPOSITION = "position";
+	const char* KROTATION = "rotation";
+	const char* KCHEST = "chest";
 	const char* KINGREDIENTS_ID = "ingredientID";
 	const char* KHEALTH_ITEMS_ID = "healthID";
-
 	const char* KHEALTH_RECOVERED = "healthRecovered";
 
 

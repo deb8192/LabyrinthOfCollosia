@@ -3,11 +3,11 @@
 #include "../Public/Characters/TlocHumanPlayer.h"
 #include "../Public/Characters/TlocEnemy.h"
 #include "../Public/Objects/TlocChest.h"
-#include "Engine/World.h"
 #include "../Public/GlobalConstants.h"
-#include "ConstructorHelpers.h"
 
+#include "Engine/World.h"
 #include "Engine/Scene.h"
+#include "ConstructorHelpers.h"
 
 // Sets default values
 ATlocHumanPlayer::ATlocHumanPlayer() : TlocPlayer()
@@ -155,7 +155,7 @@ void ATlocHumanPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAxis("MoveHorizontally", this, &ATlocHumanPlayer::moveHorizontally);
 	PlayerInputComponent->BindAxis("RotateHorizontally", this, &ATlocHumanPlayer::rotateHorizontally);
 
-	PlayerInputComponent->BindAction("PickUp", IE_Pressed, this, &ATlocHumanPlayer::modifyHudLife);
+	PlayerInputComponent->BindAction("PickUp", IE_Pressed, this, &ATlocHumanPlayer::takeObj);
 	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &ATlocHumanPlayer::attack);
 	PlayerInputComponent->BindAction("OpenMenu", IE_Pressed, this, &ATlocHumanPlayer::checkMenu);
 	PlayerInputComponent->BindAction("RotLeftMenu", IE_Pressed, this, &ATlocHumanPlayer::rotateMenuLeft);
@@ -354,79 +354,117 @@ void ATlocHumanPlayer::takeObj()
 */
 void ATlocHumanPlayer::pickupObject()
 {
+
+	GlobalConstants constants;
 	if (_object != NULL)
 	{
 		ATlocObject* _obj = checkChest();
-		//It obtains _obj's child class and identifies which one is it's child class
-		//WEAPONS
-		if (dynamic_cast<TlocWeapon*>(_obj))
+
+		if (_obj != nullptr)
 		{
-			TlocWeapon* _wpn = (TlocWeapon*)_obj;
-			_weapon.push_back(_wpn);
-			UE_LOG(LogTemp, Warning, TEXT("You picked up a weapon."));
-		}
-		//GAUNTLETS
-		else if (dynamic_cast<TlocGauntlet*>(_obj))
-		{
-			TlocGauntlet* _glt = (TlocGauntlet*)_obj;
-			_gauntlet.push_back(_glt);
-		}
-		//ARMORS
-		else if (dynamic_cast<TlocArmor*>(_obj))
-		{
-			TlocArmor* _arm = (TlocArmor*)_obj;
-			_armor.push_back(_arm);
-		}
-		//INGREDIENTS
-		else if (dynamic_cast<TlocIngredients*>(_obj))
-		{
-			TlocIngredients* _ing = (TlocIngredients*)_obj;
-			GlobalConstants constants;
-			int i = 0;
-			while (i < _ingredients.size())
+			//It's made able the char* and const char* chains comparation copying TCHAR* _gotObjName (_obj class name) into char* _objName
+			char* _objName = (char*)malloc(constants.KCHAR_SIZE);
+			TCHAR* _gotObjName = _obj->GetClassName();
+			size_t   x;
+			wcstombs_s(&x, _objName, constants.KCHAR_SIZE, _gotObjName, constants.KCHAR_SIZE);
+
+			//It obtains _obj's child class and identifies which one is it's child class
+			//WEAPONS
+			if (strcmp(_objName, constants.KWEAPON) == 0)
 			{
-				if (_ingredients[i].front() != nullptr && _ingredients[i].front()->GetID() == _ing->GetID())
+				TlocWeapon* _wpn = (TlocWeapon*)_obj;
+				_weapon.push_back(_wpn);
+				UE_LOG(LogTemp, Warning, TEXT("You picked up a weapon."));
+			}
+			//GAUNTLETS
+			else if (strcmp(_objName, constants.KGAUNTLET) == 0)
+			{
+				TlocGauntlet* _glt = (TlocGauntlet*)_obj;
+				_gauntlet.push_back(_glt);
+				UE_LOG(LogTemp, Warning, TEXT("You picked up a gauntlet."));
+			}
+			//ARMORS
+			else if (strcmp(_objName, constants.KARMOR) == 0)
+			{
+				TlocArmor* _arm = (TlocArmor*)_obj;
+				_armor.push_back(_arm);
+				UE_LOG(LogTemp, Warning, TEXT("You picked up an armor."));
+			}
+			//INGREDIENTS
+			else if (strcmp(_objName, constants.KINGREDIENT) == 0)
+			{
+				TlocIngredients* _ing = (TlocIngredients*)_obj;
+				int i = 0;
+				while (i < _ingredients.size())
 				{
-					_ingredients[i].push_back(_ing);
-					i = _ingredients.size();
+					if (_ingredients[i].front() != nullptr && _ingredients[i].front()->GetID() == _ing->GetID())
+					{
+						_ingredients[i].push_back(_ing);
+						i = _ingredients.size();
+					}
+					else
+					{
+						i++;
+					}
 				}
-				else
+				UE_LOG(LogTemp, Warning, TEXT("You picked up an ingredient."));
+			}
+			//ITEMS
+			else if (strcmp(_objName, constants.KITEM) == 0)
+			{
+				TlocItem* _itm = (TlocItem*)_obj;
+				int i = 0;
+				while (i < _items.size())
 				{
-					i++;
+					if (_items[i].front() != nullptr && _items[i].front() == _itm)
+					{
+						_items[i].push_back(_itm);
+						i = _items.size();
+					}
+					else
+					{
+						i++;
+					}
 				}
+				UE_LOG(LogTemp, Warning, TEXT("You picked up an item."));
 			}
 		}
-		//ITEMS
-		else if (dynamic_cast<TlocItem*>(_obj))
-		{
-			TlocItem* _itm = (TlocItem*)_obj;
-			GlobalConstants constants;
-			int i = 0;
-			while (i < _items.size())
-			{
-				if (_items[i].front() != nullptr && _items[i].front() == _itm)
-				{
-					_items[i].push_back(_itm);
-					i = _items.size();
-				}
-				else
-				{
-					i++;
-				}
-			}
-		}
+		else UE_LOG(LogTemp, Warning, TEXT("The chest it's been opened yet."));
 	}
 }
-
+/***************************  check Chest  ***************************
+*** Function than checks if the taken object is a chest or not.   ****
+***	In case of being a not opened chest, returns the object that  ****
+*** remains inside and, if it is not a chest, returns the proper  ****
+*** object.														  ****
+**********************************************************************
+*				In:
+*
+*				Out:	ATlocObject* _object (taken world object)
+*
+*/
 ATlocObject* ATlocHumanPlayer::checkChest()
 {
-	if (dynamic_cast<TlocChest*>(_object) && !dynamic_cast<TlocChest*>(_object)->GetOpened())
+	GlobalConstants constants;
+	//It's made able the char* and const char* chains comparation copying TCHAR* _gotObjName (_obj class name) into char* _objName
+	char* _objName = (char*)malloc(constants.KCHAR_SIZE);
+	ATlocObject* _obj = Cast<ATlocObject>(_object);
+	TCHAR* _gotObjName = _obj->GetClassName();
+	size_t   x;
+	wcstombs_s(&x, _objName, constants.KCHAR_SIZE, _gotObjName, constants.KCHAR_SIZE);
+	if (strcmp(_objName, constants.KCHEST_CLASS) == 0)
 	{
-		return dynamic_cast<TlocChest*>(_object)->GetObject();
+		TlocChest* _chest = Cast<TlocChest>(_object);
+		if (!_chest->GetOpened())
+		{
+			_chest->SetOpened(constants.KTRUE);
+			return _chest->GetObject();
+		}
+		else return nullptr;
 	}
 	else
 	{
-		return dynamic_cast<ATlocObject*>(_object);
+		return _obj;
 	}
 }
 
@@ -449,31 +487,34 @@ void ATlocHumanPlayer::SetMesh(const TCHAR* fileRoot, int mesh)
 {
 	switch (mesh)
 	{
-		case 2:
-			_charMesh = _motor->SetMesh((const TCHAR*)_name, (const TCHAR*)_fileRoot, GetRootComponent(), this);
-				break;
+	case 2:
+		_charMesh = _motor->SetMesh((const TCHAR*)_name, (const TCHAR*)_fileRoot, GetRootComponent(), this);
+		break;
 
-			/*case 3:
-				_auxCharMesh2 = _motor->SetMesh(TEXT("Auxiliar mesh 2"), (const TCHAR*)_fileRoot, GetRootComponent(), this);
-				break;
-				*/
-		default:
-			_charMesh = _motor->SetMesh((const TCHAR*)_name, (const TCHAR*)_fileRoot, GetRootComponent(), this);
+		/*case 3:
+			_auxCharMesh2 = _motor->SetMesh(TEXT("Auxiliar mesh 2"), (const TCHAR*)_fileRoot, GetRootComponent(), this);
 			break;
-			
+			*/
+	default:
+		_charMesh = _motor->SetMesh((const TCHAR*)_name, (const TCHAR*)_fileRoot, GetRootComponent(), this);
+		break;
+
 	}
 }
 
-void ATlocHumanPlayer::SetPosition(FVector newPosition)
+TlocWeapon* ATlocHumanPlayer::GetWeapon()
 {
-	SetActorLocation(newPosition);
-	TlocPlayer::SetPosition(newPosition);
+	return playerEquipment._weapon;
 }
 
-void ATlocHumanPlayer::SetRotation(FRotator newRotation)
+TlocArmor* ATlocHumanPlayer::GetArmor()
 {
-	SetActorRotation(newRotation);
-	TlocPlayer::SetRotation(newRotation);
+	return playerEquipment._armor;
+}
+
+TlocGauntlet* ATlocHumanPlayer::GetGauntlet()
+{
+	return playerEquipment._gauntlet;
 }
 
 UStaticMeshComponent* ATlocHumanPlayer::GetMesh()

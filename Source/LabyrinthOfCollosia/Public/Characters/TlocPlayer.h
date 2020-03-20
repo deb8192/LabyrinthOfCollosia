@@ -35,14 +35,69 @@ public:
 	void Move();
 	void Defend();
 
-	//Setters & Getters
+	//Getters & Setters
+
+	// -Getters TlocCharacter
+	int GetID();
+	int GetLevel();
+	int GetLife();
+	float GetDefaultLife();
+	float GetMaster();
+	float GetDefaultMaster();
+	int GetAttack();
+	int GetDefense();
+	int GetMagicDefense();
+	float GetCriticalHit();
+	float GetCriticalProb();
+	int GetEvasion();
+	int GetLuck();
+	bool GetDefend();
+	int GetAttacking();
+	//int GetTalons();
+	int GetJewels();
+	//int GetCredits();
+	bool GetInvulnerable();
+	float GetInvulnerableTime();
+	UStaticMeshComponent* GetMesh();
+	FVector GetPosition();
+	FRotator GetRotation();
+
+	// -Getters TlocPlayer
+	int GetNextLevel();
+	int GetExperience();
+	int GetPlayer();
+	
+	// -Setters TlocCharacter
+	void SetInitialLife(float lif);
+	void SetInitialMaster(float mstr);
+	void SetID(int id);
+	void SetLevel(int lvl);
+	void SetLife(float lif);
+	void SetDefaultLife(float dfltLif);
+	void SetMaster(float mstr);
+	void SetDefaultMaster(float dfltMstr);
+	void SetAttack(int att);
+	void SetDefense(int def);
+	void SetMagicDefense(int magDef);
+	void SetCriticalHit(float critHit);
+	void SetCriticalProb(float critProb);
+	void SetEvasion(int ev);
+	void SetLuck(int lck);
+	void SetDefend(bool dfnd);
+	void SetAttacking(bool attckng);
+	//void SetTalons(int tlns);
+	void SetJewels(int jwls);
+	//void SetCredits(int crdts);
+	void SetInvulnerable(bool inv);
+	void SetInvulnerableTime(float invTime);
+	virtual void SetMesh(const TCHAR* fileRoot, int mesh) = 0;
 	void SetPosition(FVector newPosition);
 	void SetRotation(FRotator newRotation);
 
-	FVector GetPosition();
-	FRotator GetRotation();
-	bool GetDefend();
-	int GetLife();
+	// -Setters TlocPlayer
+	void SetNextLevel(int nLevel);
+	void SetExperience(int exp);
+	void SetPlayer(int plyr);
 	
 protected:
 

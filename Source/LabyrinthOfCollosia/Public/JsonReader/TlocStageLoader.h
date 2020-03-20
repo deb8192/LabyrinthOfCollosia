@@ -2,10 +2,9 @@
 
 #pragma once
 
-#include "../Public/Objects/TlocObject.h"
+#include "TlocMotorLoader.h"
 #include "../Public/Characters/TlocEnemy.h"
 #include "UObject/UObjectGlobals.h"
-#include "CoreMinimal.h"
 
 #include <vector>
 
@@ -34,6 +33,7 @@ private:
 	//clase sigleton
 	TlocStageLoader();
 	static TlocStageLoader* _unic_instance;
+	TlocMotorLoader* _motorLoader;
 	//fin clase singleton
 
 };

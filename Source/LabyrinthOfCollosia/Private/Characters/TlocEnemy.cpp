@@ -295,43 +295,69 @@ void ATlocEnemy::Defend()
 {
 }
 
-void ATlocEnemy::SetMesh(const TCHAR* fileRoot, int mesh)
+int ATlocEnemy::GetID()
 {
-	switch (mesh)
-	{
-		case 2:
-			_auxFilePath = (TCHAR*)fileRoot;
-			fileRoot = nullptr;
-			_auxCharMesh = _motor->SetMesh(TEXT("Auxiliar mesh"), (const TCHAR*)_auxFilePath, GetRootComponent(), this);
-			break;
-
-		case 3:
-			_auxFilePath2 = (TCHAR*)fileRoot;
-			fileRoot = nullptr;
-			_auxCharMesh2 = _motor->SetMesh(TEXT("Auxiliar mesh 2"), (const TCHAR*)_auxFilePath2, GetRootComponent(), this);
-			break;
-
-		default:
-			_fileRoot = (TCHAR*)fileRoot;
-			fileRoot = nullptr;
-			_charMesh = _motor->SetMesh((const TCHAR*)_name, (const TCHAR*)_fileRoot, GetRootComponent(), this);
-			break;
-
-	}
+	return ID;
 }
 
-void ATlocEnemy::SetPosition(FVector newPosition)
+int ATlocEnemy::GetLevel()
 {
-	position = newPosition;
-	SetActorLocation(newPosition);
-	_charMesh->SetRelativeLocation(newPosition);
+	return level;
 }
 
-void ATlocEnemy::SetRotation(FRotator newRotation)
+int ATlocEnemy::GetLife()
 {
-	rotation = newRotation;
-	SetActorRotation(newRotation);
-	_charMesh->SetRelativeRotation(newRotation);
+	return life;
+}
+
+float ATlocEnemy::GetDefaultLife()
+{
+	return defaultLife;
+}
+
+float ATlocEnemy::GetMaster()
+{
+	return master;
+}
+
+float ATlocEnemy::GetDefaultMaster()
+{
+	return defaultMaster;
+}
+
+int ATlocEnemy::GetAttack()
+{
+	return attack;
+}
+
+int ATlocEnemy::GetDefense()
+{
+	return defense;
+}
+
+int ATlocEnemy::GetMagicDefense()
+{
+	return magicDef;
+}
+
+float ATlocEnemy::GetCriticalHit()
+{
+	return criticalHit;
+}
+
+float ATlocEnemy::GetCriticalProb()
+{
+	return criticalProb;
+}
+
+int ATlocEnemy::GetEvasion()
+{
+	return evasion;
+}
+
+int ATlocEnemy::GetLuck()
+{
+	return luck;
 }
 
 bool ATlocEnemy::GetDefend()
@@ -339,9 +365,24 @@ bool ATlocEnemy::GetDefend()
 	return defending;
 }
 
-int ATlocEnemy::GetLife()
+int ATlocEnemy::GetAttacking()
 {
-	return life;
+	return attacking;
+}
+
+int ATlocEnemy::GetJewels()
+{
+	return jewels;
+}
+
+bool ATlocEnemy::GetInvulnerable()
+{
+	return invulnerable;
+}
+
+float ATlocEnemy::GetInvulnerableTime()
+{
+	return invulnerableTime;
 }
 
 UStaticMeshComponent* ATlocEnemy::GetMesh()
@@ -371,5 +412,146 @@ TArray<TCHAR*> ATlocEnemy::GetMeshesFileRoot()
 	paths.Push(_auxFilePath);
 	paths.Push(_auxFilePath2);
 	return paths;
+}
+
+void ATlocEnemy::SetInitialLife(float lif)
+{
+	SetLife(lif);
+	SetDefaultLife(lif);
+}
+
+void ATlocEnemy::SetInitialMaster(float mstr)
+{
+	SetMaster(mstr);
+	SetDefaultMaster(mstr);
+}
+
+void ATlocEnemy::SetID(int id)
+{
+	ID = id;
+}
+
+void ATlocEnemy::SetLevel(int lvl)
+{
+	level = lvl;
+}
+
+void ATlocEnemy::SetLife(float lif)
+{
+	life = lif;
+}
+
+void ATlocEnemy::SetDefaultLife(float dfltLif)
+{
+	defaultLife = dfltLif;
+}
+
+void ATlocEnemy::SetMaster(float mstr)
+{
+	master = mstr;
+}
+
+void ATlocEnemy::SetDefaultMaster(float dfltMstr)
+{
+	defaultMaster = dfltMstr;
+}
+
+void ATlocEnemy::SetAttack(int att)
+{
+	attack = att;
+}
+
+void ATlocEnemy::SetDefense(int def)
+{
+	defense = def;
+}
+
+void ATlocEnemy::SetMagicDefense(int magDef)
+{
+	magicDef = magDef;
+}
+
+void ATlocEnemy::SetCriticalHit(float critHit)
+{
+	criticalHit = critHit;
+}
+
+void ATlocEnemy::SetCriticalProb(float critProb)
+{
+	criticalProb = critProb;
+}
+
+void ATlocEnemy::SetEvasion(int ev)
+{
+	evasion = ev;
+}
+
+void ATlocEnemy::SetLuck(int lck)
+{
+	luck = lck;
+}
+
+void ATlocEnemy::SetDefend(bool dfnd)
+{
+	defending = dfnd;
+}
+
+void ATlocEnemy::SetAttacking(bool attckng)
+{
+	attacking = attckng;
+}
+
+void ATlocEnemy::SetJewels(int jwls)
+{
+	jewels = jwls;
+}
+
+void ATlocEnemy::SetInvulnerable(bool inv)
+{
+	invulnerable = inv;
+}
+
+void ATlocEnemy::SetInvulnerableTime(float invTime)
+{
+	invulnerableTime = invTime;
+}
+
+void ATlocEnemy::SetMesh(const TCHAR* fileRoot, int mesh)
+{
+	switch (mesh)
+	{
+	case 2:
+		_auxFilePath = (TCHAR*)fileRoot;
+		fileRoot = nullptr;
+		_auxCharMesh = _motor->SetMesh(TEXT("Auxiliar mesh"), (const TCHAR*)_auxFilePath, GetRootComponent(), this);
+		break;
+
+	case 3:
+		_auxFilePath2 = (TCHAR*)fileRoot;
+		fileRoot = nullptr;
+		_auxCharMesh2 = _motor->SetMesh(TEXT("Auxiliar mesh 2"), (const TCHAR*)_auxFilePath2, GetRootComponent(), this);
+		break;
+
+	default:
+		_fileRoot = (TCHAR*)fileRoot;
+		fileRoot = nullptr;
+		_charMesh = _motor->SetMesh((const TCHAR*)_name, (const TCHAR*)_fileRoot, GetRootComponent(), this);
+		break;
+
+	}
+}
+
+void ATlocEnemy::SetPosition(FVector newPosition)
+{
+	position = newPosition;
+	SetActorLocation(newPosition);
+	_charMesh->SetRelativeLocation(newPosition);
+}
+
+void ATlocEnemy::SetRotation(FRotator newRotation)
+{
+	rotation = newRotation;
+	SetActorRotation(newRotation);
+	_charMesh->SetRelativeRotation(newRotation);
 }
 

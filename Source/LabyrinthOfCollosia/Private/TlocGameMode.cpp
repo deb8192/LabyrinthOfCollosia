@@ -20,8 +20,8 @@ ATlocGameMode::ATlocGameMode()
 	HUDClass = UTlocIngameMenu::StaticClass();
 	GameStateClass = ATlocGameState::StaticClass();
 
-
-	//_stageLoader = TlocStageLoader::GetInstance();
+	_gameLoader = TlocGameLoader::GetInstance();
+	_stageLoader = TlocStageLoader::GetInstance();
 	
 	_humanPlayer = DefaultPawnClass->GetDefaultObject<ATlocHumanPlayer>();
 	_levels.reserve(constants.KLEVEL_NUM);
@@ -128,17 +128,56 @@ void ATlocGameMode::SpawnActorsOnStage()
 	}
 }
 
+void ATlocGameMode::SetPlayersFeatures(int& plyr, std::vector<TlocPlayer*> &players)
+{
+	GlobalConstants constants;
+	switch (plyr)
+	{
+	case 1:
+		/*_dogPlayer->SetID(players[constants.KZERO]->GetID());
+		_dogPlayer->SetLevel(players[constants.KZERO]->GetLevel());
+		_dogPlayer->SetInitialLife(players[constants.KZERO]->GetDefaultLife());
+		_dogPlayer->SetAttack(players[constants.KZERO]->GetAttack());
+		_dogPlayer->SetMaster(players[constants.KZERO]->GetMaster());
+		_dogPlayer->SetMagicDefense(players[constants.KZERO]->GetMagicDefense());
+		_dogPlayer->SetEvasion(players[constants.KZERO]->GetEvasion());
+		_dogPlayer->SetLuck(players[constants.KZERO]->GetLuck());
+		_dogPlayer->SetCriticalHit(players[constants.KZERO]->GetCriticalHit());
+		_dogPlayer->SetCriticalProb(players[constants.KZERO]->GetCriticalProb());
+		_dogPlayer->SetExperience(players[constants.KZERO]->GetExperience());
+		_dogPlayer->SetNextLevel(players[constants.KZERO]->GetNextLevel());
+		_dogPlayer->SetWeapon(Cast<ATlocHumanPlayer>(players[constants.KZERO])->GetWeapon());*/
+		break;
+
+	default:
+		_humanPlayer->SetID(players[constants.KZERO]->GetID());
+		_humanPlayer->SetLevel(players[constants.KZERO]->GetLevel());
+		_humanPlayer->SetInitialLife(players[constants.KZERO]->GetDefaultLife());
+		_humanPlayer->SetAttack(players[constants.KZERO]->GetAttack());
+		_humanPlayer->SetMaster(players[constants.KZERO]->GetMaster());
+		_humanPlayer->SetMagicDefense(players[constants.KZERO]->GetMagicDefense());
+		_humanPlayer->SetEvasion(players[constants.KZERO]->GetEvasion());
+		_humanPlayer->SetLuck(players[constants.KZERO]->GetLuck());
+		_humanPlayer->SetCriticalHit(players[constants.KZERO]->GetCriticalHit());
+		_humanPlayer->SetCriticalProb(players[constants.KZERO]->GetCriticalProb());
+		_humanPlayer->SetExperience(players[constants.KZERO]->GetExperience());
+		_humanPlayer->SetNextLevel(players[constants.KZERO]->GetNextLevel());
+		//_humanPlayer->SetWeapon(Cast<ATlocHumanPlayer>(players[constants.KZERO])->GetWeapon());
+		break;
+	}
+}
+
 // Called every frame
 void ATlocGameMode::Tick(float DeltaTime)
 {
 	GlobalConstants constants;
 	Super::Tick(DeltaTime);
 
-	if (changingLevel)
+	/*if (changingLevel)
 	{
 		_world->SetCurrentLevel(_levels[1]);
 		changingLevel = false;
-	}
+	}*/
 	if (!_levelEnemies.empty())
 	{
 
@@ -173,7 +212,10 @@ void ATlocGameMode::spawnPlayers(bool newGame)
 	{
 		players = _gameLoader->NewGameLoader();
 	}
-	//_humanPlayer = dynamic_cast<ATlocHumanPlayer*, TlocPlayer>(players[0]);
+	for (int i = 0; i < players.size(); i++)
+	{
+		SetPlayersFeatures(i, players);
+	}
 }
 
 

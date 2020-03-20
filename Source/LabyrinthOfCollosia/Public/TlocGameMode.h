@@ -2,17 +2,20 @@
 
 #pragma once
 
-#include "Objects/Weapons/TlocWeapon.h"
-#include "Characters/TlocEnemy.h"
+//#include "Objects/TlocObject.h"
+//#include "Characters/TlocEnemy.h"
 #include "Characters/TlocHumanPlayer.h"
-#include "Engine/World.h"
-#include "Engine/Level.h"
-#include "Engine/Scene.h"
+#include "Characters/TlocDogPlayer.h"
 #include "JsonReader/TlocStageLoader.h"
 #include "JsonReader/TlocGameLoader.h"
 
-#include "CoreMinimal.h"
+#include "Engine/World.h"
+#include "Engine/Level.h"
+#include "Engine/Scene.h"
+
+//#include "CoreMinimal.h"
 #include "GameFramework/GameMode.h"
+
 #include "TlocGameMode.generated.h"
 
 /**
@@ -34,6 +37,7 @@ protected:
 
 	void SpawnLevels(int _lvlNum);
 	void SpawnActorsOnStage();
+	void SetPlayersFeatures(int &plyr, std::vector<TlocPlayer*> &players);
 
 	void Tick(float DeltaTime);
 
@@ -42,6 +46,7 @@ private:
 	void spawnPlayers(bool newGame);
 
 	ATlocHumanPlayer* _humanPlayer;
+	//ATlocDogPlayer* _dogPlayer;
 	UWorld* _world;
 	//ULevel* _defaultLevel;
 	std::vector<ULevel*> _levels;

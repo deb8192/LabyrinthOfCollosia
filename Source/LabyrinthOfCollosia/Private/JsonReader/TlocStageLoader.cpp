@@ -2,7 +2,7 @@
 
 #include "../Public/JsonReader/TlocStageLoader.h"
 
-#include "Dom/JsonObject.h"
+//#include "Dom/JsonObject.h"
 #include "Templates/SharedPointer.h"
 #include "Serialization/JsonReader.h"
 #include "Serialization/JsonSerializer.h"
@@ -26,10 +26,12 @@ TlocStageLoader* TlocStageLoader::_unic_instance = 0;
 
 TlocStageLoader::TlocStageLoader()
 {
+	_motorLoader = TlocMotorLoader::GetInstance();
 }
 
 TlocStageLoader::~TlocStageLoader()
 {
+	delete _motorLoader;
 }
 
 std::vector<ATlocObject*> TlocStageLoader::ObjectsLoader(const char* _name)
@@ -38,21 +40,28 @@ std::vector<ATlocObject*> TlocStageLoader::ObjectsLoader(const char* _name)
 	std::vector<ATlocObject*> levelObjects; 
 	levelObjects.reserve(100);
 
-	//We obtain the full path of the content project
+	/*//We obtain the full path of the content project
 	FString fileName = FPaths::ProjectContentDir();
 	//We add json directory, file name and file extension
 	fileName += constants.KDIR_JSON_OBJ;
 	fileName += _name;
 	fileName += constants.KEXTENSION_JSON;
+	*/
+
+	//We call motor loader to get JSON's route to load stage objects
+	FString fileName = _motorLoader->GetJsonRoute((char*) _name, (char*)constants.KDIR_JSON_OBJ, (char*)constants.KEXTENSION_JSON);
 
 	//We save json content file inside jsonStr
-	FString jsonStr;
+	/*FString jsonStr;
 	FFileHelper::LoadFileToString(jsonStr, *fileName);
 
 	TSharedPtr<FJsonObject> jsonParser = MakeShareable(new FJsonObject());
-	TSharedRef<TJsonReader<TCHAR>> jsonReader = TJsonReaderFactory<TCHAR>::Create(jsonStr);
+	TSharedRef<TJsonReader<TCHAR>> jsonReader = TJsonReaderFactory<TCHAR>::Create(jsonStr);*/
+	
+	//It's called motor loader to parsing the target JSON file pointed by fileName
+	TSharedPtr<FJsonObject> jsonParser = _motorLoader->ParsingJson(fileName);
 
-	if (FJsonSerializer::Deserialize(jsonReader, jsonParser) && jsonParser.IsValid())
+	if (jsonParser != nullptr)
 	{
 		if (jsonParser->Values.Contains(constants.KSWORD))
 		{
@@ -85,8 +94,18 @@ std::vector<ATlocObject*> TlocStageLoader::ObjectsLoader(const char* _name)
 				jsonObject->TryGetStringField(constants.KFILE_DIRECTORY, *_filePath);
 				_wpn->SetMeshFileRoot(**_filePath);
 				jsonObject->TryGetBoolField(constants.KCHEST, chest);
+
+				//Complete weapon data because there is a weapon
+				*_fPath = constants.KDIR_GLADIUS_MESH;
+				*_clsNm = constants.KWEAPON;
+				_wpn->SetMeshFileRoot(**_fPath);
+				_wpn->SetClassName(**_clsNm);
+				_wpn->SetPosition(*_pos);
+				_wpn->SetRotation(*_rot);
 				if (chest)
 				{
+					_fPath = new FString();
+					_clsNm = new FString();
 					*_fPath = constants.KDIR_CHEST_MESH;
 					*_clsNm = constants.KCHEST_CLASS; 
 
@@ -99,10 +118,6 @@ std::vector<ATlocObject*> TlocStageLoader::ObjectsLoader(const char* _name)
 				}
 				else
 				{
-					*_clsNm = constants.KWEAPON;
-					_wpn->SetClassName(**_clsNm);
-					_wpn->SetPosition(*_pos);
-					_wpn->SetRotation(*_rot);
 					levelObjects.push_back(_wpn);
 				}
 			}
@@ -145,12 +160,16 @@ std::vector<ATlocEnemy*> TlocStageLoader::EnemiesLoader(const char* _name)
 	std::vector<ATlocEnemy*> levelEnemies;
 	levelEnemies.reserve(100);
 
-	//We obtain the full path of the content project
+	/*//We obtain the full path of the content project
 	FString fileName = FPaths::ProjectContentDir();
 	//We add json directory, file name and file extension
 	fileName += constants.KDIR_JSON_ENM;
 	fileName += _name;
-	fileName += constants.KEXTENSION_JSON;
+	fileName += constants.KEXTENSION_JSON;*/
+
+	//We call motor loader to get JSON's route to load stage objects
+	FString fileName = _motorLoader->GetJsonRoute((char*)_name, (char*)constants.KDIR_JSON_ENM, (char*)constants.KEXTENSION_JSON);
+
 
 	//We save json content file inside jsonStr
 	FString jsonStr;

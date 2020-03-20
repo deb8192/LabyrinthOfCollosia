@@ -26,10 +26,10 @@ public:
 	void SetArmor(TlocArmor* _armr);
 	void SetGauntlet(TlocGauntlet* _gntlt);
 	void SetMesh(const TCHAR* fileRoot, int mesh);
-	void SetPosition(FVector newPosition);
-	void SetRotation(FRotator newRotation);
 
-
+	TlocWeapon* GetWeapon();
+	TlocArmor* GetArmor();
+	TlocGauntlet* GetGauntlet();
 	UStaticMeshComponent* GetMesh();
 
 	// Human player ingame menu

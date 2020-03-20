@@ -1,10 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
+#include "../Motor/TlocMotorLoader.h"
 
-#include "CoreMinimal.h"
-#include "../Public/Characters/TlocHumanPlayer.h"
-#include "../Public/Characters/TlocDogPlayer.h"
+#include "../Public/Characters/TlocPlayer.h"
 
 #include <vector>
 
@@ -35,5 +34,6 @@ private:
 	//clase sigleton
 	TlocGameLoader();
 	static TlocGameLoader* _unic_instance;
+	TlocMotorLoader* _motorLoader;
 	//fin clase singleton
 };

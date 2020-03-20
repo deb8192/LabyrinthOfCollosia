@@ -5,7 +5,7 @@
 #include "../Public/Characters/TlocHumanPlayer.h"
 #include "../Public/GlobalConstants.h"
 
-#include <stdlib.h>
+#include <cstdlib>
 
 // Sets default values
 TlocPlayer::TlocPlayer()
@@ -269,14 +269,226 @@ void TlocPlayer::Defend()
 {
 }
 
-bool TlocPlayer::GetDefend()
+int TlocPlayer::GetID()
 {
-	return defending;
+	return ID;
+}
+
+int TlocPlayer::GetLevel()
+{
+	return level;
 }
 
 int TlocPlayer::GetLife()
 {
 	return life;
+}
+
+float TlocPlayer::GetDefaultLife()
+{
+	return defaultLife;
+}
+
+float TlocPlayer::GetMaster()
+{
+	return master;
+}
+
+float TlocPlayer::GetDefaultMaster()
+{
+	return defaultMaster;
+}
+
+int TlocPlayer::GetAttack()
+{
+	return attack;
+}
+
+int TlocPlayer::GetDefense()
+{
+	return defense;
+}
+
+int TlocPlayer::GetMagicDefense()
+{
+	return magicDef;
+}
+
+float TlocPlayer::GetCriticalHit()
+{
+	return criticalHit;
+}
+
+float TlocPlayer::GetCriticalProb()
+{
+	return criticalProb;
+}
+
+int TlocPlayer::GetEvasion()
+{
+	return evasion;
+}
+
+int TlocPlayer::GetLuck()
+{
+	return luck;
+}
+
+bool TlocPlayer::GetDefend()
+{
+	return defending;
+}
+
+int TlocPlayer::GetAttacking()
+{
+	return attacking;
+}
+
+int TlocPlayer::GetJewels()
+{
+	return jewels;
+}
+
+bool TlocPlayer::GetInvulnerable()
+{
+	return invulnerable;
+}
+
+float TlocPlayer::GetInvulnerableTime()
+{
+	return invulnerableTime;
+}
+
+UStaticMeshComponent* TlocPlayer::GetMesh()
+{
+	return _charMesh;
+}
+
+FVector TlocPlayer::GetPosition()
+{
+	return position;
+}
+
+FRotator TlocPlayer::GetRotation()
+{
+	return rotation;
+}
+
+int TlocPlayer::GetNextLevel()
+{
+	return nextLevel;
+}
+
+int TlocPlayer::GetExperience()
+{
+	return experience;
+}
+
+int TlocPlayer::GetPlayer()
+{
+	return player;
+}
+
+void TlocPlayer::SetInitialLife(float lif)
+{
+	SetLife(lif);
+	SetDefaultLife(lif);
+}
+
+void TlocPlayer::SetInitialMaster(float mstr)
+{
+	SetMaster(mstr);
+	SetDefaultMaster(mstr);
+}
+
+void TlocPlayer::SetID(int id)
+{
+	ID = id;
+}
+
+void TlocPlayer::SetLevel(int lvl)
+{
+	level = lvl;
+}
+
+void TlocPlayer::SetLife(float lif)
+{
+	life = lif;
+}
+
+void TlocPlayer::SetDefaultLife(float dfltLif)
+{
+	defaultLife = dfltLif;
+}
+
+void TlocPlayer::SetMaster(float mstr)
+{
+	master = mstr;
+}
+
+void TlocPlayer::SetDefaultMaster(float dfltMstr)
+{
+	defaultMaster = dfltMstr;
+}
+
+void TlocPlayer::SetAttack(int att)
+{
+	attack = att;
+}
+
+void TlocPlayer::SetDefense(int def)
+{
+	defense = def;
+}
+
+void TlocPlayer::SetMagicDefense(int magDef)
+{
+	magicDef = magDef;
+}
+
+void TlocPlayer::SetCriticalHit(float critHit)
+{
+	criticalHit = critHit;
+}
+
+void TlocPlayer::SetCriticalProb(float critProb)
+{
+	criticalProb = critProb;
+}
+
+void TlocPlayer::SetEvasion(int ev)
+{
+	evasion = ev;
+}
+
+void TlocPlayer::SetLuck(int lck)
+{
+	luck = lck;
+}
+
+void TlocPlayer::SetDefend(bool dfnd)
+{
+	defending = dfnd;
+}
+
+void TlocPlayer::SetAttacking(bool attckng)
+{
+	attacking = attckng;
+}
+
+void TlocPlayer::SetJewels(int jwls)
+{
+	jewels = jwls;
+}
+
+void TlocPlayer::SetInvulnerable(bool inv)
+{
+	invulnerable = inv;
+}
+
+void TlocPlayer::SetInvulnerableTime(float invTime)
+{
+	invulnerableTime = invTime;
 }
 
 void TlocPlayer::SetPosition(FVector newPosition)
@@ -291,14 +503,18 @@ void TlocPlayer::SetRotation(FRotator newRotation)
 	_wpnMesh->SetRelativeRotation(newRotation);
 }
 
-FVector TlocPlayer::GetPosition()
+void TlocPlayer::SetNextLevel(int nLevel)
 {
-	return position;
+	nextLevel = nLevel;
 }
 
-FRotator TlocPlayer::GetRotation()
+void TlocPlayer::SetExperience(int exp)
 {
-	return rotation;
+	experience = exp;
 }
 
+void TlocPlayer::SetPlayer(int plyr)
+{
+	player = plyr;
+}
 

@@ -34,16 +34,56 @@ public:
 	virtual void Move() = 0;									//Function to move the character
 	virtual void Defend() = 0;									//Function to activate or desactivate defense state
 
-	// Getters
-	virtual void SetMesh(const TCHAR* fileRoot, int mesh) = 0;
-	virtual void SetPosition(FVector newPosition) = 0;
-	virtual void SetRotation(FRotator newRotation) = 0;
-
-	virtual bool GetDefend() = 0;
+	// Getters & Setters
+	virtual int GetID() = 0;
+	virtual int GetLevel() = 0;
 	virtual int GetLife() = 0;
+	virtual float GetDefaultLife() = 0;
+	virtual float GetMaster() = 0;
+	virtual float GetDefaultMaster() = 0;
+	virtual int GetAttack() = 0;
+	virtual int GetDefense() = 0;
+	virtual int GetMagicDefense() = 0;
+	virtual float GetCriticalHit() = 0;
+	virtual float GetCriticalProb() = 0;
+	virtual int GetEvasion() = 0;
+	virtual int GetLuck() = 0;
+	virtual bool GetDefend() = 0;
+	virtual int GetAttacking() = 0;
+	//virtual int GetTalons() = 0;
+	virtual int GetJewels() = 0;
+	//virtual int GetCredits() = 0;
+	virtual bool GetInvulnerable() = 0;
+	virtual float GetInvulnerableTime() = 0;
 	virtual UStaticMeshComponent* GetMesh() = 0;
 	virtual FVector GetPosition() = 0;
 	virtual FRotator GetRotation() = 0;
+
+	virtual void SetInitialLife(float lif) = 0;
+	virtual void SetInitialMaster(float mstr) = 0;
+	virtual void SetID(int id) = 0;
+	virtual void SetLevel(int lvl) = 0;
+	virtual void SetLife(float lif) = 0;
+	virtual void SetDefaultLife(float dfltLif) = 0;
+	virtual void SetMaster(float mstr) = 0;
+	virtual void SetDefaultMaster(float dfltMstr) = 0;
+	virtual void SetAttack(int att) = 0;
+	virtual void SetDefense(int def) = 0;
+	virtual void SetMagicDefense(int magDef) = 0;
+	virtual void SetCriticalHit(float critHit) = 0;
+	virtual void SetCriticalProb(float critProb) = 0;
+	virtual void SetEvasion(int ev) = 0;
+	virtual void SetLuck(int lck) = 0;
+	virtual void SetDefend(bool dfnd) = 0;
+	virtual void SetAttacking(bool attckng) = 0;
+	//virtual void SetTalons(int tlns) = 0;
+	virtual void SetJewels(int jwls) = 0;
+	//virtual void SetCredits(int crdts) = 0;
+	virtual void SetInvulnerable(bool inv) = 0;
+	virtual void SetInvulnerableTime(float invTime) = 0;
+	virtual void SetMesh(const TCHAR* fileRoot, int mesh) = 0;
+	virtual void SetPosition(FVector newPosition) = 0;
+	virtual void SetRotation(FRotator newRotation) = 0;
 
 
 protected:

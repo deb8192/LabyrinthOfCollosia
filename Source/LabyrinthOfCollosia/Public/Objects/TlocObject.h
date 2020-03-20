@@ -34,21 +34,23 @@ public:
 	void DestroyMeshComponent();
 
 	//Getters & Setters
-	void SetMeshFileRoot(const TCHAR* fileRoot);
-	void SetMesh(const TCHAR* fileRoot);
+	void SetName(const TCHAR* _nm);
 	void SetClassName(const TCHAR* _clsNm);
+	void SetPrice(float pric);
 	void SetAttributes();
 	void SetPosition(FVector newPosition);
 	void SetRotation(FRotator newRotation);
+	void SetMesh(const TCHAR* fileRoot);
+	void SetMeshFileRoot(const TCHAR* fileRoot);
 
 	int GetIDObject();
 	TCHAR* GetName();
 	TCHAR* GetClassName();
 	float GetPrice();
-	UStaticMeshComponent* GetMesh();
 	USphereComponent* GetInteractionCollision();
 	FVector GetPosition();
 	FRotator GetRotation();
+	UStaticMeshComponent* GetMesh();
 	TCHAR* GetMeshFileRoot();
 
 protected:

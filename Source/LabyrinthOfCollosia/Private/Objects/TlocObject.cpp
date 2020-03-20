@@ -58,11 +58,6 @@ void ATlocObject::Tick(float DeltaTime)
 void ATlocObject::ReplaceObject(ATlocObject* _obj)
 {
 	GlobalConstants constants;
-	position = _obj->GetPosition();
-	rotation = _obj->GetRotation();
-	SetActorLocationAndRotation(position, rotation);
-	_fileRoot = _obj->GetMeshFileRoot();
-
 	
 	_wpnMesh = _motor->SetMesh((const TCHAR*)_name, (const TCHAR*)_fileRoot, GetRootComponent(), this);
 	//_wpnMesh->SetupAttachment(_interactionCollision);
@@ -72,6 +67,17 @@ void ATlocObject::ReplaceObject(ATlocObject* _obj)
 	TCHAR* _gotObjName = _obj->GetClassName();
 	size_t   x;
 	wcstombs_s(&x, _objName, constants.KCHAR_SIZE, _gotObjName, constants.KCHAR_SIZE);
+
+	//Object features
+	IDObject = _obj->GetIDObject();
+	_name = _obj->GetName();
+	price = _obj->GetPrice();
+	_className = _gotObjName;
+	position = _obj->GetPosition();
+	rotation = _obj->GetRotation();
+	SetActorLocationAndRotation(position, rotation);
+	_fileRoot = _obj->GetMeshFileRoot();
+	_wpnMesh = _motor->SetMesh(_name, (const TCHAR*)_fileRoot, GetRootComponent(), this);
 
 	//Child features
 	
@@ -102,20 +108,21 @@ void ATlocObject::ReplaceObject(ATlocObject* _obj)
 
 
 	}
-	/*//GAUNTLETS
-	else if (dynamic_cast<TlocGauntlet*>(_obj))
+	//GAUNTLETS
+	else if (strcmp(_objName, constants.KGAUNTLET) == 0)
 	{
 		TlocGauntlet* _glt = (TlocGauntlet*)_obj;
-		_gauntlet.push_back(_glt);
+		TlocGauntlet* _gntltThis = (TlocGauntlet*)this;
+		//_gntltThis->SetDefense(_glt->GetDefense());
 	}
 	//ARMORS
-	else if (dynamic_cast<TlocArmor*>(_obj))
+	/*else if (strcmp(_objName, constants.KARMOR) == 0)
 	{
 		TlocArmor* _arm = (TlocArmor*)_obj;
 		_armor.push_back(_arm);
 	}
 	//INGREDIENTS
-	else if (dynamic_cast<TlocIngredients*>(_obj))
+	else if (strcmp(_objName, constants.KINGREDIENT) == 0)
 	{
 		TlocIngredients* _ing = (TlocIngredients*)_obj;
 		GlobalConstants constants;
@@ -196,6 +203,16 @@ void ATlocObject::SetMesh(const TCHAR* fileRoot)
 void ATlocObject::SetClassName(const TCHAR* _clsNm)
 {
 	_className = (TCHAR*) _clsNm;
+}
+
+void ATlocObject::SetPrice(float pric)
+{
+	price = pric;
+}
+
+void ATlocObject::SetName(const TCHAR* _nm)
+{
+	_name = (TCHAR*) _nm;
 }
 
 void ATlocObject::SetAttributes()
