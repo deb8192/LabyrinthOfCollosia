@@ -52,7 +52,7 @@ std::vector<TlocPlayer*> TlocGameLoader::NewGameLoader()
 			TArray<TSharedPtr<FJsonValue>> playersArray = jsonParser->GetArrayField(constants.KPLAYER);
 			ATlocHumanPlayer* _hPlayer;
 			ATlocDogPlayer* _dPlayer;
-			TlocSword* _swrd;
+			//TlocSword* _swrd;
 			FString* _filePath = nullptr;
 			FString _objName = "";
 			char* _clsNm = (char*)malloc(constants.KCHAR_SIZE);
@@ -83,17 +83,11 @@ std::vector<TlocPlayer*> TlocGameLoader::NewGameLoader()
 						_hPlayer->SetCriticalProb(jsonObject->GetNumberField(constants.KCRITICAL_PROB));
 						_hPlayer->SetExperience(jsonObject->GetNumberField(constants.KEXPERIENCE));
 						_hPlayer->SetNextLevel(jsonObject->GetNumberField(constants.KNEXT_LEVEL));
-						jsonObject = jsonObject->GetObjectField(constants.KWEAPON);
-						_swrd = NewObject<TlocSword>();
-						_swrd->SetClassName(*jsonObject->GetStringField(constants.KCLASS_NAME));
-						_swrd->SetName(*jsonObject->GetStringField(constants.KNAME));
-						_swrd->SetMeshFileRoot(*jsonObject->GetStringField(constants.KFILE_DIRECTORY));
-						_swrd->SetPrice(jsonObject->GetNumberField(constants.KPRICE));
-						_swrd->SetAttack(jsonObject->GetNumberField(constants.KATTACK));
-						_swrd->SetCriticalDamageInc(jsonObject->GetNumberField(constants.KCRITICAL_DAMAGE_INC));
-						_swrd->SetCriticalProbabilityInc(jsonObject->GetNumberField(constants.KCRITICAL_PROBABILITY_INC));
-						_filePath = new FString();
-						_hPlayer->SetWeapon(_swrd);
+						TlocWeapon* _wpn = _motorLoader->IdentifyWeapon(jsonObject->GetObjectField(constants.KWEAPON));
+						std::vector<TlocSpell*> playerSpells = _motorLoader->CreateSpells(jsonObject->GetArrayField(constants.KSPELL));
+						_hPlayer->SetSpells(playerSpells);
+						_hPlayer->SetWeapon(_wpn);
+						_hPlayer->AddWeapon(*_wpn);
 						players.push_back(_hPlayer);
 					}
 					//The objetct is the dog player

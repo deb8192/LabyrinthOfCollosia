@@ -196,13 +196,16 @@ void ATlocObject::SetMeshFileRoot(const TCHAR* fileRoot)
 
 void ATlocObject::SetMesh(const TCHAR* fileRoot)
 {
-	SetMeshFileRoot(fileRoot);
-	_wpnMesh = _motor->SetMesh((const TCHAR*) _name, (const TCHAR*) _fileRoot, GetRootComponent(), this);
+	if (fileRoot != nullptr)
+	{
+		SetMeshFileRoot(fileRoot);
+		_wpnMesh = _motor->SetMesh((const TCHAR*)_name, (const TCHAR*)_fileRoot, GetRootComponent(), this);
+	}
 }
 
 void ATlocObject::SetClassName(const TCHAR* _clsNm)
 {
-	_className = (TCHAR*) _clsNm;
+	_className = (TCHAR*)_clsNm;
 }
 
 void ATlocObject::SetPrice(float pric)

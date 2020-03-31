@@ -33,6 +33,7 @@ public:
 	virtual void Talk() = 0;									//Function to talk with anyone
 	virtual void Move() = 0;									//Function to move the character
 	virtual void Defend() = 0;									//Function to activate or desactivate defense state
+	virtual void AddWeapon(TlocWeapon &wpn) = 0;								//Function to add weapons to weapons vector
 
 	// Getters & Setters
 	virtual int GetID() = 0;
@@ -58,6 +59,15 @@ public:
 	virtual UStaticMeshComponent* GetMesh() = 0;
 	virtual FVector GetPosition() = 0;
 	virtual FRotator GetRotation() = 0;
+	virtual std::vector<std::vector<TlocIngredients*>> GetIngredients() = 0;
+	virtual std::vector<TlocSpell*> GetSpells() = 0;
+	virtual std::vector<TlocSpell* > GetMemorizedSpells() = 0;
+	virtual std::vector<std::vector<TlocItem*>> GetItems() = 0;
+	virtual std::vector<TlocWeapon* > GetWeapons() = 0;
+	virtual std::vector<TlocArmor*> GetArmors() = 0;
+	virtual std::vector<TlocGauntlet*> GetGauntlets() = 0;
+	virtual std::queue<int> GetBuffAilments() = 0;
+	virtual std::queue<float> GetBuffAilmentsTime() = 0;
 
 	virtual void SetInitialLife(float lif) = 0;
 	virtual void SetInitialMaster(float mstr) = 0;
@@ -84,7 +94,15 @@ public:
 	virtual void SetMesh(const TCHAR* fileRoot, int mesh) = 0;
 	virtual void SetPosition(FVector newPosition) = 0;
 	virtual void SetRotation(FRotator newRotation) = 0;
-
+	virtual void SetIngredients(std::vector<std::vector<TlocIngredients*>> &_ing) = 0;
+	virtual void SetSpells(std::vector<TlocSpell*> &_splls) = 0;
+	virtual void SetMemorizedSpells(std::vector<TlocSpell*> &_memSplls) = 0;
+	virtual void SetItems(std::vector<std::vector<TlocItem*>> &_itms) = 0;
+	virtual void SetWeapons(std::vector<TlocWeapon*> &_wpns) = 0;
+	virtual void SetArmors(std::vector<TlocArmor*> &_armrs) = 0;
+	virtual void SetGauntlets(std::vector<TlocGauntlet*> &_gntlt) = 0;
+	virtual void SetBuffAilments(std::queue<int> &_bffsAil) = 0;
+	virtual void SetBuffAilmentsTime(std::queue<float> &_bffsAilTime) = 0;
 
 protected:
 	// Variables

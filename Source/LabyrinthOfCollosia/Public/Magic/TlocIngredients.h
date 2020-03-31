@@ -12,9 +12,18 @@ class LABYRINTHOFCOLLOSIA_API TlocIngredients : public ATlocObject
 {
 public:
 	TlocIngredients();
+	TlocIngredients(int id, const TCHAR* nm, int qnty);
 	~TlocIngredients();
 	int GetID();
+	TCHAR* GetName();
+	int GetQuantity();
+
+	void SetID(int id);
+	void SetName(const TCHAR* nm);
+	void SetQuantity(int qnty);
 
 private:
 	int ID;
+	TCHAR* _ingName;
+	int quantity;
 };

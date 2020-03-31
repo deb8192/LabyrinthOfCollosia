@@ -226,18 +226,22 @@ void ATlocEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 */
 void ATlocEnemy::ModifyLife(float quantity)
 {
+	GlobalConstants constants;
 	UE_LOG(LogTemp, Warning, TEXT("You hurt the enemy."));
-	life += quantity;
+	if (quantity < 0)
+	{
+		life += (quantity - defense * constants.KTEN_PERCENT);
+		invulnerable = true;
+		invulnerableTime = constants.KINVULNERABLE_TIME;
+	}
+	else
+	{
+		life += quantity;
+	}
 	if (life <= 0)
 	{
 		//He/she dies
 		life = 0;
-	}
-	else if (quantity < 0)
-	{
-		GlobalConstants constants;
-		invulnerable = true;
-		invulnerableTime = constants.KINVULNERABLE_TIME;
 	}
 	else if (life > defaultLife)
 	{
@@ -293,6 +297,11 @@ void ATlocEnemy::Move()
 
 void ATlocEnemy::Defend()
 {
+}
+
+void ATlocEnemy::AddWeapon(TlocWeapon& wpn)
+{
+	_weapon.push_back(&wpn);
 }
 
 int ATlocEnemy::GetID()
@@ -414,6 +423,51 @@ TArray<TCHAR*> ATlocEnemy::GetMeshesFileRoot()
 	return paths;
 }
 
+std::vector<std::vector<TlocIngredients*>> ATlocEnemy::GetIngredients()
+{
+	return _ingredients;
+}
+
+std::vector<TlocSpell*> ATlocEnemy::GetSpells()
+{
+	return _learnedSpells;
+}
+
+std::vector<TlocSpell*> ATlocEnemy::GetMemorizedSpells()
+{
+	return _memorizedSpells;
+}
+
+std::vector<std::vector<TlocItem*>> ATlocEnemy::GetItems()
+{
+	return _items;
+}
+
+std::vector<TlocWeapon*> ATlocEnemy::GetWeapons()
+{
+	return _weapon;
+}
+
+std::vector<TlocArmor*> ATlocEnemy::GetArmors()
+{
+	return _armor;
+}
+
+std::vector<TlocGauntlet*> ATlocEnemy::GetGauntlets()
+{
+	return _gauntlet;
+}
+
+std::queue<int> ATlocEnemy::GetBuffAilments()
+{
+	return _buffsAilments;
+}
+
+std::queue<float> ATlocEnemy::GetBuffAilmentsTime()
+{
+	return buffsAilmentsTime;
+}
+
 void ATlocEnemy::SetInitialLife(float lif)
 {
 	SetLife(lif);
@@ -473,12 +527,14 @@ void ATlocEnemy::SetMagicDefense(int magDef)
 
 void ATlocEnemy::SetCriticalHit(float critHit)
 {
-	criticalHit = critHit;
+	GlobalConstants constants;
+	criticalHit = critHit / constants.KPERCENT;
 }
 
 void ATlocEnemy::SetCriticalProb(float critProb)
 {
-	criticalProb = critProb;
+	GlobalConstants constants;
+	criticalProb = critProb / constants.KPERCENT;
 }
 
 void ATlocEnemy::SetEvasion(int ev)
@@ -555,3 +611,47 @@ void ATlocEnemy::SetRotation(FRotator newRotation)
 	_charMesh->SetRelativeRotation(newRotation);
 }
 
+void ATlocEnemy::SetIngredients(std::vector<std::vector<TlocIngredients*>>& _ing)
+{
+	_ingredients = _ing;
+}
+
+void ATlocEnemy::SetSpells(std::vector<TlocSpell*>& splls)
+{
+	_learnedSpells = splls;
+}
+
+void ATlocEnemy::SetMemorizedSpells(std::vector<TlocSpell*>& _memSplls)
+{
+	_memorizedSpells = _memSplls;
+}
+
+void ATlocEnemy::SetItems(std::vector<std::vector<TlocItem*>>& _itms)
+{
+	_items = _itms;
+}
+
+void ATlocEnemy::SetWeapons(std::vector<TlocWeapon*>& _wpns)
+{
+	_weapon = _wpns;
+}
+
+void ATlocEnemy::SetArmors(std::vector<TlocArmor*>& _armrs)
+{
+	_armor = _armrs;
+}
+
+void ATlocEnemy::SetGauntlets(std::vector<TlocGauntlet*>& _gntlt)
+{
+	_gauntlet = _gntlt;
+}
+
+void ATlocEnemy::SetBuffAilments(std::queue<int>& _bffsAil)
+{
+	_buffsAilments = _bffsAil;
+}
+
+void ATlocEnemy::SetBuffAilmentsTime(std::queue<float>& _bffsAilTime)
+{
+	buffsAilmentsTime = _bffsAilTime;
+}

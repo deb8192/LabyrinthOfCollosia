@@ -223,11 +223,11 @@ int TlocPlayer::Attack(TlocWeapon* _wp)
 	//If player posses a weapon
 	if (_wp != nullptr)
 	{
-		damage *= (attack + _wp->GetAttack());
+		damage += (attack + _wp->GetAttack());
 		//If critProbability random value is lower than criticalProb, player hit will be critical
 		if (critProbability < criticalProb * _wp->GetCriticalProbabilityInc())
 		{
-			damage *= (criticalHit * _wp->GetCriticalDamageInc());
+			damage *= (criticalHit + _wp->GetCriticalDamageInc() + constants.KONE_F);
 		}
 	}
 
@@ -235,11 +235,11 @@ int TlocPlayer::Attack(TlocWeapon* _wp)
 	//If player don't posses any weapon
 	else
 	{
-		damage *= attack;
+		damage += attack;
 		//If critProbability random value is lower than criticalProb, player hit will be critical
 		if (critProbability < criticalProb)
 		{
-			damage *= criticalHit;
+			damage *= (criticalHit + constants.KONE_F);
 		}
 	}
 
@@ -267,6 +267,27 @@ void TlocPlayer::Move()
 
 void TlocPlayer::Defend()
 {
+}
+
+void TlocPlayer::AddWeapon(TlocWeapon& wpn)
+{
+	_weapon.push_back(&wpn);
+}
+
+
+void TlocPlayer::InitMemorizedSpells()
+{
+	GlobalConstants constants;
+	if (_memorizedSpells.size() == constants.KZERO)
+	{
+		for (int i = 0; i < _learnedSpells.size(); i++)
+		{
+			if (_learnedSpells[i]->GetActive() && _memorizedSpells.size() < constants.KMAXMEMORIZED_SPELLS)
+			{
+				_memorizedSpells.push_back(_learnedSpells[i]);
+			}
+		}
+	}
 }
 
 int TlocPlayer::GetID()
@@ -374,6 +395,51 @@ FRotator TlocPlayer::GetRotation()
 	return rotation;
 }
 
+std::vector<std::vector<TlocIngredients*>> TlocPlayer::GetIngredients()
+{
+	return _ingredients;
+}
+
+std::vector<TlocSpell*> TlocPlayer::GetSpells()
+{
+	return _learnedSpells;
+}
+
+std::vector<TlocSpell*> TlocPlayer::GetMemorizedSpells()
+{
+	return _memorizedSpells;
+}
+
+std::vector<std::vector<TlocItem*>> TlocPlayer::GetItems()
+{
+	return _items;
+}
+
+std::vector<TlocWeapon*> TlocPlayer::GetWeapons()
+{
+	return _weapon;
+}
+
+std::vector<TlocArmor*> TlocPlayer::GetArmors()
+{
+	return _armor;
+}
+
+std::vector<TlocGauntlet*> TlocPlayer::GetGauntlets()
+{
+	return _gauntlet;
+}
+
+std::queue<int> TlocPlayer::GetBuffAilments()
+{
+	return _buffsAilments;
+}
+
+std::queue<float> TlocPlayer::GetBuffAilmentsTime()
+{
+	return buffsAilmentsTime;
+}
+
 int TlocPlayer::GetNextLevel()
 {
 	return nextLevel;
@@ -448,12 +514,14 @@ void TlocPlayer::SetMagicDefense(int magDef)
 
 void TlocPlayer::SetCriticalHit(float critHit)
 {
-	criticalHit = critHit;
+	GlobalConstants constants;
+	criticalHit = critHit / constants.KPERCENT;
 }
 
 void TlocPlayer::SetCriticalProb(float critProb)
 {
-	criticalProb = critProb;
+	GlobalConstants constants;
+	criticalProb = critProb / constants.KPERCENT;
 }
 
 void TlocPlayer::SetEvasion(int ev)
@@ -501,6 +569,51 @@ void TlocPlayer::SetRotation(FRotator newRotation)
 {
 	rotation = newRotation;
 	_wpnMesh->SetRelativeRotation(newRotation);
+}
+
+void TlocPlayer::SetIngredients(std::vector<std::vector<TlocIngredients*>>& _ing)
+{
+	_ingredients = _ing;
+}
+
+void TlocPlayer::SetSpells(std::vector<TlocSpell*>& splls)
+{
+	_learnedSpells = splls;
+}
+
+void TlocPlayer::SetMemorizedSpells(std::vector<TlocSpell*>& _memSplls)
+{
+	_memorizedSpells = _memSplls;
+}
+
+void TlocPlayer::SetItems(std::vector<std::vector<TlocItem*>>& _itms)
+{
+	_items = _itms;
+}
+
+void TlocPlayer::SetWeapons(std::vector<TlocWeapon*>& _wpns)
+{
+	_weapon = _wpns;
+}
+
+void TlocPlayer::SetArmors(std::vector<TlocArmor*>& _armrs)
+{
+	_armor = _armrs;
+}
+
+void TlocPlayer::SetGauntlets(std::vector<TlocGauntlet*>& _gntlt)
+{
+	_gauntlet = _gntlt;
+}
+
+void TlocPlayer::SetBuffAilments(std::queue<int>& _bffsAil)
+{
+	_buffsAilments = _bffsAil;
+}
+
+void TlocPlayer::SetBuffAilmentsTime(std::queue<float>& _bffsAilTime)
+{
+	buffsAilmentsTime = _bffsAilTime;
 }
 
 void TlocPlayer::SetNextLevel(int nLevel)

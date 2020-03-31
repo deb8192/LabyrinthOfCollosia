@@ -28,6 +28,7 @@ public:
 	void Talk();
 	void Move();
 	void Defend();
+	void AddWeapon(TlocWeapon& wpn);
 
 	//Getters & Setters
 
@@ -57,6 +58,15 @@ public:
 	FRotator GetRotation();
 	TCHAR* GetMeshFileRoot();
 	TArray<TCHAR*> GetMeshesFileRoot();
+	std::vector<std::vector<TlocIngredients*>> GetIngredients();
+	std::vector<TlocSpell*> GetSpells();
+	std::vector<TlocSpell* > GetMemorizedSpells();
+	std::vector<std::vector<TlocItem*>> GetItems();
+	std::vector<TlocWeapon* > GetWeapons();
+	std::vector<TlocArmor*> GetArmors();
+	std::vector<TlocGauntlet*> GetGauntlets();
+	std::queue<int> GetBuffAilments();
+	std::queue<float> GetBuffAilmentsTime();
 	
 	// -Setters TlocCharacter
 	void SetInitialLife(float lif);
@@ -84,6 +94,15 @@ public:
 	void SetMesh(const TCHAR* fileRoot, int mesh);
 	void SetPosition(FVector newPosition);
 	void SetRotation(FRotator newRotation);
+	void SetIngredients(std::vector<std::vector<TlocIngredients*>>& _ing);
+	void SetSpells(std::vector<TlocSpell*>& _splls);
+	void SetMemorizedSpells(std::vector<TlocSpell*>& _memSplls);
+	void SetItems(std::vector<std::vector<TlocItem*>>& _itms);
+	void SetWeapons(std::vector<TlocWeapon*>& _wpns);
+	void SetArmors(std::vector<TlocArmor*>& _armrs);
+	void SetGauntlets(std::vector<TlocGauntlet*>& _gntlt);
+	void SetBuffAilments(std::queue<int>& _bffsAil);
+	void SetBuffAilmentsTime(std::queue<float>& _bffsAilTime);
 
 
 protected:

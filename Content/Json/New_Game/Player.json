@@ -14,6 +14,7 @@
 		"criticalProb": 15,
 		"experience": 0,
 		"nextLevel": 20,
+		"position": [-1800, -1500, 45],
 		"TlocWeapon": {
 			"className": "TlocSword",
 			"name": "Femur",
@@ -22,7 +23,197 @@
 			"attack": 10,
 			"criticalDamageInc": 10,
 			"criticalProbabilityInc": 10
-		}
+		},
+		"TlocSpell": [{
+			"ID": 0,
+			"className": "TlocSpell",
+			"name": "Heal",
+			"description": "Recovers some HP",
+			"basicPower": 30,
+			"active": true,
+			"TlocIngredients":[
+			{
+				"ID": 18,
+				"name": "root",
+				"quantity": 1
+			},
+			{
+				"ID": 20,
+				"name": "water",
+				"quantity": 1
+			}]
+		},
+		{
+			"ID": 1,
+			"className": "TlocSpell",
+			"name": "Flash",
+			"description": "Small fireball",
+			"basicPower": 27,
+			"active": true,
+			"TlocIngredients":[
+			{
+				"ID": 17,
+				"name": "oil",
+				"quantity": 1
+			},
+			{
+				"ID": 21,
+				"name": "wax",
+				"quantity": 2
+			}]
+		},
+		{
+			"ID": 2,
+			"className": "TlocSpell",
+			"name": "Hard ball",
+			"description": "Target gets beaned",
+			"basicPower": 21,
+			"active": true,
+			"TlocIngredients":[
+			{
+				"ID": 5,
+				"name": "clay",
+				"quantity": 1
+			},
+			{
+				"ID": 6,
+				"name": "cristal",
+				"quantity": 1
+			}]
+		},
+		{
+			"ID": 3,
+			"className": "TlocSpell",
+			"name": "Crush",
+			"description": "Crushes target enemy",
+			"basicPower": 30,
+			"active": true,
+			"TlocIngredients":[
+			{
+				"ID": 13,
+				"name": "limestone",
+				"quantity": 1
+			},
+			{
+				"ID": 21,
+				"name": "wax",
+				"quantity": 1
+			}]
+		},
+		{
+			"ID": 4,
+			"className": "TlocSpell",
+			"name": "Cure",
+			"description": "Dispels states",
+			"basicPower": 1,
+			"active": true,
+			"TlocIngredients":[
+			{
+				"ID": 17,
+				"name": "oil",
+				"quantity": 1
+			},
+			{
+				"ID": 18,
+				"name": "root",
+				"quantity": 2
+			}]
+		},
+		{
+			"ID": 5,
+			"className": "TlocSpell",
+			"name": "Defend",
+			"description": "Brings up defense",
+			"basicPower": 14,
+			"active": true,
+			"TlocIngredients":[
+			{
+				"ID": 1,
+				"name": "ash",
+				"quantity": 1
+			},
+			{
+				"ID": 5,
+				"name": "clay",
+				"quantity": 1
+			}]
+		},
+		{
+			"ID": 6,
+			"className": "TlocSpell",
+			"name": "Drain",
+			"description": "Steals some enemy HP",
+			"basicPower": 12,
+			"active": true,
+			"TlocIngredients":[
+			{
+				"ID": 8,
+				"name": "ethanol",
+				"quantity": 1
+			},
+			{
+				"ID": 18,
+				"name": "root",
+				"quantity": 2
+			}]
+		},
+		{
+			"ID": 7,
+			"className": "TlocSpell",
+			"name": "Revive",
+			"description": "Brings dog back to life",
+			"basicPower": 15,
+			"active": true,
+			"TlocIngredients":[
+			{
+				"ID": 3,
+				"name": "ethanol",
+				"quantity": 1
+			},
+			{
+				"ID": 18,
+				"name": "root",
+				"quantity": 3
+			}]
+		},
+		{
+			"ID": 8,
+			"className": "TlocSpell",
+			"name": "Atlas",
+			"description": "Target gets super strength",
+			"basicPower": 2,
+			"active": true,
+			"TlocIngredients":[
+			{
+				"ID": 1,
+				"name": "ash",
+				"quantity": 1
+			},
+			{
+				"ID": 2,
+				"name": "atlas amulet",
+				"quantity": 1
+			}]
+		},
+		{
+			"ID": 9,
+			"className": "TlocSpell",
+			"name": "Acid rain",
+			"description": "Showers enemies with acid",
+			"basicPower": 17,
+			"active": false,
+			"TlocIngredients":[
+			{
+				"ID": 1,
+				"name": "ash",
+				"quantity": 1
+			},
+			{
+				"ID": 20,
+				"name": "water",
+				"quantity": 3
+			}]
+		}]
 		
 	},
 	{

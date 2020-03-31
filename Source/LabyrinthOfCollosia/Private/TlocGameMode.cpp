@@ -10,20 +10,25 @@
 #include "ConstructorHelpers.h"
 #include <iostream>
 #include <Runtime\Core\Public\Misc\Paths.h>
+#include "GameFramework/PlayerController.h"
+#include "GameFramework/Controller.h"
 
 ATlocGameMode::ATlocGameMode()
 {
 	GlobalConstants constants;
 	_world = GetWorld();								//Get the world to manage it
 	//_defaultLevel = _world->GetPersistentLevel();
-	DefaultPawnClass = ATlocHumanPlayer::StaticClass();	//Associate player's pawn with player's default class
+	DefaultPawnClass = nullptr;	//Associate player's pawn with player's default class
 	HUDClass = UTlocIngameMenu::StaticClass();
 	GameStateClass = ATlocGameState::StaticClass();
 
 	_gameLoader = TlocGameLoader::GetInstance();
 	_stageLoader = TlocStageLoader::GetInstance();
-	
-	_humanPlayer = DefaultPawnClass->GetDefaultObject<ATlocHumanPlayer>();
+
+	//_humanPlayer = DefaultPawnClass->GetDefaultObject<ATlocHumanPlayer>();
+
+	//this->PlayerControllerClass->GetDefaultObject()->
+	//APlayerController::Possess(_humanPlayer);
 	_dogPlayer = CreateDefaultSubobject<ATlocDogPlayer>("Dog");
 	_levels.reserve(constants.KLEVEL_NUM);
 	_levelEnemies.reserve(30);
@@ -53,6 +58,7 @@ void ATlocGameMode::BeginPlay()
 			_world->GetLevel(i)->GetName();
 		}
 	}
+
 	spawnPlayers(true);
 	SpawnActorsOnStage();
 	
@@ -131,6 +137,8 @@ void ATlocGameMode::SpawnActorsOnStage()
 
 void ATlocGameMode::SetPlayersFeatures(int& plyr, std::vector<TlocPlayer*> &players)
 {
+
+	const FActorSpawnParameters SpawnParam = FActorSpawnParameters();
 	GlobalConstants constants;
 	switch (plyr)
 	{
@@ -163,8 +171,13 @@ void ATlocGameMode::SetPlayersFeatures(int& plyr, std::vector<TlocPlayer*> &play
 		_humanPlayer->SetCriticalProb(players[constants.KZERO]->GetCriticalProb());
 		_humanPlayer->SetExperience(players[constants.KZERO]->GetExperience());
 		_humanPlayer->SetNextLevel(players[constants.KZERO]->GetNextLevel());
-		//_humanPlayer->SetWeapon(Cast<ATlocHumanPlayer>(players[constants.KZERO])->GetWeapon());
+		_humanPlayer->SetWeapon(((ATlocHumanPlayer*) players[constants.KZERO])->GetWeapon());
+		std::vector<TlocSpell*> spl = players[constants.KZERO]->GetSpells();
+		_humanPlayer->SetSpells(spl);
+		_humanPlayer->InitMemorizedSpells();
+		_humanPlayer->AutoPossessPlayer = EAutoReceiveInput::Player0;
 		break;
+
 	}
 }
 
@@ -204,6 +217,12 @@ void ATlocGameMode::Tick(float DeltaTime)
 
 void ATlocGameMode::spawnPlayers(bool newGame)
 {
+
+	const FActorSpawnParameters SpawnParam = FActorSpawnParameters();
+	GlobalConstants constants;
+
+	//First player hero spawn
+	_humanPlayer = _world->SpawnActor<ATlocHumanPlayer>(ATlocHumanPlayer::StaticClass(), FVector(constants.KZERO, constants.KZERO, constants.KPERCENT), FRotator(constants.KZERO, -constants.K1_2PI_RADIAN, constants.KZERO), SpawnParam);
 	std::vector<TlocPlayer*> players;
 	if (newGame)
 	{

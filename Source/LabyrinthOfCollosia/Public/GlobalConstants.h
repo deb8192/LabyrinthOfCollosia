@@ -11,6 +11,9 @@ using GlobalConstants = struct Constants
 	/*** Cardinals for calculus ***/
 
 	const int KUNITY = 1;
+	const int KTWO = 2;
+	const int KTHREE = 3;
+	const int KFOUR = 4;
 	const int KPERCENT = 100;
 	size_t KCHAR_SIZE = 32;
 
@@ -29,12 +32,14 @@ using GlobalConstants = struct Constants
 	/*** Return values ***/
 
 	const int KZERO = 0;
+	const int KONE = 1;
 	const int KMINUS_ONE = -1;
 
 	/*** Float values ***/
 
 	const float KZERO_F = 0.0f;
 	const float KONE_F = 1.0f;
+	const float KTEN_PERCENT = 0.1f;
 
 	/*** Default values ***/
 
@@ -111,6 +116,7 @@ using GlobalConstants = struct Constants
 	const char* KARMOR = "TlocArmor";
 	const char* KGAUNTLET = "TlocGauntlet";
 	const char* KINGREDIENT = "TlocIngredients";
+	const char* KSPELL = "TlocSpell";
 	const char* KITEM = "TlocItem";
 	const char* KHEALT_ITEM = "TlocHealtItem";
 	const char* KCALL_BEAD_ITEN = "TlocCallBeadItem";
@@ -145,6 +151,10 @@ using GlobalConstants = struct Constants
 	const char* KPOSITION = "position";
 	const char* KROTATION = "rotation";
 	const char* KCHEST = "chest";
+	const char* KQUANTITY = "quantity";
+	const char* KDESCRIPTION = "description";
+	const char* KBASIC_POWER = "basicPower";
+	const char* KACTIVE = "active";
 	const char* KINGREDIENTS_ID = "ingredientID";
 	const char* KHEALTH_ITEMS_ID = "healthID";
 	const char* KHEALTH_RECOVERED = "healthRecovered";
@@ -164,6 +174,7 @@ using GlobalConstants = struct Constants
 	const int KMAXGAUNTLETS = 10;
 	const int KMAXLEVEL = 99;
 	const int KMAXEQUIPEMENT_LEVEL = 10;
+	const int KMAXALCHEMY_LEVEL = 10;
 
 
 	/*** Buffs & Ailments ***/

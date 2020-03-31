@@ -26,11 +26,13 @@ public:
 	void SetArmor(TlocArmor* _armr);
 	void SetGauntlet(TlocGauntlet* _gntlt);
 	void SetMesh(const TCHAR* fileRoot, int mesh);
+	void SetWeaponMesh();
 
 	TlocWeapon* GetWeapon();
 	TlocArmor* GetArmor();
 	TlocGauntlet* GetGauntlet();
 	UStaticMeshComponent* GetMesh();
+	UStaticMeshComponent* GetWeaponMesh();
 
 	// Human player ingame menu
 	FORCEINLINE class UTlocIngameMenu* GetIngameMenu() const
@@ -45,7 +47,6 @@ public:
 		return PlayerHud;
 	}
 	// !Players HUDs
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

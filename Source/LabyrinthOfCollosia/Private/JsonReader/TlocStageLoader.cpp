@@ -63,9 +63,9 @@ std::vector<ATlocObject*> TlocStageLoader::ObjectsLoader(const char* _name)
 
 	if (jsonParser != nullptr)
 	{
-		if (jsonParser->Values.Contains(constants.KSWORD))
+		if (jsonParser->Values.Contains(constants.KWEAPON))
 		{
-			TArray<TSharedPtr<FJsonValue>> objectsArray = jsonParser->GetArrayField(constants.KSWORD);
+			TArray<TSharedPtr<FJsonValue>> objectsArray = jsonParser->GetArrayField(constants.KWEAPON);
 			TlocWeapon* _wpn;
 			TlocChest* _chst;
 			FString *_filePath;
@@ -80,7 +80,7 @@ std::vector<ATlocObject*> TlocStageLoader::ObjectsLoader(const char* _name)
 				_clsNm = new FString();
 				bool chest = false;
 				_chst = NewObject<TlocChest>();
-				_wpn = NewObject<TlocWeapon>();
+				//_wpn = NewObject<TlocWeapon>();
 				TSharedPtr<FJsonObject> jsonObject = objectsArray[i]->AsObject();
 				TArray<FString> posRot;
 				jsonObject->TryGetStringArrayField(constants.KPOSITION, posRot);
@@ -92,14 +92,13 @@ std::vector<ATlocObject*> TlocStageLoader::ObjectsLoader(const char* _name)
 								  FCString::Atof(*posRot[4]),
 								  FCString::Atof(*posRot[5]), };
 				jsonObject->TryGetStringField(constants.KFILE_DIRECTORY, *_filePath);
-				_wpn->SetMeshFileRoot(**_filePath);
+				//_wpn->SetMeshFileRoot(**_filePath);
 				jsonObject->TryGetBoolField(constants.KCHEST, chest);
 
 				//Complete weapon data because there is a weapon
 				*_fPath = constants.KDIR_GLADIUS_MESH;
 				*_clsNm = constants.KWEAPON;
-				_wpn->SetMeshFileRoot(**_fPath);
-				_wpn->SetClassName(**_clsNm);
+				_wpn = _motorLoader->IdentifyWeapon(jsonObject);
 				_wpn->SetPosition(*_pos);
 				_wpn->SetRotation(*_rot);
 				if (chest)

@@ -25,18 +25,13 @@ public:
 
 	void RotateMenu(bool right);
 
-
-
 private:
 	//class ATlocGameMode* gameMode;
-
-	FVector2D center;
-	FVector2D lastCalculatedPosition;
-	float rotAngItemMenu;
 
 	UPROPERTY(meta = (BindWidget))
 		UMenuAnchor* ingameMenuAnchor;
 
+	//----     Objects Menu    ----//
 	//Butons
 	UPROPERTY(meta = (BindWidget))
 		UButton* petal_btn;
@@ -94,8 +89,83 @@ private:
 		UImage* pouch;
 	
 
+	//----     Objects Menu    ----//
+
+	//Butons
+	UPROPERTY(meta = (BindWidget))
+		UButton* Spell_0_btn;
+
+	UPROPERTY(meta = (BindWidget))
+		UButton* Spell_1_btn;
+
+	UPROPERTY(meta = (BindWidget))
+		UButton* Spell_2_btn;
+
+	UPROPERTY(meta = (BindWidget))
+		UButton* Spell_3_btn;
+
+	UPROPERTY(meta = (BindWidget))
+		UButton* Spell_4_btn;
+
+	UPROPERTY(meta = (BindWidget))
+		UButton* Spell_5_btn;
+
+	UPROPERTY(meta = (BindWidget))
+		UButton* Spell_6_btn;
+
+	UPROPERTY(meta = (BindWidget))
+		UButton* Spell_7_btn;
+
+	UPROPERTY(meta = (BindWidget))
+		UButton* Spell_8_btn;
+
+	//Butons' images
+	UPROPERTY(meta = (BindWidget))
+		UImage* Spell_0;
+
+	UPROPERTY(meta = (BindWidget))
+		UImage* Spell_1;
+
+	UPROPERTY(meta = (BindWidget))
+		UImage* Spell_2;
+
+	UPROPERTY(meta = (BindWidget))
+		UImage* Spell_3;
+
+	UPROPERTY(meta = (BindWidget))
+		UImage* Spell_4;
+
+	UPROPERTY(meta = (BindWidget))
+		UImage* Spell_5;
+
+	UPROPERTY(meta = (BindWidget))
+		UImage* Spell_6;
+
+	UPROPERTY(meta = (BindWidget))
+		UImage* Spell_7;
+
+	UPROPERTY(meta = (BindWidget))
+		UImage* Spell_8;
+
+	//---- Motion menu variables ----//	
+
+	enum Menu : int
+	{
+		ITEMS = 0,
+		WEAPONS,
+		ARMORS,
+		GAUNTLETS,
+		SPELLS
+	};
+
+	int selMenu;
+	FVector2D center;
+	FVector2D lastCalculatedPosition;
+	float rotAngItemMenu;
+
+
 	//Functions
-	void setIcons(int iterator);
+	void setItemIcons(int iterator);
 	FVector2D calculateRotation(FVector2D position, float rotAngle);
 	void substractTranslation(FVector2D* _transl, UCanvasPanelSlot* _slot);
 };

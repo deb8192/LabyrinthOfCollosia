@@ -5,6 +5,9 @@
 #include "CoreMinimal.h"
 #include "Dom/JsonObject.h"
 
+#include "../Objects/Weapons/TlocWeapon.h"
+#include "../Magic/TlocSpell.h"
+
 /**
  * 
  */
@@ -25,6 +28,8 @@ public:
 	//fin clase singleton
 
 	TSharedPtr<FJsonObject> ParsingJson(FString fileName);
+	TlocWeapon* IdentifyWeapon(TSharedPtr<FJsonObject> obj);
+	std::vector<TlocSpell*> CreateSpells(TArray<TSharedPtr<FJsonValue>> arr);
 
 	//Getters
 	FString GetJsonRoute(char* _name, char* _dir, char* _ext);
@@ -34,4 +39,9 @@ private:
 	TlocMotorLoader();
 	static TlocMotorLoader* _unic_instance;
 	//fin clase singleton
+
+	TlocSpell* obtainSpellFeatures(TSharedPtr<FJsonObject> obj);
+	void createSword(TSharedPtr<FJsonObject> obj, TlocWeapon& _wpn);
+	//void createSpear(TSharedPtr<FJsonObject> obj, TlocWeapon* _wpn);
+	//void createAxe(TSharedPtr<FJsonObject> obj, TlocWeapon* _wpn);
 };

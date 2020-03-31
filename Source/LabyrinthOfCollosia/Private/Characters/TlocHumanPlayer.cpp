@@ -49,7 +49,6 @@ ATlocHumanPlayer::ATlocHumanPlayer() : TlocPlayer()
 	_playerCamera->SetupAttachment(_playerCameraSpringArm, USpringArmComponent::SocketName);
 	_playerCameraSpringArm->SetRelativeLocationAndRotation(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z + 45.0), FRotator(-10.0f, 0.0f, 0.0f));
 
-	//playerEquipment._weapon->GetMesh()->SetupAttachment(GetRootComponent());
 
 	_wpnMesh = _motor->SetMesh(TEXT("WeaponMesh"), (const TCHAR*)playerEquipment._weapon->GetMeshFileRoot(), GetRootComponent(), this);
 	_wpnMesh->SetupAttachment(GetRootComponent());
@@ -59,6 +58,13 @@ ATlocHumanPlayer::ATlocHumanPlayer() : TlocPlayer()
 
 	_wpnMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
 
+	/*playerEquipment._weapon->GetMesh()->SetupAttachment(GetRootComponent());
+
+	playerEquipment._weapon->GetMesh()->SetRelativeLocation(FVector(0.0f, 0.0f, 25.0f));
+	playerEquipment._weapon->GetMesh()->SetRelativeRotation(FRotator(-90.f, 0.0f, 0.0f));
+
+	playerEquipment._weapon->GetMesh()->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
+	*/
 
 
 	static ConstructorHelpers::FClassFinder<UUserWidget> IngameMenuUIBPClass(TEXT("/Game/UserInterface/Menu/TlocInGameMenuBP"));
@@ -236,7 +242,10 @@ void ATlocHumanPlayer::loadInGameUI()
 {
 	if (IngameMenuUIClass == nullptr) return;
 
-	IngameMenu = CreateWidget<UTlocIngameMenu>(GetWorld(), IngameMenuUIClass);
+	if (IngameMenu == nullptr)
+	{
+		IngameMenu = CreateWidget<UTlocIngameMenu>(GetWorld(), IngameMenuUIClass);
+	}
 	if (IngameMenu == nullptr) return;
 
 	IngameMenu->AddToViewport();
@@ -245,7 +254,7 @@ void ATlocHumanPlayer::loadInGameUI()
 void ATlocHumanPlayer::closeInGameUI()
 {
 	IngameMenu->RemoveFromViewport();
-	IngameMenu = nullptr;
+	//IngameMenu = nullptr;
 }
 
 void ATlocHumanPlayer::checkMenu()
@@ -370,7 +379,7 @@ void ATlocHumanPlayer::pickupObject()
 
 			//It obtains _obj's child class and identifies which one is it's child class
 			//WEAPONS
-			if (strcmp(_objName, constants.KWEAPON) == 0)
+			if ((strcmp(_objName, constants.KSWORD) == 0) || (strcmp(_objName, constants.KSPEAR) == 0) || (strcmp(_objName, constants.KAXE) == 0))
 			{
 				TlocWeapon* _wpn = (TlocWeapon*)_obj;
 				_weapon.push_back(_wpn);
@@ -502,6 +511,16 @@ void ATlocHumanPlayer::SetMesh(const TCHAR* fileRoot, int mesh)
 	}
 }
 
+void ATlocHumanPlayer::SetWeaponMesh()
+{
+	playerEquipment._weapon->SetMesh(playerEquipment._weapon->GetMeshFileRoot());
+	playerEquipment._weapon->GetMesh()->SetupAttachment(GetRootComponent());
+	playerEquipment._weapon->GetMesh()->SetRelativeLocation(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z - 90));
+	playerEquipment._weapon->GetMesh()->SetRelativeRotation(FRotator(GetActorRotation().Pitch, GetActorRotation().Yaw - 90, GetActorRotation().Roll)); 
+	playerEquipment._weapon->GetMesh()->OnComponentBeginOverlap.AddDynamic(this, &ATlocHumanPlayer::OnHumanActorHit);
+	playerEquipment._weapon->GetMesh()->OnComponentEndOverlap.AddDynamic(this, &ATlocHumanPlayer::OnHumanActorStopHit);
+}
+
 TlocWeapon* ATlocHumanPlayer::GetWeapon()
 {
 	return playerEquipment._weapon;
@@ -519,5 +538,10 @@ TlocGauntlet* ATlocHumanPlayer::GetGauntlet()
 
 UStaticMeshComponent* ATlocHumanPlayer::GetMesh()
 {
-	return _wpnMesh;
+	return _charMesh;
+}
+
+UStaticMeshComponent* ATlocHumanPlayer::GetWeaponMesh()
+{
+	return playerEquipment._weapon->GetMesh();
 }

@@ -1,5 +1,6 @@
 {
-	"TlocSword": [{
+	"TlocWeapon": [{
+		"className": "TlocSword",
 		"chest": true,
 		"position": [-1930, -5400, 45],
 		"rotation": [0, 0, -90],
@@ -11,6 +12,7 @@
 		"criticalProbabilityInc": 10
 	},
 	{
+		"className": "TlocSword",
 		"chest": true,
 		"position": [-200, 0, 45],
 		"rotation": [0, 0, -90],

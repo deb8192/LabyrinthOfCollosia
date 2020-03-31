@@ -10,6 +10,8 @@
 void UTlocIngameMenu::NativeConstruct()
 {
 	GlobalConstants constants;
+
+	selMenu = Menu::ITEMS;
 	
 	AGameModeBase* mode = GetWorld()->GetAuthGameMode();
 	if (mode != nullptr)
@@ -18,7 +20,7 @@ void UTlocIngameMenu::NativeConstruct()
 	}
 	for (int i = 0; i < constants.KMAXITEMS; i++)
 	{
-		setIcons(i);
+		setItemIcons(i);
 	}
 
 	center = FVector2D(0.0f, 96.0f);
@@ -31,7 +33,7 @@ void UTlocIngameMenu::NativeTick(const FGeometry& geometry, float deltaTime)
 {
 }
 
-void UTlocIngameMenu::setIcons(int iterator)
+void UTlocIngameMenu::setItemIcons(int iterator)
 {
 	GlobalConstants constants;
 	FString directory = constants.KDIR_ITEMS;
