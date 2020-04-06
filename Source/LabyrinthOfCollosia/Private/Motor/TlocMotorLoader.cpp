@@ -123,16 +123,18 @@ TlocSpell* TlocMotorLoader::obtainSpellFeatures(TSharedPtr<FJsonObject> obj)
 			TSharedPtr<FJsonObject> jsonObject = arr[i]->AsObject();
 			jsonObject->TryGetStringField(constants.KNAME, *_name);
 			_ing = NewObject<TlocIngredients>();
-			_ing->SetID(jsonObject->GetNumberField(constants.KID));
+			_ing->SetIngredientID(jsonObject->GetNumberField(constants.KID));
 			_ing->SetName((TCHAR*)**_name);
 			_ing->SetQuantity(jsonObject->GetNumberField(constants.KQUANTITY));
 			splIng.push_back(_ing);
 		}
 		FString* _desc = new FString();
+		FString* _icon = new FString();
 		_name = new FString();
 		obj->TryGetStringField(constants.KNAME, *_name);
 		obj->TryGetStringField(constants.KDESCRIPTION, *_desc);
-		TlocSpell* _newSpell = new TlocSpell((int)obj->GetNumberField(constants.KID), **_name, **_desc, (int)obj->GetNumberField(constants.KBASIC_POWER), obj->GetBoolField(constants.KACTIVE), splIng);
+		obj->TryGetStringField(constants.KFILE_DIRECTORY, *_icon);
+		TlocSpell* _newSpell = new TlocSpell((int)obj->GetNumberField(constants.KID), **_name, **_desc, **_icon, (int)obj->GetNumberField(constants.KBASIC_POWER), obj->GetBoolField(constants.KACTIVE), splIng);
 		return _newSpell;
 	}
 	else return nullptr;

@@ -10,8 +10,8 @@
 #include "ConstructorHelpers.h"
 #include <iostream>
 #include <Runtime\Core\Public\Misc\Paths.h>
-#include "GameFramework/PlayerController.h"
 #include "GameFramework/Controller.h"
+#include <ctime>
 
 ATlocGameMode::ATlocGameMode()
 {
@@ -19,11 +19,15 @@ ATlocGameMode::ATlocGameMode()
 	_world = GetWorld();								//Get the world to manage it
 	//_defaultLevel = _world->GetPersistentLevel();
 	DefaultPawnClass = nullptr;	//Associate player's pawn with player's default class
+	PlayerControllerClass = ATlocPlayerController::StaticClass();
+	_humanPlayerController = (ATlocPlayerController*) PlayerControllerClass->GetDefaultObject();
 	HUDClass = UTlocIngameMenu::StaticClass();
 	GameStateClass = ATlocGameState::StaticClass();
 
 	_gameLoader = TlocGameLoader::GetInstance();
 	_stageLoader = TlocStageLoader::GetInstance();
+
+
 
 	//_humanPlayer = DefaultPawnClass->GetDefaultObject<ATlocHumanPlayer>();
 
@@ -35,6 +39,11 @@ ATlocGameMode::ATlocGameMode()
 	_levelObjects.reserve(30);
 	_createdEnemies.reserve(30);
 	_createdObjects.reserve(30);
+
+	renderTime = constants.KRENDER_TIME;
+	updateTime = constants.KUPDATE_TIME;
+	lastRenderTime = constants.KZERO_F;
+	lastUpdateTime = constants.KZERO_F;
 
 	changingLevel = true;
 
@@ -49,7 +58,7 @@ ATlocGameMode::~ATlocGameMode()
 void ATlocGameMode::BeginPlay()
 {
 	Super::BeginPlay();
-
+	SetActorTickInterval(renderTime);
 	if (_world != NULL)
 	{
 		for (int i = 0; i < _world->GetLevels().Num(); i++)
@@ -61,6 +70,7 @@ void ATlocGameMode::BeginPlay()
 
 	spawnPlayers(true);
 	SpawnActorsOnStage();
+	_humanPlayer->InitLocationRotation();
 	
 
 	/*
@@ -111,12 +121,9 @@ void ATlocGameMode::SpawnActorsOnStage()
 
 	const FActorSpawnParameters SpawnParam = FActorSpawnParameters();
 
-	//_world->AddToWorld(;
 
-	//_humanPlayer = DefaultPawnClass.GetDefaultObject();
 	_createdObjects.push_back(_stageLoader->ObjectsLoader(constants.KFIRST_LEVEL_NAME));
 	_createdEnemies.push_back(_stageLoader->EnemiesLoader(constants.KFIRST_LEVEL_NAME));
-	//_world->SpawnActor<TlocWeapon>(TlocWeapon::StaticClass(), FVector(-500, -70, 100), FRotator::ZeroRotator, SpawnParam);
 
 	for (int i = 0; i < 2; i++)
 	{
@@ -175,18 +182,16 @@ void ATlocGameMode::SetPlayersFeatures(int& plyr, std::vector<TlocPlayer*> &play
 		std::vector<TlocSpell*> spl = players[constants.KZERO]->GetSpells();
 		_humanPlayer->SetSpells(spl);
 		_humanPlayer->InitMemorizedSpells();
+		_humanPlayerController = (ATlocPlayerController*) _humanPlayer->Controller;
 		_humanPlayer->AutoPossessPlayer = EAutoReceiveInput::Player0;
 		break;
-
 	}
 }
 
-// Called every frame
-void ATlocGameMode::Tick(float DeltaTime)
+void ATlocGameMode::Update(float deltaTime)
 {
 	GlobalConstants constants;
-	Super::Tick(DeltaTime);
-
+	_humanPlayerController->Update(deltaTime);
 	/*if (changingLevel)
 	{
 		_world->SetCurrentLevel(_levels[1]);
@@ -204,13 +209,35 @@ void ATlocGameMode::Tick(float DeltaTime)
 				if (_levelEnemies[i]->GetLife() <= constants.KZERO)
 				{
 					_levelEnemies[i]->Destroy();
-				_levelEnemies.erase(_levelEnemies.begin() + i);
-				UE_LOG(LogTemp, Warning, TEXT("You killed the enemy."));
+					_levelEnemies.erase(_levelEnemies.begin() + i);
+					UE_LOG(LogTemp, Warning, TEXT("You killed the enemy."));
 				}
 			}
 		}
 	}
+}
 
+void ATlocGameMode::Render(float DeltaTime)
+{
+	_humanPlayerController->Render(DeltaTime);
+}
+
+// Called every frame
+void ATlocGameMode::Tick(float DeltaTime)
+{
+	GlobalConstants constants;
+	Super::Tick(DeltaTime);
+	float currentTime = _world->GetTimeSeconds();
+	//if (currentTime - lastRenderTime >= renderTime)
+	//{
+		Render(currentTime - lastRenderTime);
+		lastRenderTime = currentTime;
+		if (currentTime - lastUpdateTime >= updateTime)
+		{
+			Update(currentTime - lastUpdateTime);
+			lastUpdateTime = currentTime;
+		}
+	//}
 
 
 }
@@ -236,6 +263,11 @@ void ATlocGameMode::spawnPlayers(bool newGame)
 	{
 		SetPlayersFeatures(i, players);
 	}
+}
+
+float ATlocGameMode::getSeconds()
+{
+	return ((float)clock()/(CLOCKS_PER_SEC));
 }
 
 

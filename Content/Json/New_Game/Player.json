@@ -29,6 +29,7 @@
 			"className": "TlocSpell",
 			"name": "Heal",
 			"description": "Recovers some HP",
+			"fileDirectory": "/Game/Sprites/Spells/Icons-128/Heal-128px.Heal-128px",
 			"basicPower": 30,
 			"active": true,
 			"TlocIngredients":[
@@ -48,6 +49,7 @@
 			"className": "TlocSpell",
 			"name": "Flash",
 			"description": "Small fireball",
+			"fileDirectory": "/Game/Sprites/Spells/Icons-128/Flash-128px.Flash-128px",
 			"basicPower": 27,
 			"active": true,
 			"TlocIngredients":[
@@ -67,6 +69,7 @@
 			"className": "TlocSpell",
 			"name": "Hard ball",
 			"description": "Target gets beaned",
+			"fileDirectory": "/Game/Sprites/Spells/Icons-128/Heal-128px.Heal-128px",
 			"basicPower": 21,
 			"active": true,
 			"TlocIngredients":[
@@ -86,6 +89,7 @@
 			"className": "TlocSpell",
 			"name": "Crush",
 			"description": "Crushes target enemy",
+			"fileDirectory": "/Game/Sprites/Spells/Icons-128/Flash-128px.Flash-128px",
 			"basicPower": 30,
 			"active": true,
 			"TlocIngredients":[
@@ -105,6 +109,7 @@
 			"className": "TlocSpell",
 			"name": "Cure",
 			"description": "Dispels states",
+			"fileDirectory": "/Game/Sprites/Spells/Icons-128/Heal-128px.Heal-128px",
 			"basicPower": 1,
 			"active": true,
 			"TlocIngredients":[
@@ -124,6 +129,7 @@
 			"className": "TlocSpell",
 			"name": "Defend",
 			"description": "Brings up defense",
+			"fileDirectory": "/Game/Sprites/Spells/Icons-128/Flash-128px.Flash-128px",
 			"basicPower": 14,
 			"active": true,
 			"TlocIngredients":[
@@ -143,6 +149,7 @@
 			"className": "TlocSpell",
 			"name": "Drain",
 			"description": "Steals some enemy HP",
+			"fileDirectory": "/Game/Sprites/Spells/Icons-128/Heal-128px.Heal-128px",
 			"basicPower": 12,
 			"active": true,
 			"TlocIngredients":[
@@ -162,6 +169,7 @@
 			"className": "TlocSpell",
 			"name": "Revive",
 			"description": "Brings dog back to life",
+			"fileDirectory": "/Game/Sprites/Spells/Icons-128/Flash-128px.Flash-128px",
 			"basicPower": 15,
 			"active": true,
 			"TlocIngredients":[
@@ -181,6 +189,7 @@
 			"className": "TlocSpell",
 			"name": "Atlas",
 			"description": "Target gets super strength",
+			"fileDirectory": "/Game/Sprites/Spells/Icons-128/Heal-128px.Heal-128px",
 			"basicPower": 2,
 			"active": true,
 			"TlocIngredients":[
@@ -200,6 +209,7 @@
 			"className": "TlocSpell",
 			"name": "Acid rain",
 			"description": "Showers enemies with acid",
+			"fileDirectory": "/Game/Sprites/Spells/Icons-128/Flash-128px.Flash-128px",
 			"basicPower": 17,
 			"active": false,
 			"TlocIngredients":[

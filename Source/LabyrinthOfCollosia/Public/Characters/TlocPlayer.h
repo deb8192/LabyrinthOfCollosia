@@ -64,7 +64,7 @@ public:
 	UStaticMeshComponent* GetMesh();
 	FVector GetPosition();
 	FRotator GetRotation();
-	std::vector<std::vector<TlocIngredients*>> GetIngredients();
+	std::vector<TlocIngredients*> GetIngredients();
 	std::vector<TlocSpell*> GetSpells();
 	std::vector<TlocSpell* > GetMemorizedSpells();
 	std::vector<std::vector<TlocItem*>> GetItems();
@@ -105,7 +105,7 @@ public:
 	virtual void SetMesh(const TCHAR* fileRoot, int mesh) = 0;
 	void SetPosition(FVector newPosition);
 	void SetRotation(FRotator newRotation);
-	void SetIngredients(std::vector<std::vector<TlocIngredients*>>& _ing);
+	void SetIngredients(std::vector<TlocIngredients*>& _ing);
 	void SetSpells(std::vector<TlocSpell*>& _splls);
 	void SetMemorizedSpells(std::vector<TlocSpell*>& _memSplls);
 	void SetItems(std::vector<std::vector<TlocItem*>>& _itms);
@@ -121,6 +121,11 @@ public:
 	void SetPlayer(int plyr);
 	
 protected:
+
+	// Functions
+	void moveEntity(float updTime);
+	void rotateEntity(float updTime);
+	void updateTimeMove(float rendTime);
 
 	//Variables
 	int nextLevel;				//Necessary experience to reach next level

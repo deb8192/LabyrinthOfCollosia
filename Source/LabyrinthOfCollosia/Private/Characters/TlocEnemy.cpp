@@ -35,12 +35,15 @@ ATlocEnemy::ATlocEnemy()
 	criticalProb = 16;
 	luck = 75;
 	evasion = 25;
+	speed = 4.0f;
 
 	jewels = 0;
 	
 	_motor = ATlocMotorFacade::GetInstance(this);
 
 	position.X = position.Y = position.Z = 0.0;
+	renderPosition.X = renderPosition.Y = renderPosition.Z = 0.0;
+	rotation = renderRotation = FRotator::ZeroRotator;
 
 	_fileRoot = TEXT("/Game/Models/Characters/GuideMonk_Cube_000.GuideMonk_Cube_000");
 	_auxFilePath = TEXT("/Game/Models/Characters/GuideMonk_Cube_001.GuideMonk_Cube_001");
@@ -88,10 +91,7 @@ ATlocEnemy::~ATlocEnemy()
 	int size = 0;
 	for (size; size < _ingredients.size(); size++)
 	{
-		for (int j = 0; j < _ingredients[size].size(); j++)
-		{
-			_ingredients[size][j] = nullptr;
-		}
+		_ingredients[size] = nullptr;
 	}
 
 	size = 0;
@@ -156,6 +156,78 @@ void ATlocEnemy::BeginPlay()
 	//_motor->RegisterMeshComponent(_auxCharMesh);
 	//AddActorLocalOffset(FVector(0.0f, 0.0f, 0.0f), true);
 }
+
+void ATlocEnemy::moveEntity(float updTime)
+{
+	GlobalConstants constants;
+
+	//pt es el porcentaje de tiempo pasado desde la posicion
+    //de update antigua hasta la nueva
+	float pt = moveTime / updTime;
+
+	if (pt > constants.KONE_F)
+	{
+		pt = constants.KONE_F;
+	}
+
+	renderPosition.X = lastPosition.X * (constants.KONE_F - pt) + position.X * pt;
+	renderPosition.Y = lastPosition.Y * (constants.KONE_F - pt) + position.Y * pt;
+
+}
+
+void ATlocEnemy::rotateEntity(float updTime)
+{
+	GlobalConstants constants;
+
+	//pt es el porcentaje de tiempo pasado desde la posicion
+	//de update antigua hasta la nueva
+	float pt = moveTime / updTime;
+
+	if (pt > constants.KONE_F)
+	{
+		pt = constants.KONE_F;
+	}
+	else if (pt < constants.KZERO_F)
+	{
+		pt = constants.KZERO_F;
+	}
+
+	renderPosition.X = lastPosition.X * (constants.KONE_F - pt) + position.X * pt;
+	renderPosition.Y = lastPosition.Y * (constants.KONE_F - pt) + position.Y * pt;
+
+	renderRotation.Roll = lastRotation.Roll * (constants.KONE_F - pt) + rotation.Roll * pt;
+	renderRotation.Pitch = lastRotation.Pitch * (constants.KONE_F - pt) + rotation.Pitch * pt;
+	renderRotation.Yaw = lastRotation.Yaw * (constants.KONE_F - pt) + rotation.Yaw * pt;
+}
+
+void ATlocEnemy::updateTimeMove(float rendTime)
+{
+	moveTime += rendTime;
+}
+
+/*void ATlocEnemy::moveVertically(float value)
+{
+	GlobalConstants constants;
+	lastPosition.Y = position.Y;
+	position.Y += value* speed* constants.KUPDATE_TIME;
+	//AddMovementInput(GetActorForwardVector(), value*speed * GetWorld()->GetDeltaSeconds());
+}
+
+void ATlocEnemy::moveHorizontally(float value)
+{
+	GlobalConstants constants;
+	lastPosition.X = position.X;
+	position.X += value * speed * constants.KUPDATE_TIME;
+	//AddMovementInput(GetActorRightVector(), value * speed * GetWorld()->GetDeltaSeconds());
+}
+
+void ATlocEnemy::rotateHorizontally(float value)
+{
+	GlobalConstants constants;
+	lastRotation.Yaw = rotation.Yaw;
+	rotation.Yaw = value * constants.KROTATIONSPEED * constants.KUPDATE_TIME;
+	//AddControllerYawInput(value * constants.KROTATIONSPEED * GetWorld()->GetDeltaSeconds());
+}*/
 
 // Called every frame
 void ATlocEnemy::Tick(float DeltaTime)
@@ -423,7 +495,7 @@ TArray<TCHAR*> ATlocEnemy::GetMeshesFileRoot()
 	return paths;
 }
 
-std::vector<std::vector<TlocIngredients*>> ATlocEnemy::GetIngredients()
+std::vector<TlocIngredients*> ATlocEnemy::GetIngredients()
 {
 	return _ingredients;
 }
@@ -611,7 +683,7 @@ void ATlocEnemy::SetRotation(FRotator newRotation)
 	_charMesh->SetRelativeRotation(newRotation);
 }
 
-void ATlocEnemy::SetIngredients(std::vector<std::vector<TlocIngredients*>>& _ing)
+void ATlocEnemy::SetIngredients(std::vector<TlocIngredients*>& _ing)
 {
 	_ingredients = _ing;
 }

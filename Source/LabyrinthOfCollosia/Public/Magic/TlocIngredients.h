@@ -14,16 +14,20 @@ public:
 	TlocIngredients();
 	TlocIngredients(int id, const TCHAR* nm, int qnty);
 	~TlocIngredients();
-	int GetID();
+	
+	void AddQuantity(int qnty);
+	void DescendQuantity(int qnty);
+	
+	int GetIngredientID();
 	TCHAR* GetName();
 	int GetQuantity();
 
-	void SetID(int id);
+	void SetIngredientID(int id);
 	void SetName(const TCHAR* nm);
 	void SetQuantity(int qnty);
 
 private:
-	int ID;
+	int ingredientID;
 	TCHAR* _ingName;
 	int quantity;
 };

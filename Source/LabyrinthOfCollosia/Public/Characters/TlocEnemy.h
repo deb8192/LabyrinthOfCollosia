@@ -58,7 +58,7 @@ public:
 	FRotator GetRotation();
 	TCHAR* GetMeshFileRoot();
 	TArray<TCHAR*> GetMeshesFileRoot();
-	std::vector<std::vector<TlocIngredients*>> GetIngredients();
+	std::vector<TlocIngredients*> GetIngredients();
 	std::vector<TlocSpell*> GetSpells();
 	std::vector<TlocSpell* > GetMemorizedSpells();
 	std::vector<std::vector<TlocItem*>> GetItems();
@@ -94,7 +94,7 @@ public:
 	void SetMesh(const TCHAR* fileRoot, int mesh);
 	void SetPosition(FVector newPosition);
 	void SetRotation(FRotator newRotation);
-	void SetIngredients(std::vector<std::vector<TlocIngredients*>>& _ing);
+	void SetIngredients(std::vector<TlocIngredients*>& _ing);
 	void SetSpells(std::vector<TlocSpell*>& _splls);
 	void SetMemorizedSpells(std::vector<TlocSpell*>& _memSplls);
 	void SetItems(std::vector<std::vector<TlocItem*>>& _itms);
@@ -108,6 +108,11 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	// Functions
+	void moveEntity(float updTime);
+	void rotateEntity(float updTime);
+	void updateTimeMove(float rendTime);
 
 public:	
 	// Called every frame

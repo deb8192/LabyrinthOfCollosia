@@ -5,6 +5,7 @@
 #include "../Public/Objects/TlocChest.h"
 #include "../Public/GlobalConstants.h"
 
+#include "GameFramework/PlayerController.h"
 #include "Engine/World.h"
 #include "Engine/Scene.h"
 #include "ConstructorHelpers.h"
@@ -13,7 +14,7 @@
 ATlocHumanPlayer::ATlocHumanPlayer() : TlocPlayer()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 
 	//Player equip and motor
@@ -35,6 +36,10 @@ ATlocHumanPlayer::ATlocHumanPlayer() : TlocPlayer()
 	_charMesh->SetupAttachment(GetRootComponent());
 	_charMesh->SetRelativeLocation(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z - 90));
 	_charMesh->SetRelativeRotation(FRotator(GetActorRotation().Pitch, GetActorRotation().Yaw - 90, GetActorRotation().Roll));
+
+	//POSITION
+	position = lastPosition = renderPosition = FVector(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z));
+	rotation = lastRotation = renderRotation = FRotator(GetActorRotation().Pitch, GetActorRotation().Yaw, GetActorRotation().Roll);
 	
 	//CAMERA
 
@@ -47,7 +52,7 @@ ATlocHumanPlayer::ATlocHumanPlayer() : TlocPlayer()
 
 	_playerCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("PlayerCamera"));
 	_playerCamera->SetupAttachment(_playerCameraSpringArm, USpringArmComponent::SocketName);
-	_playerCameraSpringArm->SetRelativeLocationAndRotation(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z + 45.0), FRotator(-10.0f, 0.0f, 0.0f));
+	_playerCameraSpringArm->SetRelativeLocationAndRotation(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z + 45.0f), FRotator(-10.0f, 0.0f, 0.0f));
 
 
 	_wpnMesh = _motor->SetMesh(TEXT("WeaponMesh"), (const TCHAR*)playerEquipment._weapon->GetMeshFileRoot(), GetRootComponent(), this);
@@ -82,7 +87,8 @@ ATlocHumanPlayer::ATlocHumanPlayer() : TlocPlayer()
 	}
 
 	openMenu = false;
-	
+	ticking = false; 
+	rotate = false;
 
 
 }
@@ -130,6 +136,38 @@ ATlocHumanPlayer::~ATlocHumanPlayer()
 
 	_playerCameraSpringArm = nullptr;
 
+	openMenu = false;
+	ticking = false;
+	rotate = false;
+}
+
+void ATlocHumanPlayer::Update()
+{
+}
+
+void ATlocHumanPlayer::Render(float rendTime)
+{
+	GlobalConstants constants;
+	moveEntity(rendTime);
+	rotateEntity(rendTime);
+	updateTimeMove(rendTime);
+
+	//if(renderPosition.X)
+	AddMovementInput(GetActorRightVector(), renderPosition.X);
+	AddMovementInput(GetActorForwardVector(), renderPosition.Y);
+	//AddControllerYawInput(renderRotation.Yaw);
+	//AddMovementInput(
+	//_motor->SetMeshPosition(*this, renderPosition);
+	//if(renderRotation.Yaw != constants.KZERO_F)
+		_motor->SetMeshRotation(*this, renderRotation);
+}
+
+void ATlocHumanPlayer::InitLocationRotation()
+{
+
+	position = lastPosition = renderPosition = FVector(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z));
+	rotation = lastRotation = renderRotation = FRotator(GetActorRotation().Pitch, GetActorRotation().Yaw, GetActorRotation().Roll);
+
 }
 
 
@@ -139,6 +177,8 @@ void ATlocHumanPlayer::BeginPlay()
 	Super::BeginPlay();	
 
 	LoadPlayer();
+
+	SetActorTickEnabled(false);
 
 	_motor->RegisterMeshComponent(_charMesh);
 	_motor->RegisterMeshComponent(_wpnMesh);
@@ -152,20 +192,30 @@ void ATlocHumanPlayer::BeginPlay()
 void ATlocHumanPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	ticking = true;
 }
 
 // Called to bind functionality to input
 void ATlocHumanPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
+	//Player movement
 	PlayerInputComponent->BindAxis("MoveVertically", this, &ATlocHumanPlayer::moveVertically);
 	PlayerInputComponent->BindAxis("MoveHorizontally", this, &ATlocHumanPlayer::moveHorizontally);
 	PlayerInputComponent->BindAxis("RotateHorizontally", this, &ATlocHumanPlayer::rotateHorizontally);
 
+	//Menu interaction
+	PlayerInputComponent->BindAction("OpenMenu", IE_Pressed, this, &ATlocHumanPlayer::checkMenu);
+	PlayerInputComponent->BindAction("RotLeftMenu", IE_Pressed, this, &ATlocHumanPlayer::beginRotateMenuLeft);
+	PlayerInputComponent->BindAction("RotLeftMenu", IE_Released, this, &ATlocHumanPlayer::stopRotateMenuLeft);
+	PlayerInputComponent->BindAction("RotRightMenu", IE_Pressed, this, &ATlocHumanPlayer::beginRotateMenuRight);
+	PlayerInputComponent->BindAction("RotRightMenu", IE_Released, this, &ATlocHumanPlayer::stopRotateMenuRight);
+	PlayerInputComponent->BindAction("Use", IE_Pressed, this, &ATlocHumanPlayer::useMenuElement);
+
+	//Player actions
 	PlayerInputComponent->BindAction("PickUp", IE_Pressed, this, &ATlocHumanPlayer::takeObj);
 	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &ATlocHumanPlayer::attack);
-	PlayerInputComponent->BindAction("OpenMenu", IE_Pressed, this, &ATlocHumanPlayer::checkMenu);
-	PlayerInputComponent->BindAction("RotLeftMenu", IE_Pressed, this, &ATlocHumanPlayer::rotateMenuLeft);
-	PlayerInputComponent->BindAction("RotRightMenu", IE_Pressed, this, &ATlocHumanPlayer::rotateMenuRight);
+
+
 }
 
 
@@ -222,20 +272,41 @@ ATlocHumanPlayer::Equipment ATlocHumanPlayer::GetPlayerEquipment()
 
 void ATlocHumanPlayer::moveVertically(float value)
 {
-	AddMovementInput(GetActorForwardVector(), value);
+	moveTime = 0.0;
+	GlobalConstants constants;
+	lastPosition.Y = position.Y;
+	position.Y += value * speed * constants.KUPDATE_TIME;
+	if (lastPosition.Y == position.Y)
+	{
+		position.Y = lastPosition.Y = constants.KZERO_F;
+	}
+	//AddMovementInput(GetActorForwardVector(), value*speed * GetWorld()->GetDeltaSeconds());
 }
 
 void ATlocHumanPlayer::moveHorizontally(float value)
 {
-
-	AddMovementInput(GetActorRightVector(), value);
+	moveTime = 0.0;
+	GlobalConstants constants;
+	lastPosition.X = position.X;
+	position.X += value * speed * constants.KUPDATE_TIME;
+	if (lastPosition.X == position.X)
+	{
+		position.X = lastPosition.X = constants.KZERO_F;
+	}
+	//AddMovementInput(GetActorRightVector(), value * speed * GetWorld()->GetDeltaSeconds());
 }
 
 void ATlocHumanPlayer::rotateHorizontally(float value)
 {
+	moveTime = 0.0;
 	GlobalConstants constants;
-
-	AddControllerYawInput(value * constants.KROTATIONSPEED * GetWorld()->GetDeltaSeconds());
+	lastRotation.Yaw = rotation.Yaw;
+	rotation.Yaw += value * constants.KROTATIONSPEED * constants.KUPDATE_TIME;
+	/*if (lastRotation.Yaw == rotation.Yaw)
+	{
+		lastRotation.Yaw = rotation.Yaw = constants.KZERO_F;
+	}*/
+	//AddControllerYawInput(value * constants.KROTATIONSPEED * GetWorld()->GetDeltaSeconds());
 }
 
 void ATlocHumanPlayer::loadInGameUI()
@@ -245,6 +316,14 @@ void ATlocHumanPlayer::loadInGameUI()
 	if (IngameMenu == nullptr)
 	{
 		IngameMenu = CreateWidget<UTlocIngameMenu>(GetWorld(), IngameMenuUIClass);
+		if (_memorizedSpells.size() > 0)
+		{
+			for (int i = 0; i < _memorizedSpells.size(); i++)
+			{
+				IngameMenu->SetSpellsIcons(i, _memorizedSpells[i]->GetIconFilePath());
+				_memorizedSpells[i]->SetMenuId(i);
+			}
+		}
 	}
 	if (IngameMenu == nullptr) return;
 
@@ -271,9 +350,45 @@ void ATlocHumanPlayer::checkMenu()
 	}
 }
 
+int* ATlocHumanPlayer::getMemorizedSpellsID()
+{
+	GlobalConstants constants;
+	int* spellsID = new int[10];
+	if (_memorizedSpells.size() > constants.KZERO)
+	{
+		for (int i = 0; i < _memorizedSpells.size(); i++)
+		{
+			spellsID[i] = _memorizedSpells[i]->GetId();
+		}
+	}
+	return spellsID;
+}
+
+void ATlocHumanPlayer::beginRotateMenuLeft()
+{
+	rotate = true;
+	rotateMenuLeft();
+}
+
+void ATlocHumanPlayer::beginRotateMenuRight()
+{
+	rotate = true;
+	rotateMenuRight();
+}
+
+void ATlocHumanPlayer::stopRotateMenuLeft()
+{
+	rotate = false;
+}
+
+void ATlocHumanPlayer::stopRotateMenuRight()
+{
+	rotate = false;
+}
+
 void ATlocHumanPlayer::rotateMenuLeft()
 {
-	if (openMenu)
+	if (openMenu && rotate)
 	{
 		IngameMenu->RotateMenu(false);
 	}
@@ -281,9 +396,33 @@ void ATlocHumanPlayer::rotateMenuLeft()
 
 void ATlocHumanPlayer::rotateMenuRight()
 {
-	if (openMenu)
+	if (openMenu && rotate)
 	{
 		IngameMenu->RotateMenu(true);
+	}
+}
+
+void ATlocHumanPlayer::moveMenuUp()
+{
+}
+
+void ATlocHumanPlayer::moveMenuDown()
+{
+}
+
+void ATlocHumanPlayer::useMenuElement()
+{
+	int* options = new int[5];
+	if (openMenu)
+	{
+		options = IngameMenu->GetSelectedObject();
+	}
+	switch (options[0])
+	{
+		case 4:
+			selectSpell(options[1]);
+		default:
+			selectItem(options[1]);
 	}
 }
 
@@ -319,7 +458,7 @@ void ATlocHumanPlayer::modifyHudMaster(float quantity)
 void ATlocHumanPlayer::attack()
 {
 	//If player is attacking some enemy
-	if (attacking)
+	if (!openMenu && attacking)
 	{
 		//It's calculated the attack damage
 		GlobalConstants constants;
@@ -340,7 +479,7 @@ void ATlocHumanPlayer::attack()
 
 void ATlocHumanPlayer::takeObj()
 {
-	if (pickingUp && _object != NULL)
+	if (!openMenu && pickingUp && _object != NULL)
 	{
 		//Calling function that saves the object in players inventory
 		pickupObject();
@@ -350,6 +489,27 @@ void ATlocHumanPlayer::takeObj()
 		_object->Destroy();
 		_object = NULL;
 	}
+}
+
+void ATlocHumanPlayer::selectSpell(int selection)
+{
+	GlobalConstants constants;
+	if (selection >= constants.KZERO && selection < _memorizedSpells.size())
+	{
+		int i = 0;
+		bool found = false;
+		while (!found && i < _memorizedSpells.size())
+		{
+			if (_memorizedSpells[i]->GetMenuId() == selection)
+			{
+				checkSpellIngredients(*_memorizedSpells[i]);
+			}
+		}
+	}
+}
+
+void ATlocHumanPlayer::selectItem(int selection)
+{
 }
 
 /************************** pick up Object **************************
@@ -406,9 +566,9 @@ void ATlocHumanPlayer::pickupObject()
 				int i = 0;
 				while (i < _ingredients.size())
 				{
-					if (_ingredients[i].front() != nullptr && _ingredients[i].front()->GetID() == _ing->GetID())
+					if (_ingredients[i]->GetQuantity() > constants.KZERO && _ingredients[i]->GetIngredientID() == _ing->GetIngredientID())
 					{
-						_ingredients[i].push_back(_ing);
+						_ingredients[i]->AddQuantity(_ing->GetQuantity());
 						i = _ingredients.size();
 					}
 					else
@@ -475,6 +635,52 @@ ATlocObject* ATlocHumanPlayer::checkChest()
 	{
 		return _obj;
 	}
+}
+
+bool ATlocHumanPlayer::checkSpellIngredients(TlocSpell &_spll)
+{
+	GlobalConstants constants;
+	std::vector<int> _selectedIngredients;
+	_selectedIngredients.reserve(constants.KMAXINGREDIENTS);
+	int* _quantities = new int[3];
+	int i = 0;
+	bool found = true;
+	std::vector<TlocIngredients*> spellIng = _spll.GetIngredients();
+
+	//Bucle to check each one of the spell's ingredients
+	while (i < spellIng.size() && found)
+	{
+		int j = 0;
+
+		//Bucle to looking for the selected spell's ingredient in _ingredients vector
+		while (j < _ingredients.size() && found)
+		{
+			if (_ingredients[j]->GetIngredientID() == spellIng[i]->GetIngredientID())
+			{
+				//If there are enought ingredients, we finish j bucle, get quantity and selected ingredient and continue bucle i
+				if (spellIng[i]->GetQuantity() <= _ingredients[j]->GetQuantity())
+				{
+					_selectedIngredients.push_back(j);
+					_quantities[i] = spellIng[i]->GetQuantity();
+					j = _ingredients.size();
+				}
+				//If there are not enought ingredients, we finish both bucles and return without make the spell
+				else found = false;
+			}
+			else j++;
+		}
+		i++;
+	}
+	if (found)
+	{
+		//We prepare the spell for attack and change mode to select target
+		_attackingSpell = &_spll;
+		for (int i = 0; i < _selectedIngredients.size(); i++)
+		{
+			_attackingSpellIngredients[i] = _ingredients[_selectedIngredients[i]];
+		}
+	}
+	return found;
 }
 
 void ATlocHumanPlayer::SetWeapon(TlocWeapon* _wpn)

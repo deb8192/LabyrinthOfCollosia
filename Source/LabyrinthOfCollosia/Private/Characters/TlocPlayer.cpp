@@ -33,10 +33,9 @@ TlocPlayer::TlocPlayer()
 	criticalProb = 16;
 	luck = 75;
 	evasion = 25;
+	speed = 400.0f;
 	
 	jewels = 0;
-
-	position.X = position.Y = position.Z = 0.0;
 
 	experience = 0;
 	nextLevel = 200;
@@ -74,13 +73,7 @@ TlocPlayer::~TlocPlayer()
 	{
 		for (size; size < _ingredients.size(); size++)
 		{
-			if (!_ingredients[size].empty())
-			{
-				for (int j = 0; j < _ingredients[size].size(); j++)
-				{
-					_ingredients[size][j] = nullptr;
-				}
-			}
+			_ingredients[size] = nullptr;
 		}
 	}
 
@@ -395,7 +388,7 @@ FRotator TlocPlayer::GetRotation()
 	return rotation;
 }
 
-std::vector<std::vector<TlocIngredients*>> TlocPlayer::GetIngredients()
+std::vector<TlocIngredients*> TlocPlayer::GetIngredients()
 {
 	return _ingredients;
 }
@@ -571,7 +564,7 @@ void TlocPlayer::SetRotation(FRotator newRotation)
 	_wpnMesh->SetRelativeRotation(newRotation);
 }
 
-void TlocPlayer::SetIngredients(std::vector<std::vector<TlocIngredients*>>& _ing)
+void TlocPlayer::SetIngredients(std::vector<TlocIngredients*>& _ing)
 {
 	_ingredients = _ing;
 }
@@ -629,5 +622,69 @@ void TlocPlayer::SetExperience(int exp)
 void TlocPlayer::SetPlayer(int plyr)
 {
 	player = plyr;
+}
+
+void TlocPlayer::moveEntity(float updTime)
+{
+	GlobalConstants constants;
+	if (position.X != lastPosition.X || position.Y != lastPosition.Y)
+	{
+
+		//pt es el porcentaje de tiempo pasado desde la posicion
+		//de update antigua hasta la nueva
+		float pt = moveTime / updTime;
+
+		if (pt > constants.KONE_F)
+		{
+			pt = constants.KONE_F;
+		}
+		else if (pt < constants.KZERO_F)
+		{
+			pt = constants.KZERO_F;
+		}
+
+		renderPosition.X = lastPosition.X * (constants.KONE_F - pt) + position.X * pt;
+		renderPosition.Y = lastPosition.Y * (constants.KONE_F - pt) + position.Y * pt;
+	}
+	if (position.X == lastPosition.X)
+	{
+		renderPosition.X = constants.KZERO_F;
+	}
+	if (position.Y == lastPosition.Y)
+	{
+		renderPosition.Y = constants.KZERO_F;
+	}
+
+}
+
+void TlocPlayer::rotateEntity(float updTime)
+{
+	GlobalConstants constants;
+
+
+	//pt es el porcentaje de tiempo pasado desde la posicion
+	//de update antigua hasta la nueva
+	float pt = moveTime / updTime;
+
+	if (pt > constants.KONE_F)
+	{
+		pt = constants.KONE_F;
+	}
+	else if (pt < constants.KZERO_F)
+	{
+		pt = constants.KZERO_F;
+	}
+	renderRotation.Roll = lastRotation.Roll * (constants.KONE_F - pt) + rotation.Roll * pt;
+	renderRotation.Pitch = lastRotation.Pitch * (constants.KONE_F - pt) + rotation.Pitch * pt;
+	renderRotation.Yaw = lastRotation.Yaw * (constants.KONE_F - pt) + rotation.Yaw * pt;
+	/*if(rotation.Yaw == lastRotation.Yaw)
+	{
+		renderRotation.Yaw = constants.KZERO_F;
+	}*/
+}
+
+void TlocPlayer::updateTimeMove(float rendTime)
+{
+	moveTime += rendTime;
 }
 

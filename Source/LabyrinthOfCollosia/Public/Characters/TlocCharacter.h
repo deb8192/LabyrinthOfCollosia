@@ -34,7 +34,7 @@ public:
 	virtual void Move() = 0;									//Function to move the character
 	virtual void Defend() = 0;									//Function to activate or desactivate defense state
 	virtual void AddWeapon(TlocWeapon &wpn) = 0;								//Function to add weapons to weapons vector
-
+	
 	// Getters & Setters
 	virtual int GetID() = 0;
 	virtual int GetLevel() = 0;
@@ -59,7 +59,7 @@ public:
 	virtual UStaticMeshComponent* GetMesh() = 0;
 	virtual FVector GetPosition() = 0;
 	virtual FRotator GetRotation() = 0;
-	virtual std::vector<std::vector<TlocIngredients*>> GetIngredients() = 0;
+	virtual std::vector<TlocIngredients*> GetIngredients() = 0;
 	virtual std::vector<TlocSpell*> GetSpells() = 0;
 	virtual std::vector<TlocSpell* > GetMemorizedSpells() = 0;
 	virtual std::vector<std::vector<TlocItem*>> GetItems() = 0;
@@ -94,7 +94,7 @@ public:
 	virtual void SetMesh(const TCHAR* fileRoot, int mesh) = 0;
 	virtual void SetPosition(FVector newPosition) = 0;
 	virtual void SetRotation(FRotator newRotation) = 0;
-	virtual void SetIngredients(std::vector<std::vector<TlocIngredients*>> &_ing) = 0;
+	virtual void SetIngredients(std::vector<TlocIngredients*> &_ing) = 0;
 	virtual void SetSpells(std::vector<TlocSpell*> &_splls) = 0;
 	virtual void SetMemorizedSpells(std::vector<TlocSpell*> &_memSplls) = 0;
 	virtual void SetItems(std::vector<std::vector<TlocItem*>> &_itms) = 0;
@@ -105,6 +105,13 @@ public:
 	virtual void SetBuffAilmentsTime(std::queue<float> &_bffsAilTime) = 0;
 
 protected:
+
+	// Functions
+	virtual void moveEntity(float updTime) = 0;
+	virtual void rotateEntity(float updTime) = 0;
+	virtual void updateTimeMove(float rendTime) = 0;
+
+
 	// Variables
 	int ID;											//Character's ID
 	int level;										//Character's level
@@ -126,7 +133,7 @@ protected:
 	//int credits;									//Character's Onmitopia money
 	bool invulnerable;
 	float invulnerableTime;
-	std::vector<std::vector<TlocIngredients*>> _ingredients;		//Character's ingredient list
+	std::vector<TlocIngredients*> _ingredients;		//Character's ingredient list
 	std::vector<TlocSpell*> _learnedSpells;			//Character's learned spell list
 	std::vector<TlocSpell*> _memorizedSpells;		//Character's memorized spell list from the learned spell list
 	std::vector<std::vector<TlocItem*>> _items;		//Character's menu items
@@ -137,8 +144,9 @@ protected:
 	std::queue<float> buffsAilmentsTime;			//Character's active buffs or ailments' time
 
 	TCHAR* _name;
-	FVector position;
-	FRotator rotation;
+	FVector position, lastPosition, renderPosition;
+	FRotator rotation, lastRotation, renderRotation;
+	float speed, moveTime, rotateTime;
 
 	//Facade variables
 	ATlocMotorFacade* _motor;

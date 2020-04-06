@@ -4,6 +4,7 @@
 
 #include "Components/StaticMeshComponent.h"
 #include "Engine/Scene.h"
+#include "Camera/PlayerCameraManager.h"
 #include "CoreMinimal.h"
 #include "Object.h"
 #include "GameFramework/Character.h"
@@ -33,10 +34,19 @@ public:
 	//fin singleton public
 
 	//Functions
-	UStaticMeshComponent* SetMesh(const TCHAR* _name, const TCHAR* _directory, USceneComponent* rootComponent, UObject *obj);
-	void RegisterMeshComponent(UStaticMeshComponent* _mesh);
 
+	//Function that moves the player camera to the target enemy
+	void SetViewTarget(AActor& target, float blendTime, EViewTargetBlendFunction blendFunc, float blendExp, bool blockOutgoing);
+	//Function that sets a mesh to an object
+	UStaticMeshComponent* SetMesh(const TCHAR* _name, const TCHAR* _directory, USceneComponent* rootComponent, UObject *obj);
+	//Function that sets an object mesh into the world
+	void RegisterMeshComponent(UStaticMeshComponent* _mesh);
+	//Function that removes an object mesh from the world
 	void DestroyMeshComponent(UStaticMeshComponent* _mesh);
+
+	void SetMeshPosition(AActor& actor, FVector &position);
+	void SetMeshRotation(AActor& actor, FRotator &rotation);
+
 
 	void BeginPlay();
 

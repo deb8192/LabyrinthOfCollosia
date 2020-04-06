@@ -24,6 +24,8 @@ public:
 	void NativeTick(const FGeometry& geometry, float deltaTime) override;
 
 	void RotateMenu(bool right);
+	void SetSpellsIcons(int numSpell, TCHAR* filePath);
+	int* GetSelectedObject();
 
 private:
 	//class ATlocGameMode* gameMode;
@@ -32,6 +34,10 @@ private:
 		UMenuAnchor* ingameMenuAnchor;
 
 	//----     Objects Menu    ----//
+	//Selector
+	UPROPERTY(meta = (BindWidget))
+		UImage* menuSelector;
+
 	//Butons
 	UPROPERTY(meta = (BindWidget))
 		UButton* petal_btn;

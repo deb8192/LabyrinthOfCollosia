@@ -20,6 +20,10 @@ public:
 	//ATlocHumanPlayer(int idChrctr, int lvl, int lif, int att, int def, int magdef, int exp, int nxtlvl, int crit, int critProb, int lck, int eva);
 	~ATlocHumanPlayer();
 
+	void Update();
+	void Render(float rendTime);
+	void InitLocationRotation();
+
 	//Setters & Getters
 
 	void SetWeapon(TlocWeapon* _wpn);
@@ -88,10 +92,18 @@ private:
 	void loadInGameUI();
 	void closeInGameUI();
 	void checkMenu();
+	int* getMemorizedSpellsID();
 
 	//Functions to use menu
+	void beginRotateMenuLeft();
+	void beginRotateMenuRight();
+	void stopRotateMenuLeft();
+	void stopRotateMenuRight();
 	void rotateMenuLeft();
 	void rotateMenuRight();
+	void moveMenuUp();
+	void moveMenuDown();
+	void useMenuElement();
 
 	//Functions to load Player's HUD and use it
 	void loadHud();
@@ -101,8 +113,11 @@ private:
 	//Functions to eject player's actions
 	void attack();
 	void takeObj();
+	void selectSpell(int selection);
+	void selectItem(int selection);
 	void pickupObject();
 	ATlocObject* checkChest();
+	bool checkSpellIngredients(TlocSpell& _spll);
 
 	//Variables
 	using Equipment = struct equipmentStructure
@@ -115,7 +130,11 @@ private:
 	Equipment playerEquipment;						//Character's set of armor, gauntlet and weapon
 	AActor* _enemy;									//Character's objective
 	AActor* _object;								//Character's picking object
+	TlocSpell* _attackingSpell;
+	std::vector<TlocIngredients*> _attackingSpellIngredients;
 	bool pickingUp;
+	bool ticking;
+	bool rotate;
 
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* _playerCamera; 

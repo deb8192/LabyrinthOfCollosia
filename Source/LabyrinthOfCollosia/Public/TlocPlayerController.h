@@ -13,5 +13,21 @@ UCLASS()
 class LABYRINTHOFCOLLOSIA_API ATlocPlayerController : public APlayerController
 {
 	GENERATED_BODY()
+
+public:
+	ATlocPlayerController();
+	~ATlocPlayerController();
+
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+	// Called each 1/15 seconds
+	void Update(float DeltaTime);
+	void Render(float DeltaTime);
+
+protected:
+
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
 	
 };

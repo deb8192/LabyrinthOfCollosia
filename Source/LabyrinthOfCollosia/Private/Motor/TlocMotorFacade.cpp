@@ -2,6 +2,7 @@
 
 
 #include "TlocMotorFacade.h"
+#include "Kismet/GameplayStatics.h"
 #include "Engine/World.h"
 
 
@@ -19,6 +20,12 @@ ATlocMotorFacade::ATlocMotorFacade()
 
 ATlocMotorFacade::~ATlocMotorFacade()
 {
+}
+
+void ATlocMotorFacade::SetViewTarget(AActor &target, float blendTime, EViewTargetBlendFunction blendFunc, float blendExp, bool blockOutgoing)
+{
+	APlayerController* _pController = UGameplayStatics::GetPlayerController(this, 0);
+	_pController->SetViewTargetWithBlend(&target, blendTime, blendFunc, blendExp, blockOutgoing);
 }
 
 UStaticMeshComponent* ATlocMotorFacade::SetMesh(const TCHAR* _name, const TCHAR* _directory, USceneComponent* rootComponent, UObject* obj)
@@ -44,6 +51,16 @@ void ATlocMotorFacade::RegisterMeshComponent(UStaticMeshComponent* _mesh)
 void ATlocMotorFacade::DestroyMeshComponent(UStaticMeshComponent* _mesh)
 {
 	_mesh->DestroyComponent();
+}
+
+void ATlocMotorFacade::SetMeshPosition(AActor& actor, FVector& position)
+{
+	actor.SetActorLocation(position);
+}
+
+void ATlocMotorFacade::SetMeshRotation(AActor& actor, FRotator& rotation)
+{
+	actor.SetActorRotation(rotation);
 }
 
 // Called when the game starts or when spawned

@@ -44,6 +44,8 @@ using GlobalConstants = struct Constants
 	/*** Default values ***/
 
 	const int KLEVEL_NUM = 6;
+	const float KRENDER_TIME = 1.0f / 60.0f;
+	const float KUPDATE_TIME = 1.0f / 15.0f;
 	const float KINVULNERABLE_TIME = 1.5;
 	const int KBASICDAMAGE = 2;
 	const int KMAX_NUM_DIRECTORIES = 4;
@@ -66,7 +68,8 @@ using GlobalConstants = struct Constants
 	//	-Menu directories
 
 	const char* KDIR_ITEMS = "/Game/Sprites/Items/";
-	const char* KDIR_ITEMS_128 = "Icons-128/";
+	const char* KDIR_SPELLS = "/Game/Sprites/Spells/";
+	const char* KDIR_ICONS_128 = "Icons-128/";
 	const char* KNAME_PETAL_128 = "Petal-128px.Petal-128px";
 	const char* KNAME_PETAL = "Petal";
 	const char* KNAME_NECTAR_128 = "Nectar-128px.Nectar-128px";
@@ -85,6 +88,10 @@ using GlobalConstants = struct Constants
 	const char* KNAME_POUCH = "Pouch";
 	const char* KNAME_WINGS_128 = "Wings-128px.Wings-128px";
 	const char* KNAME_WINGS = "Wings";
+	const char* KNAME_HEAL_128 = "Heal-128px.Heal-128px";
+	const char* KNAME_HEAL = "Heal";
+	const char* KNAME_FLASH_128 = "Flash-128px.Flash-128px";
+	const char* KNAME_FLASH = "Flash";
 
 	//	-HUD directories
 

@@ -5,27 +5,35 @@
 
 TlocIngredients::TlocIngredients()
 {
-	ID = 0;
+	ingredientID = 0;
 	_ingName = nullptr;
 	quantity = 0;
 }
 
 TlocIngredients::TlocIngredients(int id, const TCHAR* _nm, int qnty)
 {
-	ID = id;
+	ingredientID = id;
 	_ingName = (TCHAR*) _nm;
 	quantity = qnty;
 }
 
 TlocIngredients::~TlocIngredients()
 {
-	ID = 0;
+	ingredientID = 0;
 	_ingName = nullptr;
 	quantity = 0;
 }
-int TlocIngredients::GetID()
+void TlocIngredients::AddQuantity(int qnty)
 {
-	return ID;
+	quantity += qnty;
+}
+void TlocIngredients::DescendQuantity(int qnty)
+{
+	quantity -= qnty;
+}
+int TlocIngredients::GetIngredientID()
+{
+	return ingredientID;
 }
 
 TCHAR* TlocIngredients::GetName()
@@ -38,9 +46,9 @@ int TlocIngredients::GetQuantity()
 	return quantity;
 }
 
-void TlocIngredients::SetID(int id)
+void TlocIngredients::SetIngredientID(int id)
 {
-	ID = id;
+	ingredientID = id;
 }
 
 void TlocIngredients::SetName(const TCHAR* _nm)

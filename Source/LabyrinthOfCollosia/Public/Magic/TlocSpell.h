@@ -15,14 +15,16 @@ public:
 
 	//Methods
 	TlocSpell();
-	TlocSpell(int idSpll, const TCHAR* nm, const TCHAR* desc, float pwr, bool act, std::vector<TlocIngredients*> ingrdnts);
+	TlocSpell(int idSpll, const TCHAR* nm, const TCHAR* desc, const TCHAR* icon, float pwr, bool act, std::vector<TlocIngredients*> ingrdnts);
 	~TlocSpell();
 	void IncNumUses();
 
 	//Getters && setters
 	int GetId();
+	int GetMenuId();
 	TCHAR* GetName();
 	TCHAR* GetDescription();
+	TCHAR* GetIconFilePath();
 	int GetLevel();
 	int GetNumUses();
 	int GetNextLevel();
@@ -31,8 +33,10 @@ public:
 	bool GetActive();
 
 	void SetId(int id);
+	void SetMenuId(int menId);
 	void SetName(const TCHAR* nm);
 	void SetDescription(const TCHAR* desc);
+	void SetIconFilePath(const TCHAR* icon);
 	void SetLevel(int lvl);
 	void SetNumUses(int uses);
 	void SetBasicPower(float pwr);
@@ -50,8 +54,10 @@ private:
 
 	//Variables
 	int ID;
+	int menuID;
 	TCHAR *_spellName;
 	TCHAR *_description;
+	TCHAR* _iconFilePath;
 	int level;
 	int numUses;
 	float basicPower;

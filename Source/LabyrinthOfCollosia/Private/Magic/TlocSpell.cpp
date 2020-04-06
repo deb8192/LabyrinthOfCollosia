@@ -8,7 +8,8 @@ TlocSpell::TlocSpell()
 {
 	GlobalConstants constants;
 	ID = -1;
-	_spellName = _description = nullptr;
+	menuID = -1;
+	_spellName = _description = _iconFilePath = nullptr;
 	level = 1; 
 	numUses = 0;
 	basicPower = 0;
@@ -16,12 +17,13 @@ TlocSpell::TlocSpell()
 	active = false;
 }
 
-TlocSpell::TlocSpell(int idSpll, const TCHAR* nm, const TCHAR* desc, float pwr, bool act, std::vector<TlocIngredients*> ingrdnts)
+TlocSpell::TlocSpell(int idSpll, const TCHAR* nm, const TCHAR* desc, const TCHAR* icon, float pwr, bool act, std::vector<TlocIngredients*> ingrdnts)
 {
 	TlocSpell();
 	ID = idSpll;
 	_spellName = (TCHAR*) nm;
-	_description = (TCHAR*)desc;
+	_description = (TCHAR*) desc;
+	_iconFilePath = (TCHAR*) icon;
 	basicPower = pwr;
 	active = act;
 	ingredients = ingrdnts;
@@ -31,9 +33,10 @@ TlocSpell::~TlocSpell()
 {
 	int size = ingredients.size();
 	ID = 0;
+	menuID = 0;
 	basicPower = 0;
 	level = 0;
-	_spellName = _description = nullptr;
+	_spellName = _description = _iconFilePath = nullptr;
 	numUses = 0;
 	active = false;
 
@@ -108,6 +111,11 @@ int TlocSpell::GetId()
 	return ID;
 }
 
+int TlocSpell::GetMenuId()
+{
+	return menuID;
+}
+
 TCHAR* TlocSpell::GetName()
 {
 	return _spellName;
@@ -116,6 +124,11 @@ TCHAR* TlocSpell::GetName()
 TCHAR* TlocSpell::GetDescription()
 {
 	return _description;
+}
+
+TCHAR* TlocSpell::GetIconFilePath()
+{
+	return _iconFilePath;
 }
 
 int TlocSpell::GetLevel()
@@ -158,6 +171,11 @@ void TlocSpell::SetId(int id)
 	ID = id;
 }
 
+void TlocSpell::SetMenuId(int menId)
+{
+	menuID = menId;
+}
+
 void TlocSpell::SetName(const TCHAR* nm)
 {
 	_spellName = (TCHAR*) nm;
@@ -166,6 +184,11 @@ void TlocSpell::SetName(const TCHAR* nm)
 void TlocSpell::SetDescription(const TCHAR* desc)
 {
 	_description = (TCHAR*) desc;
+}
+
+void TlocSpell::SetIconFilePath(const TCHAR* icon)
+{
+	_iconFilePath = (TCHAR*) icon;
 }
 
 void TlocSpell::SetLevel(int lvl)
