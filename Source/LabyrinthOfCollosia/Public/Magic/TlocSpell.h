@@ -43,6 +43,15 @@ public:
 	void SetIngredients(std::vector <TlocIngredients*> &ing);
 	void SetActive(bool act);
 
+	//---- Spell's target ----//	
+
+	enum Target : int
+	{
+		ENEMY = 0,
+		PLAYER,
+		STAGE
+	};
+
 private:
 
 	//Functions
@@ -60,7 +69,9 @@ private:
 	TCHAR* _iconFilePath;
 	int level;
 	int numUses;
+	int target;
 	float basicPower;
 	bool active;
 	std::vector<TlocIngredients*> ingredients;
+
 };

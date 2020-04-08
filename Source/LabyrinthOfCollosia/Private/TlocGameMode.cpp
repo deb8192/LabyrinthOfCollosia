@@ -197,12 +197,12 @@ void ATlocGameMode::Update(float deltaTime)
 		_world->SetCurrentLevel(_levels[1]);
 		changingLevel = false;
 	}*/
+
+	//Checks for enemies to kill them
 	if (!_levelEnemies.empty())
 	{
-
 		for (int i = 0; i < _levelEnemies.size(); i++)
 		{
-
 			if (_levelEnemies[i] != NULL)
 			{
 				_levelEnemies[i]->AddActorWorldOffset(FVector(0.0f, 0.0f, 0.0f), true);

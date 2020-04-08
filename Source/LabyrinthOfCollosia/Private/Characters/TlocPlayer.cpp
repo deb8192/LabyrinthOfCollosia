@@ -36,6 +36,8 @@ TlocPlayer::TlocPlayer()
 	speed = 400.0f;
 	
 	jewels = 0;
+	_attackingSpell = nullptr;
+	_attackingSpellIngredients.reserve(3);
 
 	experience = 0;
 	nextLevel = 200;
@@ -622,6 +624,19 @@ void TlocPlayer::SetExperience(int exp)
 void TlocPlayer::SetPlayer(int plyr)
 {
 	player = plyr;
+}
+
+void TlocPlayer::SetMode(int mod)
+{
+	switch (mod)
+	{
+		case 1:
+			mode = PlayingMode::TARGET_SELECTION;
+			break;
+
+		default:
+			mode = PlayingMode::NORMAL;
+	}
 }
 
 void TlocPlayer::moveEntity(float updTime)

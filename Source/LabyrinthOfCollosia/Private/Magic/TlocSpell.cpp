@@ -13,6 +13,7 @@ TlocSpell::TlocSpell()
 	level = 1; 
 	numUses = 0;
 	basicPower = 0;
+	target = Target::ENEMY;
 	ingredients.reserve(constants.KTHREE);
 	active = false;
 }
@@ -39,6 +40,7 @@ TlocSpell::~TlocSpell()
 	_spellName = _description = _iconFilePath = nullptr;
 	numUses = 0;
 	active = false;
+	target = Target::ENEMY;
 
 	while (size > 0)
 	{

@@ -39,7 +39,7 @@ ATlocHumanPlayer::ATlocHumanPlayer() : TlocPlayer()
 
 	//POSITION
 	position = lastPosition = renderPosition = FVector(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z));
-	rotation = lastRotation = renderRotation = FRotator(GetActorRotation().Pitch, GetActorRotation().Yaw, GetActorRotation().Roll);
+	rotation = lastRotation = renderRotation = defaultRotation = FRotator(GetActorRotation().Pitch, GetActorRotation().Yaw, GetActorRotation().Roll);
 	
 	//CAMERA
 
@@ -148,25 +148,22 @@ void ATlocHumanPlayer::Update()
 void ATlocHumanPlayer::Render(float rendTime)
 {
 	GlobalConstants constants;
-	moveEntity(rendTime);
-	rotateEntity(rendTime);
+	moveEntity(constants.KUPDATE_TIME);
+	rotateEntity(constants.KUPDATE_TIME);
 	updateTimeMove(rendTime);
 
 	//if(renderPosition.X)
-	AddMovementInput(GetActorRightVector(), renderPosition.X);
-	AddMovementInput(GetActorForwardVector(), renderPosition.Y);
-	//AddControllerYawInput(renderRotation.Yaw);
-	//AddMovementInput(
-	//_motor->SetMeshPosition(*this, renderPosition);
-	//if(renderRotation.Yaw != constants.KZERO_F)
-		_motor->SetMeshRotation(*this, renderRotation);
+	//AddMovementInput(GetActorRightVector(), renderPosition.X);
+	//AddMovementInput(GetActorForwardVector(), renderPosition.Y);
+	_motor->MoveActor(*this, renderPosition);
+	_motor->SetMeshRotation(*this, renderRotation);
 }
 
 void ATlocHumanPlayer::InitLocationRotation()
 {
 
-	position = lastPosition = renderPosition = FVector(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z));
-	rotation = lastRotation = renderRotation = FRotator(GetActorRotation().Pitch, GetActorRotation().Yaw, GetActorRotation().Roll);
+	position = lastPosition = renderPosition = FVector(GetActorLocation());
+	rotation = lastRotation = renderRotation = FRotator(GetActorRotation());
 
 }
 
@@ -209,6 +206,8 @@ void ATlocHumanPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAction("RotLeftMenu", IE_Released, this, &ATlocHumanPlayer::stopRotateMenuLeft);
 	PlayerInputComponent->BindAction("RotRightMenu", IE_Pressed, this, &ATlocHumanPlayer::beginRotateMenuRight);
 	PlayerInputComponent->BindAction("RotRightMenu", IE_Released, this, &ATlocHumanPlayer::stopRotateMenuRight);
+	PlayerInputComponent->BindAction("UpIngameMenu", IE_Pressed, this, &ATlocHumanPlayer::moveMenuUp);
+	PlayerInputComponent->BindAction("DownIngameMenu", IE_Pressed, this, &ATlocHumanPlayer::moveMenuDown);
 	PlayerInputComponent->BindAction("Use", IE_Pressed, this, &ATlocHumanPlayer::useMenuElement);
 
 	//Player actions
@@ -272,41 +271,43 @@ ATlocHumanPlayer::Equipment ATlocHumanPlayer::GetPlayerEquipment()
 
 void ATlocHumanPlayer::moveVertically(float value)
 {
-	moveTime = 0.0;
-	GlobalConstants constants;
-	lastPosition.Y = position.Y;
-	position.Y += value * speed * constants.KUPDATE_TIME;
-	if (lastPosition.Y == position.Y)
+	if (mode == PlayingMode::NORMAL)
 	{
-		position.Y = lastPosition.Y = constants.KZERO_F;
+		moveTime = 0.0;
+		GlobalConstants constants;
+		lastPosition.Y = position.Y;
+		position.Y += value * speed * constants.KUPDATE_TIME;
+		if (lastPosition.Y == position.Y)
+		{
+			position.Y = lastPosition.Y = constants.KZERO_F;
+		}
 	}
-	//AddMovementInput(GetActorForwardVector(), value*speed * GetWorld()->GetDeltaSeconds());
 }
 
 void ATlocHumanPlayer::moveHorizontally(float value)
 {
-	moveTime = 0.0;
-	GlobalConstants constants;
-	lastPosition.X = position.X;
-	position.X += value * speed * constants.KUPDATE_TIME;
-	if (lastPosition.X == position.X)
+	if (mode == PlayingMode::NORMAL)
 	{
-		position.X = lastPosition.X = constants.KZERO_F;
+		moveTime = 0.0;
+		GlobalConstants constants;
+		lastPosition.X = position.X;
+		position.X += value * speed * constants.KUPDATE_TIME;
+		if (lastPosition.X == position.X)
+		{
+			position.X = lastPosition.X = constants.KZERO_F;
+		}
 	}
-	//AddMovementInput(GetActorRightVector(), value * speed * GetWorld()->GetDeltaSeconds());
 }
 
 void ATlocHumanPlayer::rotateHorizontally(float value)
 {
-	moveTime = 0.0;
-	GlobalConstants constants;
-	lastRotation.Yaw = rotation.Yaw;
-	rotation.Yaw += value * constants.KROTATIONSPEED * constants.KUPDATE_TIME;
-	/*if (lastRotation.Yaw == rotation.Yaw)
+	if (mode == PlayingMode::NORMAL)
 	{
-		lastRotation.Yaw = rotation.Yaw = constants.KZERO_F;
-	}*/
-	//AddControllerYawInput(value * constants.KROTATIONSPEED * GetWorld()->GetDeltaSeconds());
+		moveTime = 0.0;
+		GlobalConstants constants;
+		lastRotation.Yaw = rotation.Yaw;
+		rotation.Yaw += value * constants.KROTATIONSPEED * constants.KUPDATE_TIME;
+	}
 }
 
 void ATlocHumanPlayer::loadInGameUI()
@@ -404,15 +405,17 @@ void ATlocHumanPlayer::rotateMenuRight()
 
 void ATlocHumanPlayer::moveMenuUp()
 {
+	IngameMenu->MoveMenuDown();
 }
 
 void ATlocHumanPlayer::moveMenuDown()
 {
+	IngameMenu->MoveMenuUp();
 }
 
 void ATlocHumanPlayer::useMenuElement()
 {
-	int* options = new int[5];
+	int* options = new int[2];
 	if (openMenu)
 	{
 		options = IngameMenu->GetSelectedObject();
@@ -491,9 +494,19 @@ void ATlocHumanPlayer::takeObj()
 	}
 }
 
+/*******************************   Select Spell  ********************************
+****  Function that checks if the player has the spell's identified by the   ****
+**** ID in selection. If true, calls checkSpellIngredients passing the spell ****
+*********************************************************************************
+*				In:		int selection() (spell's ID)
+*
+*				Out:
+*
+*/
 void ATlocHumanPlayer::selectSpell(int selection)
 {
 	GlobalConstants constants;
+	bool prepared = false;
 	if (selection >= constants.KZERO && selection < _memorizedSpells.size())
 	{
 		int i = 0;
@@ -502,9 +515,39 @@ void ATlocHumanPlayer::selectSpell(int selection)
 		{
 			if (_memorizedSpells[i]->GetMenuId() == selection)
 			{
-				checkSpellIngredients(*_memorizedSpells[i]);
+				//This function prepares the spell if player has the ingredients
+				prepared = checkSpellIngredients(*_memorizedSpells[i]);
+				found = true; 
+				i = _memorizedSpells.size();
+			}
+			else
+			{
+				i++;
 			}
 		}
+	}
+	if (prepared)
+	{
+		SetMode(PlayingMode::TARGET_SELECTION);
+	}
+}
+
+/**************************************   Unselect Spell  *************************************
+****  Function that unsets the prepared spell and changes TARGET_SELECTIONS mode to NORMAL ****
+***********************************************************************************************
+*				In:		
+*
+*				Out:
+*
+*/
+void ATlocHumanPlayer::unselectSpell()
+{
+	GlobalConstants constants;
+	SetMode(PlayingMode::NORMAL);
+	_attackingSpell = nullptr;
+	for (int i = 0; i < _attackingSpellIngredients.size(); i++)
+	{
+		_attackingSpellIngredients[i] = nullptr;
 	}
 }
 
@@ -637,6 +680,15 @@ ATlocObject* ATlocHumanPlayer::checkChest()
 	}
 }
 
+/*************************  Check Spell Ingredients  *************************
+*** Function than checks if the player has the needed ingredients to cast ****
+***  the spell. If true, prepare the spell to cast it against the target  ****
+******************************************************************************
+*				In:		TlocSpell &_spell (selected spell to check and prepare)
+*
+*				Out:	bool found (answer for the spell check)
+*/
+
 bool ATlocHumanPlayer::checkSpellIngredients(TlocSpell &_spll)
 {
 	GlobalConstants constants;
@@ -655,9 +707,10 @@ bool ATlocHumanPlayer::checkSpellIngredients(TlocSpell &_spll)
 		//Bucle to looking for the selected spell's ingredient in _ingredients vector
 		while (j < _ingredients.size() && found)
 		{
+			//If player has the ingredient
 			if (_ingredients[j]->GetIngredientID() == spellIng[i]->GetIngredientID())
 			{
-				//If there are enought ingredients, we finish j bucle, get quantity and selected ingredient and continue bucle i
+				//and if there are enought ingredients, we finish j bucle, get quantity and selected ingredient and continue bucle i
 				if (spellIng[i]->GetQuantity() <= _ingredients[j]->GetQuantity())
 				{
 					_selectedIngredients.push_back(j);
@@ -667,7 +720,15 @@ bool ATlocHumanPlayer::checkSpellIngredients(TlocSpell &_spll)
 				//If there are not enought ingredients, we finish both bucles and return without make the spell
 				else found = false;
 			}
+			//If the ID ingredients does not coincide, the ingredient's bucle continues
 			else j++;
+
+			//If bucle arrives here means that player doesn't have the researched ingredient, so he can't cast the spell
+			//and the bucle is finished in false and without any spell prepared
+			if (j == _ingredients.size())
+			{
+				found = false;
+			}
 		}
 		i++;
 	}
@@ -675,7 +736,7 @@ bool ATlocHumanPlayer::checkSpellIngredients(TlocSpell &_spll)
 	{
 		//We prepare the spell for attack and change mode to select target
 		_attackingSpell = &_spll;
-		for (int i = 0; i < _selectedIngredients.size(); i++)
+		for (i = 0; i < _selectedIngredients.size(); i++)
 		{
 			_attackingSpellIngredients[i] = _ingredients[_selectedIngredients[i]];
 		}

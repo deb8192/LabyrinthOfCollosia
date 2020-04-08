@@ -119,6 +119,13 @@ public:
 	void SetNextLevel(int nLevel);
 	void SetExperience(int exp);
 	void SetPlayer(int plyr);
+	void SetMode(int mod);
+
+	enum PlayingMode : int
+	{
+		NORMAL = 0,
+		TARGET_SELECTION
+	};
 	
 protected:
 
@@ -131,6 +138,6 @@ protected:
 	int nextLevel;				//Necessary experience to reach next level
 	int experience;				//Player experience
 	int player;					//Int that identifies if player is boy, girls or dog
-
+	int mode;
 
 };

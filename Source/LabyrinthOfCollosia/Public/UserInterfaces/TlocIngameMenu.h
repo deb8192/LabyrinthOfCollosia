@@ -8,6 +8,7 @@
 #include "Components/MenuAnchor.h"
 #include "Components/Button.h"
 #include "Components/CanvasPanelSlot.h"
+#include "Components/CanvasPanel.h"
 //#include "TlocGameMode.h"
 #include "TlocIngameMenu.generated.h"
 
@@ -24,8 +25,22 @@ public:
 	void NativeTick(const FGeometry& geometry, float deltaTime) override;
 
 	void RotateMenu(bool right);
+	void MoveMenuUp();
+	void MoveMenuDown();
+
 	void SetSpellsIcons(int numSpell, TCHAR* filePath);
 	int* GetSelectedObject();
+
+	//---- Motion menu variables ----//	
+
+	enum Menu : int
+	{
+		ITEMS = 0,
+		SPELLS,
+		ARMORS,
+		GAUNTLETS,
+		WEAPONS
+	};
 
 private:
 	//class ATlocGameMode* gameMode;
@@ -33,10 +48,16 @@ private:
 	UPROPERTY(meta = (BindWidget))
 		UMenuAnchor* ingameMenuAnchor;
 
-	//----     Objects Menu    ----//
+	//----		Menu		----//
+
 	//Selector
 	UPROPERTY(meta = (BindWidget))
 		UImage* menuSelector;
+
+	//----     Item Menu    ----//
+
+	UPROPERTY(meta = (BindWidget))
+		UCanvasPanel* ItemCanvas;
 
 	//Butons
 	UPROPERTY(meta = (BindWidget))
@@ -95,7 +116,10 @@ private:
 		UImage* pouch;
 	
 
-	//----     Objects Menu    ----//
+	//----     Spell Menu    ----//
+
+	UPROPERTY(meta = (BindWidget))
+		UCanvasPanel* SpellCanvas;
 
 	//Butons
 	UPROPERTY(meta = (BindWidget))
@@ -153,25 +177,151 @@ private:
 	UPROPERTY(meta = (BindWidget))
 		UImage* Spell_8;
 
-	//---- Motion menu variables ----//	
+	//----     Armor Menu    ----//
 
-	enum Menu : int
-	{
-		ITEMS = 0,
-		WEAPONS,
-		ARMORS,
-		GAUNTLETS,
-		SPELLS
-	};
+	UPROPERTY(meta = (BindWidget))
+		UCanvasPanel* ArmorCanvas;
 
-	int selMenu;
+	//----     Gauntlet Menu    ----//
+
+	UPROPERTY(meta = (BindWidget))
+		UCanvasPanel* GauntletCanvas;
+
+	//----     Weapon Menu    ----//
+
+	UPROPERTY(meta = (BindWidget))
+		UCanvasPanel* WeaponCanvas;
+
+	//Butons
+	UPROPERTY(meta = (BindWidget))
+		UButton* Femur_btn;
+
+	UPROPERTY(meta = (BindWidget))
+		UButton* Axe_btn;
+
+	UPROPERTY(meta = (BindWidget))
+		UButton* Spear_btn;
+
+	UPROPERTY(meta = (BindWidget))
+		UButton* SpartanSword_btn;
+
+	UPROPERTY(meta = (BindWidget))
+		UButton* SpartanAxe_btn;
+
+	UPROPERTY(meta = (BindWidget))
+		UButton* SpartanSpear_btn;
+
+	UPROPERTY(meta = (BindWidget))
+		UButton* Falcata_btn;
+
+	UPROPERTY(meta = (BindWidget))
+		UButton* IberianAxe_btn;
+
+	UPROPERTY(meta = (BindWidget))
+		UButton* ViriatusSpear_btn;
+
+	UPROPERTY(meta = (BindWidget))
+		UButton* RaSword_btn;
+
+	UPROPERTY(meta = (BindWidget))
+		UButton* CeremonialAxe_btn;
+
+	UPROPERTY(meta = (BindWidget))
+		UButton* HorusSpear_btn;
+
+	UPROPERTY(meta = (BindWidget))
+		UButton* VikingSword_btn;
+
+	UPROPERTY(meta = (BindWidget))
+		UButton* VikingAxe_btn;
+
+	UPROPERTY(meta = (BindWidget))
+		UButton* VikingSpear_btn;
+
+	UPROPERTY(meta = (BindWidget))
+		UButton* Gladius_btn;
+
+	UPROPERTY(meta = (BindWidget))
+		UButton* RomanAxe_btn;
+
+	UPROPERTY(meta = (BindWidget))
+		UButton* Pillum_btn;
+
+	//Butons' images
+	UPROPERTY(meta = (BindWidget))
+		UImage* Femur;
+
+	UPROPERTY(meta = (BindWidget))
+		UImage* Axe;
+
+	UPROPERTY(meta = (BindWidget))
+		UImage* Spear;
+
+	UPROPERTY(meta = (BindWidget))
+		UImage* SpartanSword;
+
+	UPROPERTY(meta = (BindWidget))
+		UImage* SpartanAxe;
+
+	UPROPERTY(meta = (BindWidget))
+		UImage* SpartanSpear;
+
+	UPROPERTY(meta = (BindWidget))
+		UImage* Falcata;
+
+	UPROPERTY(meta = (BindWidget))
+		UImage* IberianAxe;
+
+	UPROPERTY(meta = (BindWidget))
+		UImage* ViriatusSpear;
+
+	UPROPERTY(meta = (BindWidget))
+		UImage* RaSword;
+
+	UPROPERTY(meta = (BindWidget))
+		UImage* CeremonialAxe;
+
+	UPROPERTY(meta = (BindWidget))
+		UImage* HorusSpear;
+
+	UPROPERTY(meta = (BindWidget))
+		UImage* VikingSword;
+
+	UPROPERTY(meta = (BindWidget))
+		UImage* VikingAxe;
+
+	UPROPERTY(meta = (BindWidget))
+		UImage* VikingSpear;
+
+	UPROPERTY(meta = (BindWidget))
+		UImage* Gladius;
+
+	UPROPERTY(meta = (BindWidget))
+		UImage* RomanAxe;
+
+	UPROPERTY(meta = (BindWidget))
+		UImage* Pillum;
+
+	int selMenu, menuSections;
+	float verticalDistance, totalVerticalDistance;
 	FVector2D center;
-	FVector2D lastCalculatedPosition;
-	float rotAngItemMenu;
+	FVector2D calculatedPosition, lastCalculatedPosition, renderPosition;
+	float rotAngItemSpellMenu, rotAngWeapons;
 
 
 	//Functions
 	void setItemIcons(int iterator);
+	UCanvasPanelSlot* getLowerMenuCanvas();
+	UCanvasPanelSlot* getHigherMenuCanvas();
+	UCanvasPanelSlot* getMenuCanvas(int sel);
+	TArray<UPanelSlot*> getSubSlots();
+	void moveCanvasUp(UCanvasPanelSlot& _slot);
+	void moveCanvasDown(UCanvasPanelSlot& _slot);
+	void moveCanvasToTop();
+	void moveCanvasToBottom();
+	void rotateElements(bool right);
+	void rotateItems(float rotation);
+	void rotateSpells(float rotation);
 	FVector2D calculateRotation(FVector2D position, float rotAngle);
 	void substractTranslation(FVector2D* _transl, UCanvasPanelSlot* _slot);
 };

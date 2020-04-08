@@ -38,12 +38,14 @@ ATlocEnemy::ATlocEnemy()
 	speed = 4.0f;
 
 	jewels = 0;
+	_attackingSpell = nullptr;
+	_attackingSpellIngredients.reserve(3);
 	
 	_motor = ATlocMotorFacade::GetInstance(this);
 
 	position.X = position.Y = position.Z = 0.0;
 	renderPosition.X = renderPosition.Y = renderPosition.Z = 0.0;
-	rotation = renderRotation = FRotator::ZeroRotator;
+	rotation = renderRotation = defaultRotation = FRotator::ZeroRotator;
 
 	_fileRoot = TEXT("/Game/Models/Characters/GuideMonk_Cube_000.GuideMonk_Cube_000");
 	_auxFilePath = TEXT("/Game/Models/Characters/GuideMonk_Cube_001.GuideMonk_Cube_001");

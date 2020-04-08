@@ -53,6 +53,12 @@ void ATlocMotorFacade::DestroyMeshComponent(UStaticMeshComponent* _mesh)
 	_mesh->DestroyComponent();
 }
 
+void ATlocMotorFacade::MoveActor(APawn& actor, FVector& position)
+{
+	actor.AddMovementInput(actor.GetActorRightVector(), position.X);
+	actor.AddMovementInput(actor.GetActorForwardVector(), position.Y);
+}
+
 void ATlocMotorFacade::SetMeshPosition(AActor& actor, FVector& position)
 {
 	actor.SetActorLocation(position);

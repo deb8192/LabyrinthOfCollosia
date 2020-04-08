@@ -51,6 +51,8 @@ using GlobalConstants = struct Constants
 	const int KMAX_NUM_DIRECTORIES = 4;
 	const int KMAX_VARIABLE_DAMAGE = 5;
 	const int KMIN_VARIABLE_DAMAGE = -2;
+	const int KMAX_MENU_SECTIONS = 5;
+	const int KMENU_VERT_DISTANCE = 1140;
 	const char* KEMPTY_STRING = "";
 
 	//	-Directory

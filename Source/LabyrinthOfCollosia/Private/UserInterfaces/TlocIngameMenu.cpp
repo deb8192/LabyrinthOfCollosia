@@ -12,27 +12,26 @@ void UTlocIngameMenu::NativeConstruct()
 	GlobalConstants constants;
 
 	selMenu = Menu::ITEMS;
+	menuSections = constants.KMAX_MENU_SECTIONS;
+	verticalDistance = (float) constants.KMENU_VERT_DISTANCE;
+	totalVerticalDistance = (float)verticalDistance * menuSections;
 	
-	AGameModeBase* mode = GetWorld()->GetAuthGameMode();
-	if (mode != nullptr)
-	{
-		//gameMode = dynamic_cast<ATlocGameMode*>(mode);
-	}
 	for (int i = 0; i < constants.KMAXITEMS; i++)
 	{
 		setItemIcons(i);
 	}
 
-	center = FVector2D(0.0f, 96.0f);
-	lastCalculatedPosition = FVector2D(0.0f, 0.0f);
-	rotAngItemMenu = 40.0f;
-	//petal = LoadObject<UStaticMesh>(NULL, _directory);
+	center = FVector2D(0.0f, 9.0f);
+	lastCalculatedPosition = calculatedPosition = renderPosition = FVector2D(0.0f, 0.0f);
+	rotAngItemSpellMenu = 40.0f;
+	rotAngWeapons = 20.0f;
 }
 
 void UTlocIngameMenu::NativeTick(const FGeometry& geometry, float deltaTime)
 {
 }
 
+// Function that sets the correct sprite as its icon to the item indicated by the iterator
 void UTlocIngameMenu::setItemIcons(int iterator)
 {
 	GlobalConstants constants;
@@ -132,61 +131,83 @@ void UTlocIngameMenu::setItemIcons(int iterator)
 	brush = nullptr;
 }
 
+//Function that calls the elements rotation function having in mind the value of selMenu
 void UTlocIngameMenu::RotateMenu(bool right)
 {
 	GlobalConstants constants;
-	float rotation = rotAngItemMenu;
-	FVector2D translation = FVector2D(0.0f, 0.0f);
-	if (!right)
+	float rotation = rotAngItemSpellMenu;
+	rotateElements(right);
+	/*switch (selMenu)
 	{
-		rotation *= constants.KMINUS_ONE;
-	}
-	//Petal translation
-	UCanvasPanelSlot* _slot = Cast<UCanvasPanelSlot>(petal_btn->Slot);
-	translation = calculateRotation(_slot->GetPosition(), rotation);
-	_slot->SetPosition(translation);
-
-	//Nectar translation
-	_slot = Cast<UCanvasPanelSlot>(nectar_btn->Slot);
-	translation = calculateRotation(_slot->GetPosition(), rotation);
-	_slot->SetPosition(translation);
-
-	//Honey translation
-	_slot = Cast<UCanvasPanelSlot>(honey_btn->Slot);
-	translation = calculateRotation(_slot->GetPosition(), rotation);
-	_slot->SetPosition(translation);
-
-	//Bisquit translation
-	_slot = Cast<UCanvasPanelSlot>(bisquit_btn->Slot);
-	translation = calculateRotation(_slot->GetPosition(), rotation);
-	_slot->SetPosition(translation);
-
-	//Elixir translation
-	_slot = Cast<UCanvasPanelSlot>(elixir_btn->Slot);
-	translation = calculateRotation(_slot->GetPosition(), rotation);
-	_slot->SetPosition(translation);
-
-	//Pixie translation
-	_slot = Cast<UCanvasPanelSlot>(pixie_btn->Slot);
-	translation = calculateRotation(_slot->GetPosition(), rotation);
-	_slot->SetPosition(translation);
-
-	//Bead translation
-	_slot = Cast<UCanvasPanelSlot>(bead_btn->Slot);
-	translation = calculateRotation(_slot->GetPosition(), rotation);
-	_slot->SetPosition(translation);
-
-	//Wings translation
-	_slot = Cast<UCanvasPanelSlot>(wings_btn->Slot);
-	translation = calculateRotation(_slot->GetPosition(), rotation);
-	_slot->SetPosition(translation);
-
-	//Pouch translation
-	_slot = Cast<UCanvasPanelSlot>(pouch_btn->Slot);
-	translation = calculateRotation(_slot->GetPosition(), rotation);
-	_slot->SetPosition(translation);
+	case Menu::SPELLS:
+		rotateSpells(rotation);
+		break;
+	default: rotateItems(rotation);
+		break;
+	}*/
 }
 
+//Function that prepare the menu elements to move them up. The player will move menu up when
+//wanted to explore lower elements
+void UTlocIngameMenu::MoveMenuUp()
+{
+	UCanvasPanelSlot* _slot = nullptr;
+	//It's changed the menu selector selMenu to activate only the movement and actions of one elements menu
+	selMenu++;
+	if (selMenu > Menu::WEAPONS)
+	{
+		selMenu -= menuSections;
+	}
+	for(int i = 0; i < menuSections; i++)
+	{
+		_slot = getMenuCanvas(i);
+		moveCanvasUp(*_slot);
+	}
+	moveCanvasToBottom();
+	/*UCanvasPanelSlot* _slot = Cast<UCanvasPanelSlot>(ItemCanvas->Slot);
+	_slot->SetPosition(FVector2D(_slot->GetPosition().X, _slot->GetPosition().Y + verticalDistance));
+
+	_slot = Cast<UCanvasPanelSlot>(SpellCanvas->Slot);
+	_slot->SetPosition(FVector2D(_slot->GetPosition().X, _slot->GetPosition().Y + verticalDistance));
+
+	_slot = Cast<UCanvasPanelSlot>(WeaponCanvas->Slot);
+	_slot->SetPosition(FVector2D(_slot->GetPosition().X, _slot->GetPosition().Y + verticalDistance));*/
+	
+}
+
+//Function that prepare the menu elements to move them down. The player will move menu down when
+//wanted to explore higher elements
+void UTlocIngameMenu::MoveMenuDown()
+{
+	UCanvasPanelSlot* _slot = nullptr;
+	//It's changed the menu selector selMenu to activate only the movement and actions of one elements menu
+	selMenu--;
+	if (selMenu < Menu::ITEMS)
+	{
+		selMenu += menuSections;
+	}
+	for (int i = 0; i < menuSections; i++)
+	{
+		_slot = getMenuCanvas(i);
+		moveCanvasDown(*_slot);
+	}
+	moveCanvasToTop();
+
+	/*if (selMenu < Menu::WEAPONS)
+	{
+		selMenu++;
+		UCanvasPanelSlot* _slot = Cast<UCanvasPanelSlot>(ItemCanvas->Slot);
+		_slot->SetPosition(FVector2D(_slot->GetPosition().X, _slot->GetPosition().Y - verticalDistance));
+
+		_slot = Cast<UCanvasPanelSlot>(SpellCanvas->Slot);
+		_slot->SetPosition(FVector2D(_slot->GetPosition().X, _slot->GetPosition().Y - verticalDistance));
+
+		_slot = Cast<UCanvasPanelSlot>(WeaponCanvas->Slot);
+		_slot->SetPosition(FVector2D(_slot->GetPosition().X, _slot->GetPosition().Y - verticalDistance));
+	}*/
+}
+
+//Function that sets the spells sprites having in count the filePath route to get the sprite
 void UTlocIngameMenu::SetSpellsIcons(int numSpell, TCHAR* filePath)
 {
 	GlobalConstants constants;
@@ -263,6 +284,7 @@ void UTlocIngameMenu::SetSpellsIcons(int numSpell, TCHAR* filePath)
 	brush = nullptr;
 }
 
+//Function that returns the selected menu and the menu element which is placed at the selectors place to use it
 int* UTlocIngameMenu::GetSelectedObject()
 {
 	GlobalConstants constants; 
@@ -379,6 +401,233 @@ int* UTlocIngameMenu::GetSelectedObject()
 	return nullptr;
 }
 
+UCanvasPanelSlot* UTlocIngameMenu::getLowerMenuCanvas()
+{
+	UCanvasPanelSlot *_slot = nullptr, *_selectedSlot = nullptr;
+	for (int i = 0; i < menuSections; i++)
+	{
+		_slot = getMenuCanvas(i);
+		if (_selectedSlot == nullptr)
+		{
+			_selectedSlot = _slot;
+		}
+		else if (_slot != nullptr && _slot->GetPosition().Y > _selectedSlot->GetPosition().Y)
+		{
+			_selectedSlot = _slot;
+		}
+	}
+	return _selectedSlot;
+}
+
+UCanvasPanelSlot* UTlocIngameMenu::getHigherMenuCanvas()
+{
+	UCanvasPanelSlot* _slot = nullptr, * _selectedSlot = nullptr;
+	for (int i = 0; i < menuSections; i++)
+	{
+		_slot = getMenuCanvas(i);
+		if (_selectedSlot == nullptr)
+		{
+			_selectedSlot = _slot;
+		}
+		else if (_slot != nullptr && _slot->GetPosition().Y < _selectedSlot->GetPosition().Y)
+		{
+			_selectedSlot = _slot;
+		}
+	}
+	return _selectedSlot;;
+}
+
+UCanvasPanelSlot* UTlocIngameMenu::getMenuCanvas(int sel)
+{
+	UCanvasPanelSlot *_slot = nullptr;
+	switch (sel)
+	{
+	case 1:
+		_slot = Cast<UCanvasPanelSlot>(SpellCanvas->Slot);
+		break;
+	case 2:
+		_slot = Cast<UCanvasPanelSlot>(ArmorCanvas->Slot);
+		break;
+	case 3:
+		_slot = Cast<UCanvasPanelSlot>(GauntletCanvas->Slot);
+		break;
+	case 4:
+		_slot = Cast<UCanvasPanelSlot>(WeaponCanvas->Slot);
+		break;
+	default:
+		_slot = Cast<UCanvasPanelSlot>(ItemCanvas->Slot);
+		break;
+	}
+	return _slot;
+}
+
+TArray<UPanelSlot*> UTlocIngameMenu::getSubSlots()
+{
+	switch (selMenu)
+	{
+	case 0:
+		return ItemCanvas->GetSlots();
+	case 1:
+		return SpellCanvas->GetSlots();
+	case 2:
+		return ArmorCanvas->GetSlots();
+	case 3:
+		return GauntletCanvas->GetSlots();
+	case 4:
+		return WeaponCanvas->GetSlots();
+	default:
+		return ItemCanvas->GetSlots();
+	}
+}
+
+//Function that moves menu elements up
+void UTlocIngameMenu::moveCanvasUp(UCanvasPanelSlot& _slot)
+{
+	_slot.SetPosition(FVector2D(_slot.GetPosition().X, _slot.GetPosition().Y - verticalDistance));
+}
+
+//Function that moves menu elements down
+void UTlocIngameMenu::moveCanvasDown(UCanvasPanelSlot& _slot)
+{
+	_slot.SetPosition(FVector2D(_slot.GetPosition().X, _slot.GetPosition().Y + verticalDistance));
+}
+
+//Function that moves the lower element to top
+void UTlocIngameMenu::moveCanvasToTop()
+{
+	UCanvasPanelSlot* _slot = getLowerMenuCanvas();
+	_slot->SetPosition(FVector2D(_slot->GetPosition().X, _slot->GetPosition().Y - totalVerticalDistance));
+}
+
+//Function that moves the higher element to bottom
+void UTlocIngameMenu::moveCanvasToBottom()
+{
+	UCanvasPanelSlot* _slot = getHigherMenuCanvas();
+	_slot->SetPosition(FVector2D(_slot->GetPosition().X, _slot->GetPosition().Y + totalVerticalDistance));
+}
+
+void UTlocIngameMenu::rotateElements(bool right)
+{
+	GlobalConstants constants;
+	FVector2D translation = FVector2D(0.0f, 0.0f);
+	int numElements = getSubSlots().Num();
+
+	//It's obtained the rotation angle by dividing 360º into the selected menu number of elements
+	float rotation = (float)constants.K2PI_RADIAN / (float)numElements;
+	if (right)
+	{
+		rotation *= constants.KMINUS_ONE;
+	}
+
+	for (int i = 0; i < numElements; i++)
+	{
+		UCanvasPanelSlot *_slot = Cast<UCanvasPanelSlot>(getSubSlots()[i]); 
+		translation = calculateRotation(_slot->GetPosition(), rotation);
+		_slot->SetPosition(translation);
+	}
+}
+
+//Function that rotate the items having in mind the rotation angle
+void UTlocIngameMenu::rotateItems(float rotation)
+{
+	FVector2D translation = FVector2D(0.0f, 0.0f);
+	//Petal translation
+	UCanvasPanelSlot* _slot = Cast<UCanvasPanelSlot>(petal_btn->Slot);
+	translation = calculateRotation(_slot->GetPosition(), rotation);
+	_slot->SetPosition(translation);
+
+	//Nectar translation
+	_slot = Cast<UCanvasPanelSlot>(nectar_btn->Slot);
+	translation = calculateRotation(_slot->GetPosition(), rotation);
+	_slot->SetPosition(translation);
+
+	//Honey translation
+	_slot = Cast<UCanvasPanelSlot>(honey_btn->Slot);
+	translation = calculateRotation(_slot->GetPosition(), rotation);
+	_slot->SetPosition(translation);
+
+	//Bisquit translation
+	_slot = Cast<UCanvasPanelSlot>(bisquit_btn->Slot);
+	translation = calculateRotation(_slot->GetPosition(), rotation);
+	_slot->SetPosition(translation);
+
+	//Elixir translation
+	_slot = Cast<UCanvasPanelSlot>(elixir_btn->Slot);
+	translation = calculateRotation(_slot->GetPosition(), rotation);
+	_slot->SetPosition(translation);
+
+	//Pixie translation
+	_slot = Cast<UCanvasPanelSlot>(pixie_btn->Slot);
+	translation = calculateRotation(_slot->GetPosition(), rotation);
+	_slot->SetPosition(translation);
+
+	//Bead translation
+	_slot = Cast<UCanvasPanelSlot>(bead_btn->Slot);
+	translation = calculateRotation(_slot->GetPosition(), rotation);
+	_slot->SetPosition(translation);
+
+	//Wings translation
+	_slot = Cast<UCanvasPanelSlot>(wings_btn->Slot);
+	translation = calculateRotation(_slot->GetPosition(), rotation);
+	_slot->SetPosition(translation);
+
+	//Pouch translation
+	_slot = Cast<UCanvasPanelSlot>(pouch_btn->Slot);
+	translation = calculateRotation(_slot->GetPosition(), rotation);
+	_slot->SetPosition(translation);
+}
+
+//Function that rotate the memorized spells having in mind the rotation angle
+void UTlocIngameMenu::rotateSpells(float rotation)
+{
+	FVector2D translation = FVector2D(0.0f, 0.0f);
+	//Spell_0 translation
+	UCanvasPanelSlot* _slot = Cast<UCanvasPanelSlot>(Spell_0_btn->Slot);
+	translation = calculateRotation(_slot->GetPosition(), rotation);
+	_slot->SetPosition(translation);
+
+	//Spell_1 translation
+	_slot = Cast<UCanvasPanelSlot>(Spell_1_btn->Slot);
+	translation = calculateRotation(_slot->GetPosition(), rotation);
+	_slot->SetPosition(translation);
+
+	//Spell_2 translation
+	_slot = Cast<UCanvasPanelSlot>(Spell_2_btn->Slot);
+	translation = calculateRotation(_slot->GetPosition(), rotation);
+	_slot->SetPosition(translation);
+
+	//Spell_3 translation
+	_slot = Cast<UCanvasPanelSlot>(Spell_3_btn->Slot);
+	translation = calculateRotation(_slot->GetPosition(), rotation);
+	_slot->SetPosition(translation);
+
+	//Spell_4 translation
+	_slot = Cast<UCanvasPanelSlot>(Spell_4_btn->Slot);
+	translation = calculateRotation(_slot->GetPosition(), rotation);
+	_slot->SetPosition(translation);
+
+	//Spell_5 translation
+	_slot = Cast<UCanvasPanelSlot>(Spell_5_btn->Slot);
+	translation = calculateRotation(_slot->GetPosition(), rotation);
+	_slot->SetPosition(translation);
+
+	//Spell_6 translation
+	_slot = Cast<UCanvasPanelSlot>(Spell_6_btn->Slot);
+	translation = calculateRotation(_slot->GetPosition(), rotation);
+	_slot->SetPosition(translation);
+
+	//Spell_6 translation
+	_slot = Cast<UCanvasPanelSlot>(Spell_7_btn->Slot);
+	translation = calculateRotation(_slot->GetPosition(), rotation);
+	_slot->SetPosition(translation);
+
+	//Spell_8 translation
+	_slot = Cast<UCanvasPanelSlot>(Spell_8_btn->Slot);
+	translation = calculateRotation(_slot->GetPosition(), rotation);
+	_slot->SetPosition(translation);
+}
+
+//Function that calculates the element menu trans lation having in mind its position and the rotation angle to move it
 FVector2D UTlocIngameMenu::calculateRotation(FVector2D position, float rotAngle)
 {
 	GlobalConstants constants;

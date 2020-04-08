@@ -24,7 +24,7 @@ class LABYRINTHOFCOLLOSIA_API TlocCharacter
 public:
 
 	// Called when the game starts or when spawned
-	//virtual ~TlocCharacter();
+	virtual ~TlocCharacter() {};
 
 	virtual void ModifyLife(float quantity) = 0;				//Adds or substracts as many as quantity value is
 	virtual int Attack() = 0;									//Calculates hit damage
@@ -143,9 +143,12 @@ protected:
 	std::queue<int> _buffsAilments;					//Character's active buffs or ailments
 	std::queue<float> buffsAilmentsTime;			//Character's active buffs or ailments' time
 
+	TlocSpell* _attackingSpell;						//Character's prepared spell to Cast
+	std::vector<TlocIngredients*> _attackingSpellIngredients;	//Character's prepared spell ingredients
+
 	TCHAR* _name;
 	FVector position, lastPosition, renderPosition;
-	FRotator rotation, lastRotation, renderRotation;
+	FRotator rotation, lastRotation, renderRotation, defaultRotation;
 	float speed, moveTime, rotateTime;
 
 	//Facade variables

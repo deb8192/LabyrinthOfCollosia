@@ -114,6 +114,7 @@ private:
 	void attack();
 	void takeObj();
 	void selectSpell(int selection);
+	void unselectSpell();
 	void selectItem(int selection);
 	void pickupObject();
 	ATlocObject* checkChest();
@@ -130,8 +131,6 @@ private:
 	Equipment playerEquipment;						//Character's set of armor, gauntlet and weapon
 	AActor* _enemy;									//Character's objective
 	AActor* _object;								//Character's picking object
-	TlocSpell* _attackingSpell;
-	std::vector<TlocIngredients*> _attackingSpellIngredients;
 	bool pickingUp;
 	bool ticking;
 	bool rotate;

@@ -44,6 +44,8 @@ public:
 	//Function that removes an object mesh from the world
 	void DestroyMeshComponent(UStaticMeshComponent* _mesh);
 
+	void MoveActor(APawn& actor, FVector& position);
+
 	void SetMeshPosition(AActor& actor, FVector &position);
 	void SetMeshRotation(AActor& actor, FRotator &rotation);
 
