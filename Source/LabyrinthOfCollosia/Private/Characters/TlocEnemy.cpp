@@ -3,6 +3,7 @@
 
 #include "TlocEnemy.h"
 #include "../Public/GlobalConstants.h"
+#include "Camera/CameraComponent.h"
 #include "ConstructorHelpers.h"
 
 
@@ -51,6 +52,7 @@ ATlocEnemy::ATlocEnemy()
 	_auxFilePath = TEXT("/Game/Models/Characters/GuideMonk_Cube_001.GuideMonk_Cube_001");
 	_auxFilePath2 = TEXT("");
 	_name = TEXT("Enemy");
+	_className = TEXT("TlocEnemy");
 
 
 	//USceneComponent* _rootComponent = CreateDefaultSubobject<USceneComponent>("RootEnemy");
@@ -63,6 +65,17 @@ ATlocEnemy::ATlocEnemy()
 	_auxCharMesh->SetupAttachment(GetRootComponent());
 	//_auxCharMesh2->SetupAttachment(GetRootComponent());
 
+	//CAMERA
+
+	_targetCameraSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraSpringArm"));
+	_targetCameraSpringArm->SetupAttachment(GetRootComponent());
+	_targetCameraSpringArm->TargetArmLength = constants.KCAMERA_DISTANCE;
+
+	//Camera target arm
+	_targetCameraSpringArm->bEnableCameraLag = true;
+	_targetCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("TargetCamera"));
+	_targetCamera->SetupAttachment(_targetCameraSpringArm, USpringArmComponent::SocketName);
+	_targetCameraSpringArm->SetRelativeLocationAndRotation(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z + constants.K1_4PI_RADIAN), FRotator(0.0f, 45.f, 0.0f));
 
 	/*
 	_charMesh->SetRelativeLocation(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z - 90));
@@ -507,6 +520,11 @@ std::vector<TlocSpell*> ATlocEnemy::GetSpells()
 	return _learnedSpells;
 }
 
+TlocSpell* ATlocEnemy::GetAttackingSpell()
+{
+	return _attackingSpell;
+}
+
 std::vector<TlocSpell*> ATlocEnemy::GetMemorizedSpells()
 {
 	return _memorizedSpells;
@@ -540,6 +558,31 @@ std::queue<int> ATlocEnemy::GetBuffAilments()
 std::queue<float> ATlocEnemy::GetBuffAilmentsTime()
 {
 	return buffsAilmentsTime;
+}
+
+TCHAR* ATlocEnemy::GetName()
+{
+	return _name;
+}
+
+TCHAR* ATlocEnemy::GetClassName()
+{
+	return _className;
+}
+
+std::vector<AActor*> ATlocEnemy::GetTargetEnemies()
+{
+	return _targetEnemies;
+}
+
+std::vector<AActor*> ATlocEnemy::GetTargetPlayers()
+{
+	return _targetPlayers;
+}
+
+std::vector<AActor*> ATlocEnemy::GetTargetObjects()
+{
+	return _targetObjects;
 }
 
 void ATlocEnemy::SetInitialLife(float lif)
@@ -728,4 +771,29 @@ void ATlocEnemy::SetBuffAilments(std::queue<int>& _bffsAil)
 void ATlocEnemy::SetBuffAilmentsTime(std::queue<float>& _bffsAilTime)
 {
 	buffsAilmentsTime = _bffsAilTime;
+}
+
+void ATlocEnemy::SetName(TCHAR* _nm)
+{
+	_name = _nm;
+}
+
+void ATlocEnemy::SetClassName(TCHAR* _clssNm)
+{
+	_className = _clssNm;
+}
+
+void ATlocEnemy::SetTargetEnemies(std::vector<AActor*>& _enm)
+{
+	_targetEnemies = _enm;
+}
+
+void ATlocEnemy::SetTargetPlayers(std::vector<AActor*>& _all)
+{
+	_targetPlayers = _all;
+}
+
+void ATlocEnemy::SetTargetObjects(std::vector<AActor*>& _obj)
+{
+	_targetObjects = _obj;
 }

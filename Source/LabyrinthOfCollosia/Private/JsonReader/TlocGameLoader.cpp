@@ -83,9 +83,11 @@ std::vector<TlocPlayer*> TlocGameLoader::NewGameLoader()
 						_hPlayer->SetCriticalProb(jsonObject->GetNumberField(constants.KCRITICAL_PROB));
 						_hPlayer->SetExperience(jsonObject->GetNumberField(constants.KEXPERIENCE));
 						_hPlayer->SetNextLevel(jsonObject->GetNumberField(constants.KNEXT_LEVEL));
-						TlocWeapon* _wpn = _motorLoader->IdentifyWeapon(jsonObject->GetObjectField(constants.KWEAPON));
+						std::vector<TlocIngredients*> playerIngredients = _motorLoader->IdentifyIngredients(jsonObject->GetArrayField(constants.KINGREDIENT));
+						_hPlayer->SetIngredients(playerIngredients);
 						std::vector<TlocSpell*> playerSpells = _motorLoader->CreateSpells(jsonObject->GetArrayField(constants.KSPELL));
 						_hPlayer->SetSpells(playerSpells);
+						TlocWeapon* _wpn = _motorLoader->IdentifyWeapon(jsonObject->GetObjectField(constants.KWEAPON));
 						_hPlayer->SetWeapon(_wpn);
 						_hPlayer->AddWeapon(*_wpn);
 						players.push_back(_hPlayer);

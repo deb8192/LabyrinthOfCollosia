@@ -29,6 +29,7 @@ public:
 	void MoveMenuDown();
 
 	void SetSpellsIcons(int numSpell, TCHAR* filePath);
+	void SetWeaponIcons(int numWeapon, TCHAR* filePath);
 	int* GetSelectedObject();
 
 	//---- Motion menu variables ----//	
@@ -182,10 +183,86 @@ private:
 	UPROPERTY(meta = (BindWidget))
 		UCanvasPanel* ArmorCanvas;
 
+	//Butons
+	UPROPERTY(meta = (BindWidget))
+		UButton* LinenTunic_btn;
+
+	UPROPERTY(meta = (BindWidget))
+		UButton* SpartanCuirass_btn;
+
+	UPROPERTY(meta = (BindWidget))
+		UButton* LeatherArmor_btn;
+
+	UPROPERTY(meta = (BindWidget))
+		UButton* ScaleArmor_btn;
+
+	UPROPERTY(meta = (BindWidget))
+		UButton* GermanicTunic_btn;
+
+	UPROPERTY(meta = (BindWidget))
+		UButton* CenturionCape_btn;
+
+	//Butons' images
+	UPROPERTY(meta = (BindWidget))
+		UImage* LinenTunic;
+
+	UPROPERTY(meta = (BindWidget))
+		UImage* SpartanCuirass;
+
+	UPROPERTY(meta = (BindWidget))
+		UImage* LeatherArmor;
+
+	UPROPERTY(meta = (BindWidget))
+		UImage* ScaleArmor;
+
+	UPROPERTY(meta = (BindWidget))
+		UImage* GermanicTunic;
+
+	UPROPERTY(meta = (BindWidget))
+		UImage* CenturionCape;
+
 	//----     Gauntlet Menu    ----//
 
 	UPROPERTY(meta = (BindWidget))
 		UCanvasPanel* GauntletCanvas;
+
+	//Butons
+	UPROPERTY(meta = (BindWidget))
+		UButton* CelticShield_btn;
+
+	UPROPERTY(meta = (BindWidget))
+		UButton* LegionaryShield_btn;
+
+	UPROPERTY(meta = (BindWidget))
+		UButton* SpartanShield_btn;
+
+	UPROPERTY(meta = (BindWidget))
+		UButton* EgipcianShield_btn;
+
+	UPROPERTY(meta = (BindWidget))
+		UButton* VikingShield_btn;
+
+	UPROPERTY(meta = (BindWidget))
+		UButton* AchillesShield_btn;
+
+	//Butons' images
+	UPROPERTY(meta = (BindWidget))
+		UImage* CelticShield;
+
+	UPROPERTY(meta = (BindWidget))
+		UImage* LegionaryShield;
+
+	UPROPERTY(meta = (BindWidget))
+		UImage* SpartanShield;
+
+	UPROPERTY(meta = (BindWidget))
+		UImage* EgipcianShield;
+
+	UPROPERTY(meta = (BindWidget))
+		UImage* VikingShield;
+
+	UPROPERTY(meta = (BindWidget))
+		UImage* AchillesShield;
 
 	//----     Weapon Menu    ----//
 
@@ -209,7 +286,7 @@ private:
 		UButton* SpartanAxe_btn;
 
 	UPROPERTY(meta = (BindWidget))
-		UButton* SpartanSpear_btn;
+		UButton* Doru_btn;
 
 	UPROPERTY(meta = (BindWidget))
 		UButton* Falcata_btn;
@@ -264,7 +341,7 @@ private:
 		UImage* SpartanAxe;
 
 	UPROPERTY(meta = (BindWidget))
-		UImage* SpartanSpear;
+		UImage* Doru;
 
 	UPROPERTY(meta = (BindWidget))
 		UImage* Falcata;
@@ -304,9 +381,7 @@ private:
 
 	int selMenu, menuSections;
 	float verticalDistance, totalVerticalDistance;
-	FVector2D center;
 	FVector2D calculatedPosition, lastCalculatedPosition, renderPosition;
-	float rotAngItemSpellMenu, rotAngWeapons;
 
 
 	//Functions
@@ -320,8 +395,6 @@ private:
 	void moveCanvasToTop();
 	void moveCanvasToBottom();
 	void rotateElements(bool right);
-	void rotateItems(float rotation);
-	void rotateSpells(float rotation);
 	FVector2D calculateRotation(FVector2D position, float rotAngle);
 	void substractTranslation(FVector2D* _transl, UCanvasPanelSlot* _slot);
 };

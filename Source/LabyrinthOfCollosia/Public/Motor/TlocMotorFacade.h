@@ -36,7 +36,7 @@ public:
 	//Functions
 
 	//Function that moves the player camera to the target enemy
-	void SetViewTarget(AActor& target, float blendTime, EViewTargetBlendFunction blendFunc, float blendExp, bool blockOutgoing);
+	void SetViewTarget(const UObject &worldContextObject, AActor& target, float blendTime);
 	//Function that sets a mesh to an object
 	UStaticMeshComponent* SetMesh(const TCHAR* _name, const TCHAR* _directory, USceneComponent* rootComponent, UObject *obj);
 	//Function that sets an object mesh into the world
@@ -44,10 +44,12 @@ public:
 	//Function that removes an object mesh from the world
 	void DestroyMeshComponent(UStaticMeshComponent* _mesh);
 
-	void MoveActor(APawn& actor, FVector& position);
+	void MovePlayer(APawn& actor, FVector position);
+	void MoveActor(AActor& actor, FVector position);
+	void RotateActor(AActor& actor, FRotator rotation);
 
-	void SetMeshPosition(AActor& actor, FVector &position);
-	void SetMeshRotation(AActor& actor, FRotator &rotation);
+	void SetMeshPosition(AActor& actor, FVector position);
+	void SetMeshRotation(AActor& actor, FRotator rotation);
 
 
 	void BeginPlay();

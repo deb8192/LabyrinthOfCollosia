@@ -22,10 +22,10 @@ ATlocMotorFacade::~ATlocMotorFacade()
 {
 }
 
-void ATlocMotorFacade::SetViewTarget(AActor &target, float blendTime, EViewTargetBlendFunction blendFunc, float blendExp, bool blockOutgoing)
+void ATlocMotorFacade::SetViewTarget(const UObject &worldContextObject, AActor &target, float blendTime)
 {
-	APlayerController* _pController = UGameplayStatics::GetPlayerController(this, 0);
-	_pController->SetViewTargetWithBlend(&target, blendTime, blendFunc, blendExp, blockOutgoing);
+	APlayerController* _pController = UGameplayStatics::GetPlayerController(&worldContextObject, 0);
+	_pController->SetViewTargetWithBlend(&target, blendTime);
 }
 
 UStaticMeshComponent* ATlocMotorFacade::SetMesh(const TCHAR* _name, const TCHAR* _directory, USceneComponent* rootComponent, UObject* obj)
@@ -53,18 +53,28 @@ void ATlocMotorFacade::DestroyMeshComponent(UStaticMeshComponent* _mesh)
 	_mesh->DestroyComponent();
 }
 
-void ATlocMotorFacade::MoveActor(APawn& actor, FVector& position)
+void ATlocMotorFacade::MovePlayer(APawn& actor, FVector position)
 {
 	actor.AddMovementInput(actor.GetActorRightVector(), position.X);
 	actor.AddMovementInput(actor.GetActorForwardVector(), position.Y);
 }
 
-void ATlocMotorFacade::SetMeshPosition(AActor& actor, FVector& position)
+void ATlocMotorFacade::MoveActor(AActor& actor, FVector position)
 {
 	actor.SetActorLocation(position);
 }
 
-void ATlocMotorFacade::SetMeshRotation(AActor& actor, FRotator& rotation)
+void ATlocMotorFacade::RotateActor(AActor& actor, FRotator rotation)
+{
+	actor.SetActorRotation(rotation);
+}
+
+void ATlocMotorFacade::SetMeshPosition(AActor& actor, FVector position)
+{
+	actor.SetActorLocation(position);
+}
+
+void ATlocMotorFacade::SetMeshRotation(AActor& actor, FRotator rotation)
 {
 	actor.SetActorRotation(rotation);
 }

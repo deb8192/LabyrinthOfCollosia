@@ -8,11 +8,13 @@
 #include "GameFramework/PlayerController.h"
 #include "Engine/World.h"
 #include "Engine/Scene.h"
+#include "Engine/Engine.h"
 #include "ConstructorHelpers.h"
 
 // Sets default values
 ATlocHumanPlayer::ATlocHumanPlayer() : TlocPlayer()
 {
+	GlobalConstants constants;
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
@@ -54,7 +56,6 @@ ATlocHumanPlayer::ATlocHumanPlayer() : TlocPlayer()
 	_playerCamera->SetupAttachment(_playerCameraSpringArm, USpringArmComponent::SocketName);
 	_playerCameraSpringArm->SetRelativeLocationAndRotation(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z + 45.0f), FRotator(-10.0f, 0.0f, 0.0f));
 
-
 	_wpnMesh = _motor->SetMesh(TEXT("WeaponMesh"), (const TCHAR*)playerEquipment._weapon->GetMeshFileRoot(), GetRootComponent(), this);
 	_wpnMesh->SetupAttachment(GetRootComponent());
 
@@ -90,7 +91,7 @@ ATlocHumanPlayer::ATlocHumanPlayer() : TlocPlayer()
 	ticking = false; 
 	rotate = false;
 
-
+	MyNumber = 0;
 }
 
 //COMENTADO PARA EXPORTACIONES DE PROYECTO
@@ -155,8 +156,8 @@ void ATlocHumanPlayer::Render(float rendTime)
 	//if(renderPosition.X)
 	//AddMovementInput(GetActorRightVector(), renderPosition.X);
 	//AddMovementInput(GetActorForwardVector(), renderPosition.Y);
-	_motor->MoveActor(*this, renderPosition);
-	_motor->SetMeshRotation(*this, renderRotation);
+	//_motor->MovePlayer(*this, renderPosition);
+	//_motor->SetMeshRotation(*this, renderRotation);
 }
 
 void ATlocHumanPlayer::InitLocationRotation()
@@ -208,11 +209,18 @@ void ATlocHumanPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAction("RotRightMenu", IE_Released, this, &ATlocHumanPlayer::stopRotateMenuRight);
 	PlayerInputComponent->BindAction("UpIngameMenu", IE_Pressed, this, &ATlocHumanPlayer::moveMenuUp);
 	PlayerInputComponent->BindAction("DownIngameMenu", IE_Pressed, this, &ATlocHumanPlayer::moveMenuDown);
-	PlayerInputComponent->BindAction("Use", IE_Pressed, this, &ATlocHumanPlayer::useMenuElement);
+	//PlayerInputComponent->BindAction("Use", IE_Pressed, this, &ATlocHumanPlayer::useMenuElement);
+
+	//Choosing target
+	PlayerInputComponent->BindAction("SelectTargetLeft", IE_Pressed, this, &ATlocHumanPlayer::selectTargetLeft);
+	PlayerInputComponent->BindAction("SelectTargetRight", IE_Pressed, this, &ATlocHumanPlayer::selectTargetRight);
+	//PlayerInputComponent->BindAction("ChooseTarget", IE_Pressed, this, &ATlocHumanPlayer::chooseTarget);
+	PlayerInputComponent->BindAction("Cancel", IE_Pressed, this, &ATlocHumanPlayer::cancel);
+	
 
 	//Player actions
 	PlayerInputComponent->BindAction("PickUp", IE_Pressed, this, &ATlocHumanPlayer::takeObj);
-	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &ATlocHumanPlayer::attack);
+	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &ATlocHumanPlayer::action);
 
 
 }
@@ -327,13 +335,22 @@ void ATlocHumanPlayer::loadInGameUI()
 		}
 	}
 	if (IngameMenu == nullptr) return;
-
-	IngameMenu->AddToViewport();
+	if (!IngameMenu->IsInViewport())
+	{
+		IngameMenu->AddToViewport();
+	}
+	if (IngameMenu->GetVisibility() != ESlateVisibility::Visible)
+	{
+		IngameMenu->SetVisibility(ESlateVisibility::Visible);
+	}
 }
 
 void ATlocHumanPlayer::closeInGameUI()
 {
-	IngameMenu->RemoveFromViewport();
+	if (IngameMenu->GetVisibility() != ESlateVisibility::Hidden)
+	{
+		IngameMenu->SetVisibility(ESlateVisibility::Hidden);
+	}
 	//IngameMenu = nullptr;
 }
 
@@ -389,28 +406,41 @@ void ATlocHumanPlayer::stopRotateMenuRight()
 
 void ATlocHumanPlayer::rotateMenuLeft()
 {
-	if (openMenu && rotate)
+	if (mode == PlayingMode::NORMAL)
 	{
-		IngameMenu->RotateMenu(false);
+		if (openMenu && rotate)
+		{
+			IngameMenu->RotateMenu(false);
+		}
 	}
 }
 
 void ATlocHumanPlayer::rotateMenuRight()
 {
-	if (openMenu && rotate)
+	if (mode == PlayingMode::NORMAL)
 	{
-		IngameMenu->RotateMenu(true);
+		if (openMenu && rotate)
+		{
+			IngameMenu->RotateMenu(true);
+		}
 	}
 }
 
 void ATlocHumanPlayer::moveMenuUp()
 {
-	IngameMenu->MoveMenuDown();
+	if (mode == PlayingMode::NORMAL)
+	{
+		IngameMenu->MoveMenuDown();
+	}
 }
 
 void ATlocHumanPlayer::moveMenuDown()
 {
-	IngameMenu->MoveMenuUp();
+
+	if (mode == PlayingMode::NORMAL)
+	{
+		IngameMenu->MoveMenuUp();
+	}
 }
 
 void ATlocHumanPlayer::useMenuElement()
@@ -419,13 +449,92 @@ void ATlocHumanPlayer::useMenuElement()
 	if (openMenu)
 	{
 		options = IngameMenu->GetSelectedObject();
+		switch (options[0])
+		{
+			case 1:
+				selectSpell(options[1]);
+			case 2:
+			//	selectSpell(options[1]);
+			case 3:
+			//	selectSpell(options[1]);
+			case 4:
+			//	selectSpell(options[1]);
+			default:
+				selectItem(options[1]);
+		}
 	}
-	switch (options[0])
+}
+
+void ATlocHumanPlayer::chooseTarget()
+{
+	if (_attackingSpell && _attackingSpellIngredients.size() > 0)
 	{
-		case 4:
-			selectSpell(options[1]);
-		default:
-			selectItem(options[1]);
+		mode = PlayingMode::CASTING_SPELL;
+	}
+	/*GlobalConstants constants;
+	switch (_attackingSpell->GetKindTarget())
+	{
+	case 0:
+		if (targetSelector > _targetEnemies.size())
+		{
+			_attackingSpell->CastSpell(_targetEnemies);
+		}
+		else
+		{
+			_attackingSpell->CastSpell(*_targetEnemies[targetSelector]);
+		}
+		break;
+	case 1:
+		if (targetSelector > _targetPlayers.size())
+		{
+			_attackingSpell->CastSpell(_targetPlayers);
+		}
+		else
+		{
+			_attackingSpell->CastSpell(*_targetPlayers[targetSelector]);
+		}
+		break;
+	case 2:
+		if (targetSelector > _targetPlayers.size())
+		{
+			_attackingSpell->CastSpell(_targetPlayers);
+		}
+		else
+		{
+			_attackingSpell->CastSpell(*_targetPlayers[targetSelector]);
+		}
+		break;
+	case 3:
+		if (targetSelector > _targetPlayers.size())
+		{
+			_attackingSpell->CastSpell(_targetPlayers);
+		}
+		else
+		{
+			_attackingSpell->CastSpell(*_targetPlayers[targetSelector]);
+		}
+		break;
+	case 4:
+		if (targetSelector > _targetObjects.size())
+		{
+			_attackingSpell->CastSpell(_targetObjects);
+		}
+		else
+		{
+			_attackingSpell->CastSpell(*_targetObjects[targetSelector]);
+		}
+		break;
+	}*/
+}
+
+void ATlocHumanPlayer::cancel()
+{
+	GlobalConstants constants;
+	if (mode == PlayingMode::TARGET_SELECTION)
+	{
+		mode = PlayingMode::NORMAL;
+		_motor->SetViewTarget(*this, *this, constants.KUPDATE_TIME);
+		unselectSpell();	//WORK WITH OBJECTS TO
 	}
 }
 
@@ -455,6 +564,19 @@ void ATlocHumanPlayer::modifyHudMaster(float quantity)
 	if (quantity < constants.KZERO_F)
 	{
 		PlayerHud->ModifyMasterBar(abs(quantity));
+	}
+}
+
+void ATlocHumanPlayer::action()
+{
+	if (mode == PlayingMode::NORMAL)
+	{
+		attack();
+		useMenuElement();
+	}
+	else if (mode == PlayingMode::TARGET_SELECTION)
+	{
+		chooseTarget();
 	}
 }
 
@@ -645,7 +767,7 @@ void ATlocHumanPlayer::pickupObject()
 	}
 }
 /***************************  check Chest  ***************************
-*** Function than checks if the taken object is a chest or not.   ****
+*** Function that checks if the taken object is a chest or not.   ****
 ***	In case of being a not opened chest, returns the object that  ****
 *** remains inside and, if it is not a chest, returns the proper  ****
 *** object.														  ****
@@ -681,14 +803,13 @@ ATlocObject* ATlocHumanPlayer::checkChest()
 }
 
 /*************************  Check Spell Ingredients  *************************
-*** Function than checks if the player has the needed ingredients to cast ****
+*** Function that checks if the player has the needed ingredients to cast ****
 ***  the spell. If true, prepare the spell to cast it against the target  ****
 ******************************************************************************
 *				In:		TlocSpell &_spell (selected spell to check and prepare)
 *
 *				Out:	bool found (answer for the spell check)
 */
-
 bool ATlocHumanPlayer::checkSpellIngredients(TlocSpell &_spll)
 {
 	GlobalConstants constants;
@@ -703,33 +824,46 @@ bool ATlocHumanPlayer::checkSpellIngredients(TlocSpell &_spll)
 	while (i < spellIng.size() && found)
 	{
 		int j = 0;
-
-		//Bucle to looking for the selected spell's ingredient in _ingredients vector
-		while (j < _ingredients.size() && found)
+		//It goes into j bucle if player has got ingredients
+		if (j < _ingredients.size())
 		{
-			//If player has the ingredient
-			if (_ingredients[j]->GetIngredientID() == spellIng[i]->GetIngredientID())
+			//Bucle to looking for the selected spell's ingredient in _ingredients vector
+			while (j < _ingredients.size() && found)
 			{
-				//and if there are enought ingredients, we finish j bucle, get quantity and selected ingredient and continue bucle i
-				if (spellIng[i]->GetQuantity() <= _ingredients[j]->GetQuantity())
+				//If player has the ingredient
+				if (_ingredients[j]->GetIngredientID() == spellIng[i]->GetIngredientID())
 				{
-					_selectedIngredients.push_back(j);
-					_quantities[i] = spellIng[i]->GetQuantity();
-					j = _ingredients.size();
-				}
-				//If there are not enought ingredients, we finish both bucles and return without make the spell
-				else found = false;
-			}
-			//If the ID ingredients does not coincide, the ingredient's bucle continues
-			else j++;
+					//and if there are enought ingredients, we finish j bucle, get quantity and selected ingredient and continue bucle i
+					if (spellIng[i]->GetQuantity() <= _ingredients[j]->GetQuantity())
+					{
+						_selectedIngredients.push_back(j);
+						_quantities[i] = spellIng[i]->GetQuantity();
+						j = _ingredients.size();
+					}
+					//If there are not enought ingredients, we finish both bucles and return without make the spell
+					else 
+					{
+						found = false;
+						if (GEngine)
+						{
+							const int32 AlwaysAddKey = -1; // Passing -1 means that we will not try and overwrite an   
+														   // existing message, just add a new one  
+							GEngine->AddOnScreenDebugMessage(AlwaysAddKey, 0.5f, FColor::Yellow, TEXT("You don't have enought ingredients") + FString::FromInt(MyNumber));
 
-			//If bucle arrives here means that player doesn't have the researched ingredient, so he can't cast the spell
-			//and the bucle is finished in false and without any spell prepared
-			if (j == _ingredients.size())
-			{
-				found = false;
+							const int32 MyNumberKey = 0; // Not passing -1 so each time through we will update the existing message instead  
+														 // of making a new one  
+							GEngine->AddOnScreenDebugMessage(MyNumberKey, 5.f, FColor::Yellow, FString::FromInt(MyNumber));
+
+							++MyNumber; // Increase MyNumber so we can see it change on screen  
+						}
+					}
+				}
+				//If the ID ingredients does not coincide, the ingredient's bucle continues
+				else j++;
 			}
 		}
+		//If player doesn't have got ingredients, bucles are ended
+		else found = false;
 		i++;
 	}
 	if (found)
@@ -738,7 +872,7 @@ bool ATlocHumanPlayer::checkSpellIngredients(TlocSpell &_spll)
 		_attackingSpell = &_spll;
 		for (i = 0; i < _selectedIngredients.size(); i++)
 		{
-			_attackingSpellIngredients[i] = _ingredients[_selectedIngredients[i]];
+			_attackingSpellIngredients.push_back(_ingredients[_selectedIngredients[i]]);
 		}
 	}
 	return found;

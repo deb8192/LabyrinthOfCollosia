@@ -60,6 +60,7 @@ public:
 	TArray<TCHAR*> GetMeshesFileRoot();
 	std::vector<TlocIngredients*> GetIngredients();
 	std::vector<TlocSpell*> GetSpells();
+	TlocSpell* GetAttackingSpell();
 	std::vector<TlocSpell* > GetMemorizedSpells();
 	std::vector<std::vector<TlocItem*>> GetItems();
 	std::vector<TlocWeapon* > GetWeapons();
@@ -67,6 +68,11 @@ public:
 	std::vector<TlocGauntlet*> GetGauntlets();
 	std::queue<int> GetBuffAilments();
 	std::queue<float> GetBuffAilmentsTime();
+	TCHAR* GetName();
+	TCHAR* GetClassName();
+	std::vector<AActor*> GetTargetEnemies();
+	std::vector<AActor*> GetTargetPlayers();
+	std::vector<AActor*> GetTargetObjects();
 	
 	// -Setters TlocCharacter
 	void SetInitialLife(float lif);
@@ -103,6 +109,11 @@ public:
 	void SetGauntlets(std::vector<TlocGauntlet*>& _gntlt);
 	void SetBuffAilments(std::queue<int>& _bffsAil);
 	void SetBuffAilmentsTime(std::queue<float>& _bffsAilTime);
+	void SetName(TCHAR* _nm);
+	void SetClassName(TCHAR* _clssNm);
+	void SetTargetEnemies(std::vector<AActor*>& _enm);
+	void SetTargetPlayers(std::vector<AActor*>& _all);
+	void SetTargetObjects(std::vector<AActor*>& _obj);
 
 
 protected:
@@ -131,4 +142,8 @@ private:
 	TCHAR* _auxFilePath;
 	TCHAR* _auxFilePath2;
 
+	UPROPERTY(VisibleAnywhere)
+		USpringArmComponent* _targetCameraSpringArm;
+	UPROPERTY(VisibleAnywhere)
+		UCameraComponent* _targetCamera;
 };

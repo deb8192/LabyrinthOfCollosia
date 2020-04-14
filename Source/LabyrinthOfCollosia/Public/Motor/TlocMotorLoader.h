@@ -29,6 +29,7 @@ public:
 
 	TSharedPtr<FJsonObject> ParsingJson(FString fileName);
 	TlocWeapon* IdentifyWeapon(TSharedPtr<FJsonObject> obj);
+	std::vector<TlocIngredients*> IdentifyIngredients(TArray<TSharedPtr<FJsonValue>> arr);
 	std::vector<TlocSpell*> CreateSpells(TArray<TSharedPtr<FJsonValue>> arr);
 
 	//Getters
@@ -40,6 +41,7 @@ private:
 	static TlocMotorLoader* _unic_instance;
 	//fin clase singleton
 
+	TlocIngredients* obtainIngredientsFeatures(TSharedPtr<FJsonObject> obj);
 	TlocSpell* obtainSpellFeatures(TSharedPtr<FJsonObject> obj);
 	void createSword(TSharedPtr<FJsonObject> obj, TlocWeapon& _wpn);
 	//void createSpear(TSharedPtr<FJsonObject> obj, TlocWeapon* _wpn);

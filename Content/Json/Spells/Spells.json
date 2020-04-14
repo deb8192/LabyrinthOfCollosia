@@ -1,0 +1,294 @@
+"TlocSpell": [{
+	"ID": 0,
+	"className": "TlocSpell",
+	"name": "Flash",
+	"description": "Small fireball",
+	"fileDirectory": "/Game/Sprites/Spells/Icons-128/Flash-128px.Flash-128px",
+	"target": 0,
+	"basicPower": 27,
+	"active": true,
+	"TlocIngredients":[
+	{
+		"ID": 17,
+		"name": "oil",
+		"quantity": 1
+	},
+	{
+		"ID": 21,
+		"name": "wax",
+		"quantity": 2
+	}]
+},
+{
+	"ID": 1,
+	"className": "TlocSpell",
+	"name": "Hard ball",
+	"description": "Target gets beaned",
+	"fileDirectory": "/Game/Sprites/Spells/Icons-128/Heal-128px.Heal-128px",
+	"target": 0,
+	"basicPower": 21,
+	"active": true,
+	"TlocIngredients":[
+	{
+		"ID": 5,
+		"name": "clay",
+		"quantity": 1
+	},
+	{
+		"ID": 6,
+		"name": "cristal",
+		"quantity": 1
+	}]
+},
+{
+	"ID": 2,
+	"className": "TlocSpell",
+	"name": "Acid rain",
+	"description": "Showers enemies with acid",
+	"fileDirectory": "/Game/Sprites/Spells/Icons-128/Flash-128px.Flash-128px",
+	"target": 0,
+	"basicPower": 17,
+	"active": false,
+	"TlocIngredients":[
+	{
+		"ID": 1,
+		"name": "ash",
+		"quantity": 1
+	},
+	{
+		"ID": 20,
+		"name": "water",
+		"quantity": 3
+	}]
+},
+{
+	"ID": 3,
+	"className": "TlocSpell",
+	"name": "Defend",
+	"description": "Brings up defense",
+	"fileDirectory": "/Game/Sprites/Spells/Icons-128/Flash-128px.Flash-128px",
+	"target": 1,
+	"basicPower": 14,
+	"active": true,
+	"TlocIngredients":[
+	{
+		"ID": 1,
+		"name": "ash",
+		"quantity": 1
+	},
+	{
+		"ID": 5,
+		"name": "clay",
+		"quantity": 1
+	}]
+},
+{
+	"ID": 4,
+	"className": "TlocSpell",
+	"name": "Cure",
+	"description": "Dispels states",
+	"fileDirectory": "/Game/Sprites/Spells/Icons-128/Heal-128px.Heal-128px",
+	"target": 1,
+	"basicPower": 1,
+	"active": true,
+	"TlocIngredients":[
+	{
+		"ID": 17,
+		"name": "oil",
+		"quantity": 1
+	},
+	{
+		"ID": 18,
+		"name": "root",
+		"quantity": 2
+	}]
+},
+{
+	"ID": 5,
+	"className": "TlocSpell",
+	"name": "Heal",
+	"description": "Recovers some HP",
+	"fileDirectory": "/Game/Sprites/Spells/Icons-128/Heal-128px.Heal-128px",
+	"target": 1,
+	"basicPower": 30,
+	"active": true,
+	"TlocIngredients":[
+	{
+		"ID": 18,
+		"name": "root",
+		"quantity": 1
+	},
+	{
+		"ID": 20,
+		"name": "water",
+		"quantity": 1
+	}]
+},
+{
+	"ID": 6,
+	"className": "TlocSpell",
+	"name": "Levitate",
+	"description": "Levitate and move boulders",
+	"fileDirectory": "/Game/Sprites/Spells/Icons-128/Heal-128px.Heal-128px",
+	"target": 0,
+	"basicPower": 12,
+	"active": false,
+	"TlocIngredients":[
+	{
+		"ID": 8,
+		"name": "ethanol",
+		"quantity": 1
+	},
+	{
+		"ID": 18,
+		"name": "root",
+		"quantity": 2
+	}]
+},
+{
+	"ID": 7,
+	"className": "TlocSpell",
+	"name": "Speed",
+	"description": "Raises evasion",
+	"fileDirectory": "/Game/Sprites/Spells/Icons-128/Heal-128px.Heal-128px",
+	"target": 0,
+	"basicPower": 12,
+	"active": false,
+	"TlocIngredients":[
+	{
+		"ID": 8,
+		"name": "ethanol",
+		"quantity": 1
+	},
+	{
+		"ID": 18,
+		"name": "root",
+		"quantity": 2
+	}]
+},
+{
+	"ID": 8,
+	"className": "TlocSpell",
+	"name": "Crush",
+	"description": "Crushes target enemy",
+	"fileDirectory": "/Game/Sprites/Spells/Icons-128/Flash-128px.Flash-128px",
+	"target": 0,
+	"basicPower": 30,
+	"active": true,
+	"TlocIngredients":[
+	{
+		"ID": 13,
+		"name": "limestone",
+		"quantity": 1
+	},
+	{
+		"ID": 21,
+		"name": "wax",
+		"quantity": 1
+	}]
+},
+{
+	"ID": 9,
+	"className": "TlocSpell",
+	"name": "Sting",
+	"description": "Deals damage - locks the target for a medium time",
+	"fileDirectory": "/Game/Sprites/Spells/Icons-128/Heal-128px.Heal-128px",
+	"target": 0,
+	"basicPower": 12,
+	"active": false,
+	"TlocIngredients":[
+	{
+		"ID": 8,
+		"name": "ethanol",
+		"quantity": 1
+	},
+	{
+		"ID": 18,
+		"name": "root",
+		"quantity": 2
+	}]
+},
+{
+	"ID": 10,
+	"className": "TlocSpell",
+	"name": "Revive",
+	"description": "Brings dog back to life",
+	"fileDirectory": "/Game/Sprites/Spells/Icons-128/Flash-128px.Flash-128px",
+	"target": 3,
+	"basicPower": 15,
+	"active": true,
+	"TlocIngredients":[
+	{
+		"ID": 3,
+		"name": "ethanol",
+		"quantity": 1
+	},
+	{
+		"ID": 18,
+		"name": "root",
+		"quantity": 3
+	}]
+},
+{
+	"ID": 11,
+	"className": "TlocSpell",
+	"name": "Revealer",
+	"description": "Reveals invisible paths",
+	"fileDirectory": "/Game/Sprites/Spells/Icons-128/Flash-128px.Flash-128px",
+	"target": 3,
+	"basicPower": 15,
+	"active": true,
+	"TlocIngredients":[
+	{
+		"ID": 3,
+		"name": "ethanol",
+		"quantity": 1
+	},
+	{
+		"ID": 18,
+		"name": "root",
+		"quantity": 3
+	}]
+},
+{
+	"ID": 12,
+	"className": "TlocSpell",
+	"name": "Atlas",
+	"description": "Target gets super strength",
+	"fileDirectory": "/Game/Sprites/Spells/Icons-128/Heal-128px.Heal-128px",
+	"target": 2,
+	"basicPower": 2,
+	"active": true,
+	"TlocIngredients":[
+	{
+		"ID": 1,
+		"name": "ash",
+		"quantity": 1
+	},
+	{
+		"ID": 2,
+		"name": "atlas amulet",
+		"quantity": 1
+	}]
+},
+{
+	"ID": 13,
+	"className": "TlocSpell",
+	"name": "Drain",
+	"description": "Steals some enemy HP",
+	"fileDirectory": "/Game/Sprites/Spells/Icons-128/Heal-128px.Heal-128px",
+	"target": 0,
+	"basicPower": 12,
+	"active": false,
+	"TlocIngredients":[
+	{
+		"ID": 8,
+		"name": "ethanol",
+		"quantity": 1
+	},
+	{
+		"ID": 18,
+		"name": "root",
+		"quantity": 2
+	}]
+}]

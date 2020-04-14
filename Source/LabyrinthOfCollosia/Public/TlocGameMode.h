@@ -8,6 +8,8 @@
 #include "Characters/TlocDogPlayer.h"
 #include "JsonReader/TlocStageLoader.h"
 #include "JsonReader/TlocGameLoader.h"
+#include "Magic/TlocProjectile.h"
+#include "Motor/TlocMotorSpatialCalculus.h"
 
 #include "Engine/World.h"
 #include "Engine/Level.h"
@@ -51,6 +53,18 @@ private:
 
 	void spawnPlayers(bool newGame);
 	float getSeconds();
+	bool searchTargets(TlocSpell &_castingSpell, AActor &_activeActor);
+	AActor* pointTarget();
+	bool checkEnemyTargets(int kindOfTarget, ATlocEnemy &enemy);
+	bool checkPlayerTargets(int kindOfTarget);
+	bool checkThereAreTargets(AActor& _actor);
+	bool isBiggerThan(int num, int comparation);
+
+	void setHumanPlayerViewTarget(float deltaTime);
+	//void setDogPlayerViewTarget(float deltaTime);
+
+	void getSpellEffect(TlocSpell& _castingSpell, AActor &_activeActor);
+	void spawnProjectiles(TlocSpell& _castingSpell, AActor& _activeActor, const int &selector);
 
 	//World playable characters and levels
 	ATlocHumanPlayer* _humanPlayer;
@@ -68,6 +82,7 @@ private:
 	std::vector<ATlocObject*> _levelObjects;
 	std::vector<std::vector<ATlocEnemy*>> _createdEnemies;
 	std::vector<std::vector<ATlocObject*>> _createdObjects;
+	AActor* _target;
 
 	//Controllers
 	ATlocPlayerController* _humanPlayerController;
@@ -77,5 +92,12 @@ private:
 	float updateTime;
 	float lastRenderTime;
 	float lastUpdateTime;
+	bool choosingTarget;
 	bool changingLevel; 
+	std::vector<ATlocProjectile*> _projectiles;
+
+
+	//Motors
+	TlocMotorSpatialCalculus* _spatialCalculusMotor;
+	ATlocMotorFacade* _motor;
 };

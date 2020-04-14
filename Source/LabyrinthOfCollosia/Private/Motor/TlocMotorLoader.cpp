@@ -65,6 +65,26 @@ TlocWeapon* TlocMotorLoader::IdentifyWeapon(TSharedPtr<FJsonObject> obj)
 	return _wpn;
 }
 
+std::vector<TlocIngredients*> TlocMotorLoader::IdentifyIngredients(TArray<TSharedPtr<FJsonValue>> arr)
+{
+	GlobalConstants constants;
+	std::vector<TlocIngredients*> playerIngredients;
+	playerIngredients.reserve(constants.KMAXINGREDIENTS);
+	if (arr.Num() > constants.KZERO)
+	{
+		for (short i = 0; i < arr.Num(); i++)
+		{
+			TSharedPtr<FJsonObject> jsonObject = arr[i]->AsObject();
+			TlocIngredients* _ingredient = obtainIngredientsFeatures(jsonObject);
+			if (_ingredient != nullptr)
+			{
+				playerIngredients.push_back(_ingredient);
+			}
+		}
+	}
+	return playerIngredients;
+}
+
 std::vector<TlocSpell*> TlocMotorLoader::CreateSpells(TArray<TSharedPtr<FJsonValue>> arr)
 {
 	GlobalConstants constants;
@@ -98,6 +118,18 @@ FString TlocMotorLoader::GetJsonRoute(char* _name, char* _dir, char* _ext)
 	return fileName;
 }
 
+TlocIngredients* TlocMotorLoader::obtainIngredientsFeatures(TSharedPtr<FJsonObject> obj)
+{
+	GlobalConstants constants;
+	FString* _name = new FString();
+	obj->TryGetStringField(constants.KNAME, *_name);
+	TlocIngredients* _newIngredient = NewObject<TlocIngredients>();
+	_newIngredient->SetName(**_name);
+	_newIngredient->SetIngredientID((int)obj->GetNumberField(constants.KID));
+	_newIngredient->SetQuantity((int)obj->GetNumberField(constants.KQUANTITY));
+	return _newIngredient;
+}
+
 /******************************** Obtain Spell Features ********************************
 **** Function that reads the FJsonObject obj to obtain TlocSpell _spll the features ****
 ****************************		 for setting in it.		****************************
@@ -117,6 +149,7 @@ TlocSpell* TlocMotorLoader::obtainSpellFeatures(TSharedPtr<FJsonObject> obj)
 	splIng.reserve(constants.KTHREE);
 	if (arr.Num() > constants.KZERO)
 	{
+		//Bucle for getting the spell ingredients
 		for (int i = 0; i < arr.Num(); i++)
 		{
 			_name = new FString();
@@ -134,7 +167,7 @@ TlocSpell* TlocMotorLoader::obtainSpellFeatures(TSharedPtr<FJsonObject> obj)
 		obj->TryGetStringField(constants.KNAME, *_name);
 		obj->TryGetStringField(constants.KDESCRIPTION, *_desc);
 		obj->TryGetStringField(constants.KFILE_DIRECTORY, *_icon);
-		TlocSpell* _newSpell = new TlocSpell((int)obj->GetNumberField(constants.KID), **_name, **_desc, **_icon, (int)obj->GetNumberField(constants.KBASIC_POWER), obj->GetBoolField(constants.KACTIVE), splIng);
+		TlocSpell* _newSpell = new TlocSpell((int)obj->GetNumberField(constants.KID), **_name, **_desc, **_icon, (int) obj->GetNumberField(constants.KTARGET), (float) obj->GetNumberField(constants.KBASIC_POWER), obj->GetBoolField(constants.KACTIVE), splIng);
 		return _newSpell;
 	}
 	else return nullptr;

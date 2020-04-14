@@ -18,7 +18,8 @@ using GlobalConstants = struct Constants
 	size_t KCHAR_SIZE = 32;
 
 	/*** Trigonometric calculus ***/
-
+	const float DEG_TO_RAD = 0.0174532925199432957f;
+	const float RAD_TO_DEG = 57.295779513082320876f;
 	const int KPI_RADIAN = 180;
 	const int K3_2PI_RADIAN = 270;
 	const int K2PI_RADIAN = 360;
@@ -43,11 +44,15 @@ using GlobalConstants = struct Constants
 
 	/*** Default values ***/
 
-	const int KLEVEL_NUM = 6;
 	const float KRENDER_TIME = 1.0f / 60.0f;
 	const float KUPDATE_TIME = 1.0f / 15.0f;
 	const float KINVULNERABLE_TIME = 1.5;
+	const float KMAX_TARGET_DISTANCE = 2000.f;
+	const float KCAMERA_DISTANCE = 250.f;
+	const float KHALF_CAMERA_DISTANCE = 125.f;
+	const int KMAX_NUM_PLAYERS = 2;
 	const int KBASICDAMAGE = 2;
+	const int KMAX_NUM_TARGETS = 30;
 	const int KMAX_NUM_DIRECTORIES = 4;
 	const int KMAX_VARIABLE_DAMAGE = 5;
 	const int KMIN_VARIABLE_DAMAGE = -2;
@@ -167,6 +172,7 @@ using GlobalConstants = struct Constants
 	const char* KINGREDIENTS_ID = "ingredientID";
 	const char* KHEALTH_ITEMS_ID = "healthID";
 	const char* KHEALTH_RECOVERED = "healthRecovered";
+	const char* KTARGET = "target";
 
 
 	/*** Max number of ***/

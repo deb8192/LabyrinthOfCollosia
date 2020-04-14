@@ -7,7 +7,7 @@
 #include "TlocCharacter.h"
 #include "..\UserInterfaces\TlocIngameMenu.h"
 #include "..\UserInterfaces\TlocHUD.h"
-#include "Camera/CameraComponent.h"
+#include "GameFramework/Actor.h"
 //#include "TlocEnemy.h"
 
 /**
@@ -35,6 +35,7 @@ public:
 	void Move();
 	void Defend();
 	void AddWeapon(TlocWeapon &wpn);
+	void SelectTarget(AActor& _target, float blendTime);
 
 	//Getters & Setters
 
@@ -63,9 +64,12 @@ public:
 	float GetInvulnerableTime();
 	UStaticMeshComponent* GetMesh();
 	FVector GetPosition();
+	FVector GetRenderPosition();
 	FRotator GetRotation();
+	FRotator GetRenderRotation();
 	std::vector<TlocIngredients*> GetIngredients();
 	std::vector<TlocSpell*> GetSpells();
+	TlocSpell* GetAttackingSpell();
 	std::vector<TlocSpell* > GetMemorizedSpells();
 	std::vector<std::vector<TlocItem*>> GetItems();
 	std::vector<TlocWeapon* > GetWeapons();
@@ -73,11 +77,18 @@ public:
 	std::vector<TlocGauntlet*> GetGauntlets();
 	std::queue<int> GetBuffAilments();
 	std::queue<float> GetBuffAilmentsTime();
+	TCHAR* GetName();
+	TCHAR* GetClassName();
 
 	// -Getters TlocPlayer
 	int GetNextLevel();
 	int GetExperience();
 	int GetPlayer();
+	int GetMode();
+	std::vector<AActor*> GetTargetEnemies();
+	std::vector<AActor*> GetTargetPlayers();
+	std::vector<AActor*> GetTargetObjects();
+	int GetTargetSelector();
 	
 	// -Setters TlocCharacter
 	void SetInitialLife(float lif);
@@ -114,17 +125,23 @@ public:
 	void SetGauntlets(std::vector<TlocGauntlet*>& _gntlt);
 	void SetBuffAilments(std::queue<int>& _bffsAil);
 	void SetBuffAilmentsTime(std::queue<float>& _bffsAilTime);
+	void SetName(TCHAR* _nm);
+	void SetClassName(TCHAR* _clssNm);
 
 	// -Setters TlocPlayer
 	void SetNextLevel(int nLevel);
 	void SetExperience(int exp);
 	void SetPlayer(int plyr);
 	void SetMode(int mod);
+	void SetTargetEnemies(std::vector<AActor*> &_enm);
+	void SetTargetPlayers(std::vector<AActor*> &_all);
+	void SetTargetObjects(std::vector<AActor*> &_obj);
 
 	enum PlayingMode : int
 	{
 		NORMAL = 0,
-		TARGET_SELECTION
+		TARGET_SELECTION,
+		CASTING_SPELL
 	};
 	
 protected:
@@ -133,11 +150,14 @@ protected:
 	void moveEntity(float updTime);
 	void rotateEntity(float updTime);
 	void updateTimeMove(float rendTime);
+	void selectTargetLeft();
+	void selectTargetRight();
 
 	//Variables
 	int nextLevel;				//Necessary experience to reach next level
 	int experience;				//Player experience
 	int player;					//Int that identifies if player is boy, girls or dog
-	int mode;
+	int mode;					//Int that identifies playing mode: normal or target_selection
+	int targetSelector;
 
 };

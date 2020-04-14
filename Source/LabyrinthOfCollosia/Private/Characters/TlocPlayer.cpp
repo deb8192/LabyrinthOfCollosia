@@ -42,6 +42,11 @@ TlocPlayer::TlocPlayer()
 	experience = 0;
 	nextLevel = 200;
 	player = 0;
+	_targetEnemies.reserve(constants.KMAX_NUM_TARGETS);
+	_targetPlayers.reserve(2);
+	_targetObjects.reserve(constants.KMAX_NUM_TARGETS);
+
+	_className = nullptr;
 
 
 }
@@ -269,6 +274,11 @@ void TlocPlayer::AddWeapon(TlocWeapon& wpn)
 	_weapon.push_back(&wpn);
 }
 
+void TlocPlayer::SelectTarget(AActor &_target, float blendTime)
+{
+	//_motor->SetViewTarget(this, _target, blendTime);
+}
+
 
 void TlocPlayer::InitMemorizedSpells()
 {
@@ -385,9 +395,19 @@ FVector TlocPlayer::GetPosition()
 	return position;
 }
 
+FVector TlocPlayer::GetRenderPosition()
+{
+	return renderPosition;
+}
+
 FRotator TlocPlayer::GetRotation()
 {
 	return rotation;
+}
+
+FRotator TlocPlayer::GetRenderRotation()
+{
+	return renderRotation;
 }
 
 std::vector<TlocIngredients*> TlocPlayer::GetIngredients()
@@ -398,6 +418,11 @@ std::vector<TlocIngredients*> TlocPlayer::GetIngredients()
 std::vector<TlocSpell*> TlocPlayer::GetSpells()
 {
 	return _learnedSpells;
+}
+
+TlocSpell* TlocPlayer::GetAttackingSpell()
+{
+	return _attackingSpell;
 }
 
 std::vector<TlocSpell*> TlocPlayer::GetMemorizedSpells()
@@ -435,6 +460,16 @@ std::queue<float> TlocPlayer::GetBuffAilmentsTime()
 	return buffsAilmentsTime;
 }
 
+TCHAR* TlocPlayer::GetName()
+{
+	return _name;
+}
+
+TCHAR* TlocPlayer::GetClassName()
+{
+	return _className;
+}
+
 int TlocPlayer::GetNextLevel()
 {
 	return nextLevel;
@@ -448,6 +483,31 @@ int TlocPlayer::GetExperience()
 int TlocPlayer::GetPlayer()
 {
 	return player;
+}
+
+int TlocPlayer::GetMode()
+{
+	return mode;
+}
+
+std::vector<AActor*> TlocPlayer::GetTargetEnemies()
+{
+	return _targetEnemies;
+}
+
+std::vector<AActor*> TlocPlayer::GetTargetPlayers()
+{
+	return _targetPlayers;
+}
+
+std::vector<AActor*> TlocPlayer::GetTargetObjects()
+{
+	return _targetObjects;
+}
+
+int TlocPlayer::GetTargetSelector()
+{
+	return targetSelector;
 }
 
 void TlocPlayer::SetInitialLife(float lif)
@@ -611,6 +671,16 @@ void TlocPlayer::SetBuffAilmentsTime(std::queue<float>& _bffsAilTime)
 	buffsAilmentsTime = _bffsAilTime;
 }
 
+void TlocPlayer::SetName(TCHAR* _nm)
+{
+	_name = _nm;
+}
+
+void TlocPlayer::SetClassName(TCHAR* _clssNm)
+{
+	_className = _clssNm;
+}
+
 void TlocPlayer::SetNextLevel(int nLevel)
 {
 	nextLevel = nLevel;
@@ -637,6 +707,21 @@ void TlocPlayer::SetMode(int mod)
 		default:
 			mode = PlayingMode::NORMAL;
 	}
+}
+
+void TlocPlayer::SetTargetEnemies(std::vector<AActor*>& _enm)
+{
+	_targetEnemies = _enm;
+}
+
+void TlocPlayer::SetTargetPlayers(std::vector<AActor*>& _all)
+{
+	_targetPlayers = _all;
+}
+
+void TlocPlayer::SetTargetObjects(std::vector<AActor*>& _obj)
+{
+	_targetObjects = _obj;
 }
 
 void TlocPlayer::moveEntity(float updTime)
@@ -692,14 +777,74 @@ void TlocPlayer::rotateEntity(float updTime)
 	renderRotation.Roll = lastRotation.Roll * (constants.KONE_F - pt) + rotation.Roll * pt;
 	renderRotation.Pitch = lastRotation.Pitch * (constants.KONE_F - pt) + rotation.Pitch * pt;
 	renderRotation.Yaw = lastRotation.Yaw * (constants.KONE_F - pt) + rotation.Yaw * pt;
-	/*if(rotation.Yaw == lastRotation.Yaw)
-	{
-		renderRotation.Yaw = constants.KZERO_F;
-	}*/
 }
 
 void TlocPlayer::updateTimeMove(float rendTime)
 {
 	moveTime += rendTime;
 }
+
+void TlocPlayer::selectTargetLeft()
+{
+	if (mode == PlayingMode::TARGET_SELECTION)
+	{
+		GlobalConstants constants;
+		targetSelector--;
+		if (targetSelector < constants.KZERO)
+		{
+			switch (_attackingSpell->GetKindTarget())
+			{
+			case 0:
+				targetSelector = _targetEnemies.size();
+				break;
+			case 1:
+				targetSelector = _targetPlayers.size();
+				break;
+			case 2:
+				targetSelector = _targetPlayers.size() - 1;
+				break;
+			case 3:
+				targetSelector = _targetPlayers.size() - 1;
+				break;
+			case 4:
+				targetSelector = _targetObjects.size();
+				break;
+			}
+		}
+	}
+}
+
+void TlocPlayer::selectTargetRight()
+{
+	if (mode == PlayingMode::TARGET_SELECTION)
+	{
+		GlobalConstants constants;
+		targetSelector++;
+		switch (_attackingSpell->GetKindTarget())
+		{
+		case 0:
+			if(targetSelector > _targetEnemies.size())
+				targetSelector = constants.KZERO;
+			break;
+		case 1:
+			if (targetSelector > _targetPlayers.size())
+				targetSelector = constants.KZERO;
+			break;
+		case 2:
+			if (targetSelector > _targetPlayers.size() - 1)
+				targetSelector = constants.KZERO;
+			break;
+		case 3:
+			if (targetSelector > _targetPlayers.size() - 1)
+				targetSelector = constants.KZERO;
+			break;
+		case 4:
+			if (targetSelector > _targetObjects.size() - 1)
+				targetSelector = constants.KZERO;
+			break;
+		}
+	}
+}
+
+
 

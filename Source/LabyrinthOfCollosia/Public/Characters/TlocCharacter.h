@@ -11,6 +11,8 @@
 #include "..\Public\Objects\TlocArmor.h"
 #include "..\Public\Objects\TlocGauntlet.h"
 #include "..\Public\Motor\TlocMotorFacade.h"
+#include "Camera/CameraComponent.h"
+#include <Runtime\Engine\Classes\GameFramework\SpringArmComponent.h>
 //#include "TlocEnemy.h"
 
 #include "CoreMinimal.h"
@@ -61,6 +63,7 @@ public:
 	virtual FRotator GetRotation() = 0;
 	virtual std::vector<TlocIngredients*> GetIngredients() = 0;
 	virtual std::vector<TlocSpell*> GetSpells() = 0;
+	virtual TlocSpell* GetAttackingSpell() = 0;
 	virtual std::vector<TlocSpell* > GetMemorizedSpells() = 0;
 	virtual std::vector<std::vector<TlocItem*>> GetItems() = 0;
 	virtual std::vector<TlocWeapon* > GetWeapons() = 0;
@@ -68,6 +71,11 @@ public:
 	virtual std::vector<TlocGauntlet*> GetGauntlets() = 0;
 	virtual std::queue<int> GetBuffAilments() = 0;
 	virtual std::queue<float> GetBuffAilmentsTime() = 0;
+	virtual TCHAR* GetName() = 0;
+	virtual TCHAR* GetClassName() = 0;
+	virtual std::vector<AActor*> GetTargetEnemies() = 0;
+	virtual std::vector<AActor*> GetTargetPlayers() = 0;
+	virtual std::vector<AActor*> GetTargetObjects() = 0;
 
 	virtual void SetInitialLife(float lif) = 0;
 	virtual void SetInitialMaster(float mstr) = 0;
@@ -103,6 +111,11 @@ public:
 	virtual void SetGauntlets(std::vector<TlocGauntlet*> &_gntlt) = 0;
 	virtual void SetBuffAilments(std::queue<int> &_bffsAil) = 0;
 	virtual void SetBuffAilmentsTime(std::queue<float> &_bffsAilTime) = 0;
+	virtual void SetName(TCHAR* _nm) = 0;
+	virtual void SetClassName(TCHAR* _clssNm) = 0;
+	virtual void SetTargetEnemies(std::vector<AActor*>& _enm) = 0;
+	virtual void SetTargetPlayers(std::vector<AActor*>& _all) = 0;
+	virtual void SetTargetObjects(std::vector<AActor*>& _obj) = 0;
 
 protected:
 
@@ -145,8 +158,12 @@ protected:
 
 	TlocSpell* _attackingSpell;						//Character's prepared spell to Cast
 	std::vector<TlocIngredients*> _attackingSpellIngredients;	//Character's prepared spell ingredients
+	std::vector<AActor*> _targetEnemies;			//Character's enemy targets
+	std::vector<AActor*> _targetPlayers;				//Character's ally targets
+	std::vector<AActor*> _targetObjects;			//Character's object targets
 
 	TCHAR* _name;
+	TCHAR* _className;
 	FVector position, lastPosition, renderPosition;
 	FRotator rotation, lastRotation, renderRotation, defaultRotation;
 	float speed, moveTime, rotateTime;

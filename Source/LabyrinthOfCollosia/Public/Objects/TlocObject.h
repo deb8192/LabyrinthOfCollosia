@@ -62,6 +62,7 @@ protected:
 	TCHAR* _name;
 	TCHAR* _className;
 	TCHAR* _fileRoot;
+	TCHAR* _spriteFileRoot;
 	float price;
 
 	//Facade variables

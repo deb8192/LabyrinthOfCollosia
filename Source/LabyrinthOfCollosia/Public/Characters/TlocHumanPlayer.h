@@ -3,7 +3,6 @@
 #pragma once
 
 #include "TlocPlayer.h"
-#include <Runtime\Engine\Classes\GameFramework\SpringArmComponent.h>
 #include "GameFramework/Character.h"
 #include "TlocHumanPlayer.generated.h"
 
@@ -104,6 +103,8 @@ private:
 	void moveMenuUp();
 	void moveMenuDown();
 	void useMenuElement();
+	void chooseTarget();
+	void cancel();
 
 	//Functions to load Player's HUD and use it
 	void loadHud();
@@ -111,6 +112,7 @@ private:
 	void modifyHudMaster(float quantity);
 
 	//Functions to eject player's actions
+	void action();
 	void attack();
 	void takeObj();
 	void selectSpell(int selection);
@@ -136,12 +138,13 @@ private:
 	bool rotate;
 
 	UPROPERTY(VisibleAnywhere)
-	UCameraComponent* _playerCamera; 
+		UCameraComponent* _playerCamera;
 	UPROPERTY(VisibleAnywhere)
-	USpringArmComponent* _playerCameraSpringArm;
+		USpringArmComponent* _playerCameraSpringArm;
 
 	//TEST
 	//TSubclassOf<AActor> playerSpawn;
+	int MyNumber;
 
 public:
 	// Called every frame

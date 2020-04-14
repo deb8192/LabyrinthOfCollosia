@@ -12,19 +12,21 @@ TlocSpell::TlocSpell()
 	_spellName = _description = _iconFilePath = nullptr;
 	level = 1; 
 	numUses = 0;
+	target = 0;
 	basicPower = 0;
 	target = Target::ENEMY;
 	ingredients.reserve(constants.KTHREE);
 	active = false;
 }
 
-TlocSpell::TlocSpell(int idSpll, const TCHAR* nm, const TCHAR* desc, const TCHAR* icon, float pwr, bool act, std::vector<TlocIngredients*> ingrdnts)
+TlocSpell::TlocSpell(int idSpll, const TCHAR* nm, const TCHAR* desc, const TCHAR* icon, int trgt, float pwr, bool act, std::vector<TlocIngredients*> ingrdnts)
 {
 	TlocSpell();
 	ID = idSpll;
 	_spellName = (TCHAR*) nm;
 	_description = (TCHAR*) desc;
 	_iconFilePath = (TCHAR*) icon;
+	target = trgt;
 	basicPower = pwr;
 	active = act;
 	ingredients = ingrdnts;
@@ -35,6 +37,7 @@ TlocSpell::~TlocSpell()
 	int size = ingredients.size();
 	ID = 0;
 	menuID = 0;
+	target = 0;
 	basicPower = 0;
 	level = 0;
 	_spellName = _description = _iconFilePath = nullptr;
@@ -49,8 +52,17 @@ TlocSpell::~TlocSpell()
 	}
 	
 }
+int TlocSpell::CastSpell(AActor& _target)
+{
+	return -1;
+}
 
-void TlocSpell::IncNumUses()
+int TlocSpell::CastSpell(std::vector<AActor*>& _target)
+{
+	return -1;
+}
+
+void TlocSpell::incNumUses()
 {
 	GlobalConstants constants;
 	if (numUses < constants.KMAXUSES * constants.KMAXALCHEMY_LEVEL)
@@ -108,6 +120,14 @@ void TlocSpell::incBasicPowerAQuarter()
 	basicPower += (basicPower / constants.KFOUR);
 }
 
+void TlocSpell::getEffect()
+{
+	/*switch (ID)
+	{
+		case
+	}*/
+}
+
 int TlocSpell::GetId()
 {
 	return ID;
@@ -151,6 +171,11 @@ int TlocSpell::GetNextLevel()
 		return level * constants.KMAXUSES - numUses;
 	}
 	else return constants.KMINUS_ONE;
+}
+
+int TlocSpell::GetKindTarget()
+{
+	return target;
 }
 
 float TlocSpell::GetBasicPower()
@@ -201,6 +226,11 @@ void TlocSpell::SetLevel(int lvl)
 void TlocSpell::SetNumUses(int uses)
 {
 	numUses = uses;
+}
+
+void TlocSpell::SetKindTarget(int trgt)
+{
+	target = trgt;
 }
 
 void TlocSpell::SetBasicPower(float pwr)
