@@ -67,6 +67,7 @@ using GlobalConstants = struct Constants
 	const char* KEXTENSION_JSON = ".json";
 	const char* KDIR_JSON_NEW_GAME = "Json/New_Game/Player";
 	const char* KDIR_JSON_OBJ = "Json/Objects/";
+	const char* KDIR_JSON_INT = "Json/Interruptors/";
 	const char* KDIR_JSON_ENM = "Json/Enemies/";
 	const char* KDIR_GLADIUS_MESH = "/Game/Models/Stages/Stages-objects/Gladius.Gladius";
 	const char* KDIR_CHEST_MESH = "/Game/Models/Stages/Stages-objects/Vessel_Cube.Vessel_Cube";
@@ -140,6 +141,9 @@ using GlobalConstants = struct Constants
 	const char* KHUMAN_PLAYER = "TlocHumanPlayer";
 	const char* KDOG_PLAYER = "TlocDogPlayer";
 	const char* KENEMY = "TlocEnemy";
+	const char* KDOOR = "TlocDoor";
+	const char* KLEVER = "TlocLever";
+	const char* KINTERRUPTOR = "Interruptor";
 
 	//	-Properties
 

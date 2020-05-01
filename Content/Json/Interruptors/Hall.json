@@ -1,0 +1,38 @@
+{
+"TlocLever": [{
+		"className": "TlocLever",
+		"name": "Minitaurus door lever",
+		"fileDirectory1": "/Game/Models/Stages/Stages-objects/Interruptor.Interruptor",
+		"fileDirectory2": "/Game/Models/Stages/Stages-objects/Interruptor-base.Interruptor-base",
+		"position": [0, 600, 0],
+		"rotation": [0,0,0],
+		"ID": 0		
+	},
+	{
+		"className": "TlocLever",
+		"name": "Minitaurus door lever",
+		"fileDirectory1": "/Game/Models/Stages/Stages-objects/Interruptor.Interruptor",
+		"fileDirectory2": "/Game/Models/Stages/Stages-objects/Interruptor-base.Interruptor-base",
+		"position": [300, 0, 0],
+		"rotation": [0,0,0],
+		"ID": 1		
+	}],
+"TlocDoor": [{
+		"className": "TlocDoor",
+		"name": "Minitaurus door",
+		"fileDirectory1": "/Game/Models/Stages/Stages-objects/Interruptor.Interruptor",
+		"fileDirectory2": "",
+		"position": [500, 0, 0],
+		"rotation": [0,0,0],
+		"ID": 0		
+	},
+	{
+		"className": "TlocDoor",
+		"name": "Minitaurus door",
+		"fileDirectory1": "/Game/Models/Stages/Stages-objects/Interruptor.Interruptor",
+		"fileDirectory2": "",
+		"position": [0, 1000, 0],
+		"rotation": [0,0,0],
+		"ID": 1		
+	}]
+}

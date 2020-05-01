@@ -40,24 +40,9 @@ std::vector<ATlocObject*> TlocStageLoader::ObjectsLoader(const char* _name)
 	std::vector<ATlocObject*> levelObjects; 
 	levelObjects.reserve(100);
 
-	/*//We obtain the full path of the content project
-	FString fileName = FPaths::ProjectContentDir();
-	//We add json directory, file name and file extension
-	fileName += constants.KDIR_JSON_OBJ;
-	fileName += _name;
-	fileName += constants.KEXTENSION_JSON;
-	*/
-
 	//We call motor loader to get JSON's route to load stage objects
 	FString fileName = _motorLoader->GetJsonRoute((char*) _name, (char*)constants.KDIR_JSON_OBJ, (char*)constants.KEXTENSION_JSON);
 
-	//We save json content file inside jsonStr
-	/*FString jsonStr;
-	FFileHelper::LoadFileToString(jsonStr, *fileName);
-
-	TSharedPtr<FJsonObject> jsonParser = MakeShareable(new FJsonObject());
-	TSharedRef<TJsonReader<TCHAR>> jsonReader = TJsonReaderFactory<TCHAR>::Create(jsonStr);*/
-	
 	//It's called motor loader to parsing the target JSON file pointed by fileName
 	TSharedPtr<FJsonObject> jsonParser = _motorLoader->ParsingJson(fileName);
 
@@ -159,13 +144,6 @@ std::vector<ATlocEnemy*> TlocStageLoader::EnemiesLoader(const char* _name)
 	std::vector<ATlocEnemy*> levelEnemies;
 	levelEnemies.reserve(100);
 
-	/*//We obtain the full path of the content project
-	FString fileName = FPaths::ProjectContentDir();
-	//We add json directory, file name and file extension
-	fileName += constants.KDIR_JSON_ENM;
-	fileName += _name;
-	fileName += constants.KEXTENSION_JSON;*/
-
 	//We call motor loader to get JSON's route to load stage objects
 	FString fileName = _motorLoader->GetJsonRoute((char*)_name, (char*)constants.KDIR_JSON_ENM, (char*)constants.KEXTENSION_JSON);
 
@@ -208,4 +186,114 @@ std::vector<ATlocEnemy*> TlocStageLoader::EnemiesLoader(const char* _name)
 	}
 
 	return levelEnemies;
+}
+
+std::vector<AInterruptor*> TlocStageLoader::InterruptorsLoader(const char* _name)
+{
+	FMemStackBase mem = FMemStackBase();
+	GlobalConstants constants;
+	std::vector<AInterruptor*> levelInterruptors;
+	levelInterruptors.reserve(30);
+
+	//We call motor loader to get JSON's route to load stage objects
+	FString fileName = _motorLoader->GetJsonRoute((char*)_name, (char*)constants.KDIR_JSON_INT, (char*)constants.KEXTENSION_JSON);
+
+	//It's called motor loader to parsing the target JSON file pointed by fileName
+	TSharedPtr<FJsonObject> jsonParser = _motorLoader->ParsingJson(fileName);
+
+	if (jsonParser != nullptr)
+	{
+		if (jsonParser->Values.Contains(constants.KLEVER))
+		{
+			TArray<TSharedPtr<FJsonValue>> leversArray = jsonParser->GetArrayField(constants.KLEVER);
+			TlocLever* _lev;
+			FString* _filePath, _auxFilePath;
+			FString* _clsNm;
+			FVector* _pos;
+			FRotator* _rot;
+
+			for (short i = 0; i < leversArray.Num(); i++)
+			{
+				_lev = NewObject<TlocLever>();
+				_lev->InitLever();
+				_clsNm = new FString();
+				*_clsNm = constants.KLEVER;
+				TSharedPtr<FJsonObject> jsonObject = leversArray[i]->AsObject();
+				int idInterruptor = 0;
+				TArray<FString> posRot;
+				jsonObject->TryGetStringArrayField(constants.KPOSITION, posRot);
+				_pos = new FVector{ FCString::Atof(*posRot[0]),
+								  FCString::Atof(*posRot[1]),
+								  FCString::Atof(*posRot[2]), };
+				jsonObject->TryGetStringArrayField(constants.KROTATION, posRot);
+				_rot = new FRotator{ FCString::Atof(*posRot[3]),
+								  FCString::Atof(*posRot[4]),
+								  FCString::Atof(*posRot[5]), };
+				jsonObject->TryGetNumberField(constants.KID, idInterruptor);
+				_lev->SetClassName(**_clsNm);
+				_lev->InitLocationRotation(*_pos, *_rot);
+				_lev->SetId(idInterruptor);
+				int j = 1;
+				while (j < constants.KMAX_NUM_DIRECTORIES)
+				{
+					_filePath = new FString();
+					_auxFilePath = constants.KFILE_DIRECTORY;
+					_auxFilePath.AppendInt(j);
+					jsonObject->TryGetStringField(_auxFilePath, *_filePath);
+					_lev->SetMesh(**_filePath, j);
+					j++;
+				}
+				levelInterruptors.push_back(_lev);
+			}
+		}
+		if (jsonParser->Values.Contains(constants.KDOOR))
+		{
+			TArray<TSharedPtr<FJsonValue>> doorsArray = jsonParser->GetArrayField(constants.KDOOR);
+			TlocDoor* _door;
+			FString* _filePath, _auxFilePath;
+			FString* _clsNm;
+			FVector* _pos;
+			FRotator* _rot;
+
+			for (short i = 0 ; i < doorsArray.Num(); i++)
+			{
+				_door = NewObject<TlocDoor>();
+				_door->InitDoor();
+				_clsNm = new FString();
+				*_clsNm = constants.KDOOR;
+				TSharedPtr<FJsonObject> jsonObject = doorsArray[i]->AsObject();
+				int idInterruptor;
+				TArray<FString> posRot;
+				jsonObject->TryGetStringArrayField(constants.KPOSITION, posRot);
+				_pos = new FVector{ FCString::Atof(*posRot[0]),
+								  FCString::Atof(*posRot[1]),
+								  FCString::Atof(*posRot[2]), };
+				jsonObject->TryGetStringArrayField(constants.KROTATION, posRot);
+				_rot = new FRotator{ FCString::Atof(*posRot[3]),
+								  FCString::Atof(*posRot[4]),
+								  FCString::Atof(*posRot[5]), };
+				jsonObject->TryGetNumberField(constants.KID, idInterruptor);
+				_door->SetClassName(**_clsNm);
+				_door->InitLocationRotation(*_pos, *_rot);
+				_door->SetId(idInterruptor);
+				int j = 1;
+				while (j < constants.KTWO)
+				{
+					_filePath = new FString();
+					_auxFilePath = constants.KFILE_DIRECTORY;
+					_auxFilePath.AppendInt(j);
+					jsonObject->TryGetStringField(_auxFilePath, *_filePath);
+					_door->SetMesh(**_filePath);
+					j++;
+				}
+				levelInterruptors.push_back(_door);
+			}
+		}
+	}
+	return levelInterruptors;
+}
+
+void TlocStageLoader::obtainInterruptorsCommonData(AInterruptor& _int)
+{
+	//TO DO
 }

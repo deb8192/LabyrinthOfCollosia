@@ -1,7 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "GlobalConstants.h"
+
 #include "TlocProjectile.h"
+#include "GlobalConstants.h"
 
 // Sets default values
 ATlocProjectile::ATlocProjectile()

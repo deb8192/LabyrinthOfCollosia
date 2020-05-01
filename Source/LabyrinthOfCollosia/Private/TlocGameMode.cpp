@@ -34,9 +34,10 @@ ATlocGameMode::ATlocGameMode()
 	//this->PlayerControllerClass->GetDefaultObject()->
 	//APlayerController::Possess(_humanPlayer);
 	_dogPlayer = CreateDefaultSubobject<ATlocDogPlayer>("Dog");
-	_levels.reserve(5);
 	_levelEnemies.reserve(30);
 	_levelObjects.reserve(30);
+	_levelDoors.reserve(30);
+	_levelLevers.reserve(30);
 	_createdEnemies.reserve(30);
 	_createdObjects.reserve(30);
 	_projectiles.reserve(constants.KPERCENT);
@@ -62,14 +63,6 @@ void ATlocGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 	SetActorTickInterval(renderTime);
-	if (_world != NULL)
-	{
-		for (int i = 0; i < _world->GetLevels().Num(); i++)
-		{
-			_levels.push_back(_world->GetLevel(i));
-			_world->GetLevel(i)->GetName();
-		}
-	}
 
 	spawnPlayers(true);
 	SpawnActorsOnStage();
@@ -81,40 +74,6 @@ void ATlocGameMode::BeginPlay()
 	PlayerControllerClass.GetDefaultObject()->Possess(_humanPlayer);*/
 }
 
-void ATlocGameMode::SpawnLevels(int _lvlNum)
-{
-	GlobalConstants constants;
-	
-	//We obtain the full path of the content project
-	FString *fileName = new FString();
-	//FString fileName = FPaths::GameContentDir();
-	//We add json directory, file name and file extension
-	//fileName += constants.KDIR_LEVELS;
-
-	switch (_lvlNum)
-	{
-		case 1:
-			*fileName = constants.KNAME_MINITAURUS_STAGE;
-			//fileName += constants.KDIR_MINITAURUS_STAGE;
-			//fileName += constants.KNAME_MINITAURUS_STAGE;
-			break;
-			
-		default:
-			*fileName = constants.KNAME_HALL;
-			//fileName += constants.KDIR_HALL;
-			//fileName += constants.KNAME_HALL;
-			break;
-	}
-
-
-
-	//_world->GetFirstPlayerController()->ClientTravel(*fileName, TRAVEL_Relative, true);
-	//_world->SeamlessTravel(*fileName, false);
-	//FEditorFileUtils::LoadMap(fileName, false, true);
-	//_levels.push_back(LoadObject<ULevel>(NULL, *fileName));
-	//_world->AddLevel(_levels.back());
-}
-
 //Function called from stage charger to spawn enemies and objects over the stage
 //MAYBE I SHOULD CHANGE THE PLACE WHERE IS THIS FUNCTION PLACED.
 void ATlocGameMode::SpawnActorsOnStage()
@@ -124,9 +83,9 @@ void ATlocGameMode::SpawnActorsOnStage()
 
 	const FActorSpawnParameters SpawnParam = FActorSpawnParameters();
 
-
 	_createdObjects.push_back(_stageLoader->ObjectsLoader(constants.KFIRST_LEVEL_NAME));
 	_createdEnemies.push_back(_stageLoader->EnemiesLoader(constants.KFIRST_LEVEL_NAME));
+	_createdInterruptors.push_back(_stageLoader->InterruptorsLoader(constants.KFIRST_LEVEL_NAME));
 
 	for (int i = 0; i < 2; i++)
 	{
@@ -142,6 +101,27 @@ void ATlocGameMode::SpawnActorsOnStage()
 		_levelEnemies.push_back(_world->SpawnActor<ATlocEnemy>(ATlocEnemy::StaticClass(), FVector(-500, -70, 100), FRotator::ZeroRotator, SpawnParam));
 		//_levelEnemies[i] = _createdEnemies[0][i];
 		_levelEnemies[i]->replaceEnemy(_createdEnemies[0][i]);
+	}
+	for (int i = 0; i < _createdInterruptors[0].size(); i++)
+	{
+		if (i < _createdInterruptors[0].size()/constants.KTWO)
+		{
+			_levelLevers.push_back(_world->SpawnActor<TlocLever>(TlocLever::StaticClass(), FVector(100, -150, 150), FRotator::ZeroRotator, SpawnParam));
+			_levelLevers[i]->InitLever();
+			TlocLever * _leverActor = (TlocLever*)_createdInterruptors[0][i];
+			_levelLevers[i]->ReplaceLever(*_leverActor);
+			_leverActor = nullptr;
+		}
+		else
+		{
+			int j = i - _createdInterruptors[0].size() / constants.KTWO;
+			_levelDoors.push_back(_world->SpawnActor<TlocDoor>(TlocDoor::StaticClass(), FVector(-400, 70, 200), FRotator::ZeroRotator, SpawnParam));
+			_levelDoors[j]->InitDoor();
+			TlocDoor* _doorActor = (TlocDoor*)_createdInterruptors[0][i];
+			_levelDoors[j]->ReplaceDoor(*_doorActor);
+			_doorActor = nullptr;
+		}
+		
 	}
 }
 
@@ -198,11 +178,6 @@ void ATlocGameMode::Update(float deltaTime)
 {
 	GlobalConstants constants;
 	_humanPlayerController->Update(deltaTime);
-	/*if (changingLevel)
-	{
-		_world->SetCurrentLevel(_levels[1]);
-		changingLevel = false;
-	}*/
 	if (_humanPlayer->GetMode() == _humanPlayer->PlayingMode::TARGET_SELECTION)
 	{
 		bool goOn = true;

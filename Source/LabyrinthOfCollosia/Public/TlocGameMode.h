@@ -2,8 +2,8 @@
 
 #pragma once
 
-//#include "Objects/TlocObject.h"
-//#include "Characters/TlocEnemy.h"
+#include "Stage/TlocDoor.h"
+#include "Stage/TlocLever.h"
 #include "Characters/TlocHumanPlayer.h"
 #include "Characters/TlocDogPlayer.h"
 #include "JsonReader/TlocStageLoader.h"
@@ -41,7 +41,6 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	void SpawnLevels(int _lvlNum);
 	void SpawnActorsOnStage();
 	void SetPlayersFeatures(int &plyr, std::vector<TlocPlayer*> &players);
 
@@ -70,7 +69,6 @@ private:
 	ATlocHumanPlayer* _humanPlayer;
 	ATlocDogPlayer* _dogPlayer;
 	UWorld* _world;
-	std::vector<ULevel*> _levels;
 
 	//Level loaders
 	TlocGameLoader* _gameLoader;
@@ -82,6 +80,9 @@ private:
 	std::vector<ATlocObject*> _levelObjects;
 	std::vector<std::vector<ATlocEnemy*>> _createdEnemies;
 	std::vector<std::vector<ATlocObject*>> _createdObjects;
+	std::vector<std::vector<AInterruptor*>> _createdInterruptors;
+	std::vector<TlocLever*> _levelLevers;
+	std::vector<TlocDoor*> _levelDoors;
 	AActor* _target;
 
 	//Controllers

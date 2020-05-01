@@ -61,7 +61,6 @@ void ATlocObject::ReplaceObject(ATlocObject* _obj)
 	GlobalConstants constants;
 	
 	_wpnMesh = _motor->SetMesh((const TCHAR*)_name, (const TCHAR*)_fileRoot, GetRootComponent(), this);
-	//_wpnMesh->SetupAttachment(_interactionCollision);
 	_motor->RegisterMeshComponent(_wpnMesh);
 
 	char* _objName = (char*)malloc(constants.KCHAR_SIZE);

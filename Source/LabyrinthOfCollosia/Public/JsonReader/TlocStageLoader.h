@@ -4,6 +4,8 @@
 
 #include "TlocMotorLoader.h"
 #include "../Public/Characters/TlocEnemy.h"
+#include "../Public/Stage/TlocDoor.h"
+#include "../Public/Stage/TlocLever.h"
 #include "UObject/UObjectGlobals.h"
 
 #include <vector>
@@ -28,6 +30,8 @@ public:
 	//fin clase singleton
 	std::vector<ATlocObject*> ObjectsLoader(const char* _name);
 	std::vector<ATlocEnemy*> EnemiesLoader(const char* _name);
+	std::vector<AInterruptor*> InterruptorsLoader(const char* _name);
+
 
 private:
 	//clase sigleton
@@ -36,4 +40,6 @@ private:
 	TlocMotorLoader* _motorLoader;
 	//fin clase singleton
 
+	//Functions
+	void obtainInterruptorsCommonData(AInterruptor& _int);
 };
