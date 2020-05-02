@@ -3,6 +3,7 @@
 #include "../Public/Characters/TlocHumanPlayer.h"
 #include "../Public/Characters/TlocEnemy.h"
 #include "../Public/Objects/TlocChest.h"
+#include "../Public/Stage/Interruptor.h"
 #include "../Public/GlobalConstants.h"
 
 #include "GameFramework/PlayerController.h"
@@ -89,6 +90,8 @@ ATlocHumanPlayer::ATlocHumanPlayer() : TlocPlayer()
 
 	openMenu = false;
 	ticking = false; 
+	pickingUp = false;
+	interacting = false;
 	rotate = false;
 
 	MyNumber = 0;
@@ -116,6 +119,7 @@ ATlocHumanPlayer::~ATlocHumanPlayer()
 	_enemy = nullptr;
 	_object = nullptr;
 	pickingUp = false;
+	interacting = false;
 
 	//Delete UI
 	if (IngameMenu && PlayerHud->IsInViewport())
@@ -190,7 +194,6 @@ void ATlocHumanPlayer::BeginPlay()
 void ATlocHumanPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	ticking = true;
 }
 
 // Called to bind functionality to input
@@ -219,7 +222,7 @@ void ATlocHumanPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	
 
 	//Player actions
-	PlayerInputComponent->BindAction("PickUp", IE_Pressed, this, &ATlocHumanPlayer::takeObj);
+	PlayerInputComponent->BindAction("PickUp", IE_Pressed, this, &ATlocHumanPlayer::interact);
 	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &ATlocHumanPlayer::action);
 
 
@@ -246,12 +249,17 @@ void ATlocHumanPlayer::OnHumanActorStopHit(UPrimitiveComponent* _weaponMesh, AAc
 	}
 }
 
-//Function to activate the player's picking up function
+//Function to activate the player's picking up or interact function
 void ATlocHumanPlayer::OnHumanActorOverlap(AActor* _player, AActor* _obj)
 {
 	if (!pickingUp && dynamic_cast<ATlocObject*>(_obj))
 	{
 		pickingUp = true;
+		_object = _obj;
+	}
+	else if (!interacting && dynamic_cast<AInterruptor*>(_obj))
+	{
+		interacting = true;
 		_object = _obj;
 	}
 }
@@ -262,6 +270,11 @@ void ATlocHumanPlayer::OnHumanActorStopOverlap(AActor* _player, AActor* _obj)
 	if (pickingUp)
 	{
 		pickingUp = false;
+		_object = NULL;
+	}
+	if (interacting)
+	{
+		interacting = false;
 		_object = NULL;
 	}
 }
@@ -596,23 +609,28 @@ void ATlocHumanPlayer::attack()
 			ATlocEnemy* tlocEnemy = Cast<ATlocEnemy>(_enemy);
 			tlocEnemy->ModifyLife(-damage);
 		}
-		//Stoping player's attack and erasing target enemy.
-		attacking = false;
-		_enemy = NULL;
 	}
 }
 
-void ATlocHumanPlayer::takeObj()
+void ATlocHumanPlayer::interact()
 {
-	if (!openMenu && pickingUp && _object != NULL)
+	if (!openMenu)
 	{
-		//Calling function that saves the object in players inventory
-		pickupObject();
-		pickingUp = false;
+		if (pickingUp && _object != NULL)
+		{
+			//Calling function that saves the object in players inventory
+			pickupObject();
+			pickingUp = false;
 
-		//After keeping the object, it is destroyed from the stage
-		_object->Destroy();
-		_object = NULL;
+			//After keeping the object, it is destroyed from the stage
+			_object->Destroy();
+			_object = NULL;
+		}
+		else if(interacting && _object != NULL)
+		{
+			//Calling function that activates the interruptor
+			activateInterruptor();
+		}
 	}
 }
 
@@ -766,6 +784,12 @@ void ATlocHumanPlayer::pickupObject()
 		else UE_LOG(LogTemp, Warning, TEXT("The chest it's been opened yet."));
 	}
 }
+void ATlocHumanPlayer::activateInterruptor()
+{
+	AInterruptor* _interruptor = Cast<AInterruptor>(_object);
+	_interruptor->ActivateDeactivateInterruptor();
+}
+
 /***************************  check Chest  ***************************
 *** Function that checks if the taken object is a chest or not.   ****
 ***	In case of being a not opened chest, returns the object that  ****

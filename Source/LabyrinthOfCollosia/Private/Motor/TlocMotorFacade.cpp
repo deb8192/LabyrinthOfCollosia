@@ -74,9 +74,9 @@ void ATlocMotorFacade::SetMeshPosition(AActor& actor, FVector position)
 	actor.SetActorLocation(position);
 }
 
-void ATlocMotorFacade::SetMeshRotation(AActor& actor, FRotator rotation)
+void ATlocMotorFacade::SetMeshRotation(UStaticMeshComponent& actor, FRotator rotation)
 {
-	actor.SetActorRotation(rotation);
+	actor.SetRelativeRotation(rotation);
 }
 
 // Called when the game starts or when spawned

@@ -49,7 +49,7 @@ public:
 	void RotateActor(AActor& actor, FRotator rotation);
 
 	void SetMeshPosition(AActor& actor, FVector position);
-	void SetMeshRotation(AActor& actor, FRotator rotation);
+	void SetMeshRotation(UStaticMeshComponent& actor, FRotator rotation);
 
 
 	void BeginPlay();

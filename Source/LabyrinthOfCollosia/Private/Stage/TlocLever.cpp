@@ -17,7 +17,7 @@ void TlocLever::InitLever()
 {
 	_auxFileRoot = TEXT("/Game/Models/Stages/Stages-objects/Interruptor.Interruptor");
 	_auxMesh = _motor->SetMesh(_name, (const TCHAR*)_fileRoot, GetRootComponent(), this);
-	_auxMesh->AttachTo(_mesh);
+	_auxMesh->AttachTo(GetRootComponent());
 }
 
 void TlocLever::ReplaceLever(TlocLever& _lev)

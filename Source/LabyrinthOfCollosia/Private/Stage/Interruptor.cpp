@@ -12,9 +12,10 @@ AInterruptor::AInterruptor()
 	_motor = ATlocMotorFacade::GetInstance(this);
 
 	active = false;
-
+	rotationSpeed = 0.0;
+	moveTime = 0.0;
 	_interactionCollision = CreateDefaultSubobject<USphereComponent>(TEXT("InteractionCollision"));
-	_interactionCollision->SetSphereRadius(75.f, true);
+	_interactionCollision->SetSphereRadius(125.f, true);
 	SetRootComponent(_interactionCollision);
 	_fileRoot = TEXT("/Game/Models/Stages/Stages-objects/Interruptor.Interruptor");
 
@@ -32,21 +33,156 @@ AInterruptor::~AInterruptor()
 {
 	_interactionCollision = nullptr;
 	_mesh = nullptr;
-	FVector position = FVector::ZeroVector;
-	FRotator rotation = FRotator::ZeroRotator;
+	position = FVector::ZeroVector;
+	rotation = defaultRotation = activeRotation = FRotator::ZeroRotator;
 
 	_motor = nullptr;
-	int IDInterruptor = 0;
+	IDInterruptor = 0;
 	_name = nullptr;
 	_className = nullptr;
 	_fileRoot = nullptr;
 	active = false;
+	rotationSpeed = 0.0;
+	moveTime = 0.0;
 }
 
-void AInterruptor::InitLocationRotation(FVector loc, FRotator rot)
+void AInterruptor::InitLocationRotation(FVector loc, FRotator rot, FRotator actRot)
 {
 	position = lastPosition = renderPosition = loc;
-	rotation = lastRotation = renderRotation = rot;
+	rotation = lastRotation = renderRotation = defaultRotation = rot;
+	activeRotation = defaultRotation - actRot;
+}
+
+void AInterruptor::InitRotationSpeed(float spd)
+{
+	rotationSpeed = spd;
+}
+
+void AInterruptor::ActivateDeactivateInterruptor()
+{
+	active = !active;
+}
+
+void AInterruptor::Update(float updTime)
+{
+	updateRotation(updTime);
+}
+
+void AInterruptor::Render(float rendTime)
+{
+	GlobalConstants constants;
+	rotateEntity(constants.KUPDATE_TIME);
+	updateTimeMove(rendTime);
+	//_motor->SetMeshRotation();
+}
+
+void AInterruptor::updateRotation(float updTime)
+{
+	moveTime = 0.0;
+	GlobalConstants constants;
+	if (active && rotation != activeRotation)
+	{
+		if (rotation.Yaw != activeRotation.Yaw)
+		{
+			lastRotation.Yaw = rotation.Yaw;
+			if (rotation.Yaw < activeRotation.Yaw)
+			{
+				rotation.Yaw += rotationSpeed;
+			}
+			else if (rotation.Yaw > activeRotation.Yaw)
+			{
+				rotation.Yaw -= rotationSpeed;
+			}
+		}
+		else if (rotation.Roll != activeRotation.Roll)
+		{
+			lastRotation.Roll = rotation.Roll;
+			if (rotation.Roll < activeRotation.Roll)
+			{
+				rotation.Roll += rotationSpeed;
+			}
+			else if (rotation.Yaw > activeRotation.Yaw)
+			{
+				rotation.Roll -= rotationSpeed;
+			}
+		}
+		if (abs(rotation.Roll) + rotationSpeed >= abs(activeRotation.Roll))
+		{
+			rotation.Roll = activeRotation.Roll;
+		}
+		if (abs(rotation.Yaw) + rotationSpeed >= abs(activeRotation.Yaw))
+		{
+			rotation.Yaw = activeRotation.Yaw;
+		}
+	}
+	else if (!active && rotation != defaultRotation)
+	{
+		if (rotation.Yaw != defaultRotation.Yaw)
+		{
+			lastRotation.Yaw = rotation.Yaw;
+			if (rotation.Yaw < defaultRotation.Yaw)
+			{
+				rotation.Yaw += rotationSpeed;
+			}
+			else if (rotation.Yaw > defaultRotation.Yaw)
+			{
+				rotation.Yaw -= rotationSpeed;
+			}
+		}
+		else if (rotation.Roll != defaultRotation.Roll)
+		{
+			lastRotation.Roll = rotation.Roll;
+			if (rotation.Roll < defaultRotation.Roll)
+			{
+				rotation.Roll += rotationSpeed;
+			}
+			else if (rotation.Roll > defaultRotation.Roll)
+			{
+				rotation.Roll -= rotationSpeed;
+			}
+		}
+		if (abs(rotation.Roll) + rotationSpeed >= abs(defaultRotation.Roll))
+		{
+			rotation.Roll = defaultRotation.Roll;
+		}
+		if (abs(rotation.Yaw) + rotationSpeed >= abs(defaultRotation.Yaw))
+		{
+			rotation.Yaw = defaultRotation.Yaw;
+		}
+	}
+	else
+	{
+		if(lastRotation.Yaw != rotation.Yaw)
+			lastRotation.Yaw = rotation.Yaw;
+		if (lastRotation.Roll != rotation.Roll)
+			lastRotation.Roll = rotation.Roll;
+	}
+}
+
+void AInterruptor::rotateEntity(float updTime)
+{
+	GlobalConstants constants;
+
+	//pt es el porcentaje de tiempo pasado desde la posicion
+	//de update antigua hasta la nueva
+	float pt = moveTime / updTime;
+
+	if (pt > constants.KONE_F)
+	{
+		pt = constants.KONE_F;
+	}
+	else if (pt < constants.KZERO_F)
+	{
+		pt = constants.KZERO_F;
+	}
+	renderRotation.Roll = lastRotation.Roll * (constants.KONE_F - pt) + rotation.Roll * pt;
+	renderRotation.Pitch = lastRotation.Pitch * (constants.KONE_F - pt) + rotation.Pitch * pt;
+	renderRotation.Yaw = lastRotation.Yaw * (constants.KONE_F - pt) + rotation.Yaw * pt;
+}
+
+void AInterruptor::updateTimeMove(float rendTime)
+{
+	moveTime += rendTime;
 }
 
 void AInterruptor::replaceInterruptor(AInterruptor& _int)
@@ -65,6 +201,8 @@ void AInterruptor::replaceInterruptor(AInterruptor& _int)
 	IDInterruptor = _int.GetId();
 	_name = _int.GetName();
 	_className = _gotObjName;
+	InitLocationRotation(_int.GetPosition(), _int.GetRotation(), _int.GetActiveRotation());
+	InitRotationSpeed(_int.GetSpeedRotation());
 	position = _int.GetPosition();
 	rotation = _int.GetRotation();
 	SetActorLocationAndRotation(position, rotation);
@@ -84,7 +222,7 @@ bool AInterruptor::GetActive()
 	return active;
 }
 
-UMeshComponent* AInterruptor::GetMesh()
+UStaticMeshComponent* AInterruptor::GetMesh()
 {
 	return _mesh;
 }
@@ -118,10 +256,18 @@ FRotator AInterruptor::GetRotation()
 {
 	return rotation;
 }
+FRotator AInterruptor::GetActiveRotation()
+{
+	return activeRotation;
+}
 
 FRotator AInterruptor::GetRenderRotation()
 {
 	return renderRotation;
+}
+float AInterruptor::GetSpeedRotation()
+{
+	return rotationSpeed;
 }
 
 void AInterruptor::SetId(int id)

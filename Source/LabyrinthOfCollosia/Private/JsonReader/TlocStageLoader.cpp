@@ -211,6 +211,7 @@ std::vector<AInterruptor*> TlocStageLoader::InterruptorsLoader(const char* _name
 			FString* _clsNm;
 			FVector* _pos;
 			FRotator* _rot;
+			FRotator* _actRot;
 
 			for (short i = 0; i < leversArray.Num(); i++)
 			{
@@ -220,6 +221,7 @@ std::vector<AInterruptor*> TlocStageLoader::InterruptorsLoader(const char* _name
 				*_clsNm = constants.KLEVER;
 				TSharedPtr<FJsonObject> jsonObject = leversArray[i]->AsObject();
 				int idInterruptor = 0;
+				int speedRotation = 0;
 				TArray<FString> posRot;
 				jsonObject->TryGetStringArrayField(constants.KPOSITION, posRot);
 				_pos = new FVector{ FCString::Atof(*posRot[0]),
@@ -229,9 +231,15 @@ std::vector<AInterruptor*> TlocStageLoader::InterruptorsLoader(const char* _name
 				_rot = new FRotator{ FCString::Atof(*posRot[3]),
 								  FCString::Atof(*posRot[4]),
 								  FCString::Atof(*posRot[5]), };
+				jsonObject->TryGetStringArrayField(constants.KACTIVE_ROTATION, posRot);
+				_actRot = new FRotator{ FCString::Atof(*posRot[6]),
+								  FCString::Atof(*posRot[7]),
+								  FCString::Atof(*posRot[8]), };
 				jsonObject->TryGetNumberField(constants.KID, idInterruptor);
+				jsonObject->TryGetNumberField(constants.KSPEED_STR, speedRotation);
 				_lev->SetClassName(**_clsNm);
-				_lev->InitLocationRotation(*_pos, *_rot);
+				_lev->InitLocationRotation(*_pos, *_rot, *_actRot);
+				_lev->InitRotationSpeed((float)speedRotation);
 				_lev->SetId(idInterruptor);
 				int j = 1;
 				while (j < constants.KMAX_NUM_DIRECTORIES)
@@ -254,6 +262,7 @@ std::vector<AInterruptor*> TlocStageLoader::InterruptorsLoader(const char* _name
 			FString* _clsNm;
 			FVector* _pos;
 			FRotator* _rot;
+			FRotator* _actRot;
 
 			for (short i = 0 ; i < doorsArray.Num(); i++)
 			{
@@ -262,7 +271,8 @@ std::vector<AInterruptor*> TlocStageLoader::InterruptorsLoader(const char* _name
 				_clsNm = new FString();
 				*_clsNm = constants.KDOOR;
 				TSharedPtr<FJsonObject> jsonObject = doorsArray[i]->AsObject();
-				int idInterruptor;
+				int idInterruptor = 0;
+				int speedRotation = 0;
 				TArray<FString> posRot;
 				jsonObject->TryGetStringArrayField(constants.KPOSITION, posRot);
 				_pos = new FVector{ FCString::Atof(*posRot[0]),
@@ -272,9 +282,15 @@ std::vector<AInterruptor*> TlocStageLoader::InterruptorsLoader(const char* _name
 				_rot = new FRotator{ FCString::Atof(*posRot[3]),
 								  FCString::Atof(*posRot[4]),
 								  FCString::Atof(*posRot[5]), };
+				jsonObject->TryGetStringArrayField(constants.KACTIVE_ROTATION, posRot);
+				_actRot = new FRotator{ FCString::Atof(*posRot[6]),
+								  FCString::Atof(*posRot[7]),
+								  FCString::Atof(*posRot[8]), };
 				jsonObject->TryGetNumberField(constants.KID, idInterruptor);
+				jsonObject->TryGetNumberField(constants.KSPEED_STR, speedRotation);
 				_door->SetClassName(**_clsNm);
-				_door->InitLocationRotation(*_pos, *_rot);
+				_door->InitLocationRotation(*_pos, *_rot, *_actRot);
+				_door->InitRotationSpeed((float)speedRotation);
 				_door->SetId(idInterruptor);
 				int j = 1;
 				while (j < constants.KTWO)

@@ -20,18 +20,27 @@ public:
 	AInterruptor();
 	~AInterruptor();
 	
-	void InitLocationRotation(FVector loc, FRotator rot);
+	void InitLocationRotation(FVector loc, FRotator rot, FRotator actRot);
+	void InitRotationSpeed(float spd);
+	void ActivateDeactivateInterruptor();
+	void Update(float updTime);
+	void Render(float rendTime);
+	void updateRotation(float updTime);
+	void rotateEntity(float updTime);
+	void updateTimeMove(float rendTime);
 
 	int GetId();
 	bool GetActive();
-	UMeshComponent* GetMesh();
+	UStaticMeshComponent* GetMesh();
 	TCHAR* GetMeshFileRoot();
 	TCHAR* GetName();
 	TCHAR* GetClassName();
 	FVector GetPosition();
 	FVector GetRenderPosition();
 	FRotator GetRotation();
+	FRotator GetActiveRotation();
 	FRotator GetRenderRotation();
+	float GetSpeedRotation();
 
 	void SetId(int id);
 	void SetActive(bool act);
@@ -50,7 +59,8 @@ protected:
 	USphereComponent* _interactionCollision;
 	UStaticMeshComponent* _mesh;
 	FVector position, lastPosition, renderPosition;
-	FRotator rotation, lastRotation, renderRotation, defaultRotation;
+	FRotator rotation, lastRotation, renderRotation, defaultRotation, activeRotation;
+	float moveTime, rotationSpeed;
 
 	ATlocMotorFacade* _motor;
 	int IDInterruptor;

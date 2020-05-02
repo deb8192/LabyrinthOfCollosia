@@ -114,11 +114,12 @@ private:
 	//Functions to eject player's actions
 	void action();
 	void attack();
-	void takeObj();
+	void interact();
 	void selectSpell(int selection);
 	void unselectSpell();
 	void selectItem(int selection);
 	void pickupObject();
+	void activateInterruptor();
 	ATlocObject* checkChest();
 	bool checkSpellIngredients(TlocSpell& _spll);
 
@@ -134,6 +135,7 @@ private:
 	AActor* _enemy;									//Character's objective
 	AActor* _object;								//Character's picking object
 	bool pickingUp;
+	bool interacting;
 	bool ticking;
 	bool rotate;
 

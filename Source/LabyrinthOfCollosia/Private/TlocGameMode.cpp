@@ -212,6 +212,33 @@ void ATlocGameMode::Update(float deltaTime)
 	{
 		_projectiles[i]->Update(deltaTime);
 	}
+	//Update _levelLevers rotation
+	for (int i = 0; i < _levelLevers.size(); i++)
+	{
+		int id = _levelLevers[i]->GetId();
+		int j = 0;
+		bool encontrado = false;
+		bool active = _levelLevers[i]->GetActive();
+		_levelLevers[i]->Update(deltaTime);
+		while (!encontrado && j < _levelDoors.size())
+		{
+			if (_levelDoors[j]->GetId() == id)
+			{
+				if (_levelDoors[j]->GetActive() == active)
+				{
+					_levelDoors[j]->ActivateDeactivateInterruptor();
+					encontrado = true;
+				}
+			}
+			j++;
+		}
+	}
+
+	//Update _levelDoors rotation
+	for (int i = 0; i < _levelDoors.size(); i++)
+	{
+		_levelDoors[i]->Update(deltaTime);
+	}
 
 	//Checks for enemies to update their state them
 	if (!choosingTarget && !_levelEnemies.empty())
@@ -237,14 +264,28 @@ void ATlocGameMode::Render(float DeltaTime)
 	//Render _humanaPlayer position & rotation
 	_humanPlayerController->Render(DeltaTime);
 	_motor->MovePlayer(*_humanPlayer, _humanPlayer->GetRenderPosition());
-	_motor->SetMeshRotation(*_humanPlayer, _humanPlayer->GetRenderRotation());
+	_motor->RotateActor(*_humanPlayer, _humanPlayer->GetRenderRotation());
 
 	//Render _projectiles position & rotation
 	for (int i = 0; i < _projectiles.size(); i++)
 	{
 		_projectiles[i]->Render(DeltaTime);
 		_motor->MoveActor(*_projectiles[i], _projectiles[i]->GetRenderPosition());
-		_motor->SetMeshRotation(*_projectiles[i], _projectiles[i]->GetRenderRotation());
+		_motor->RotateActor(*_projectiles[i], _projectiles[i]->GetRenderRotation());
+	}
+
+	//Render _levelLevers rotation
+	for (int i = 0; i < _levelLevers.size(); i++)
+	{
+		_levelLevers[i]->Render(DeltaTime);
+		_motor->SetMeshRotation(*_levelLevers[i]->GetMesh(), _levelLevers[i]->GetRenderRotation());
+	}
+
+	//Render _levelLevers rotation
+	for (int i = 0; i < _levelLevers.size(); i++)
+	{
+		_levelDoors[i]->Render(DeltaTime);
+		_motor->SetMeshRotation(*_levelDoors[i]->GetMesh(), _levelDoors[i]->GetRenderRotation());
 	}
 }
 
