@@ -22,7 +22,6 @@ void TlocLever::InitLever()
 
 void TlocLever::ReplaceLever(TlocLever& _lev)
 {
-	replaceInterruptor(_lev);
 
 	TArray<TCHAR*> paths = _lev.GetMeshesFileRoot();
 	_auxFileRoot = paths[1];
@@ -32,6 +31,9 @@ void TlocLever::ReplaceLever(TlocLever& _lev)
 		_auxMesh->AttachTo(GetRootComponent());
 		_motor->RegisterMeshComponent(_auxMesh);
 	}
+
+	replaceInterruptor(_lev);
+	_motor->SetMeshRotation(*_auxMesh, renderRotation);
 }
 
 TArray<TCHAR*> TlocLever::GetMeshesFileRoot()

@@ -224,7 +224,7 @@ void ATlocGameMode::Update(float deltaTime)
 		{
 			if (_levelDoors[j]->GetId() == id)
 			{
-				if (_levelDoors[j]->GetActive() == active)
+				if (_levelDoors[j]->GetActive() != active)
 				{
 					_levelDoors[j]->ActivateDeactivateInterruptor();
 					encontrado = true;

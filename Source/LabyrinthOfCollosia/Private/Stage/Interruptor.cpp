@@ -101,7 +101,7 @@ void AInterruptor::updateRotation(float updTime)
 			{
 				rotation.Roll += rotationSpeed;
 			}
-			else if (rotation.Yaw > activeRotation.Yaw)
+			else if (rotation.Roll > activeRotation.Roll)
 			{
 				rotation.Roll -= rotationSpeed;
 			}
@@ -189,27 +189,25 @@ void AInterruptor::replaceInterruptor(AInterruptor& _int)
 {
 	GlobalConstants constants;
 
-	_mesh = _motor->SetMesh((const TCHAR*)_name, (const TCHAR*)_fileRoot, GetRootComponent(), this);
-	_motor->RegisterMeshComponent(_mesh);
-
 	char* _intName = (char*)malloc(constants.KCHAR_SIZE);
 	TCHAR* _gotObjName = _int.GetClassName();
 	size_t   x;
 	wcstombs_s(&x, _intName, constants.KCHAR_SIZE, _gotObjName, constants.KCHAR_SIZE);
 
-	//Object features
 	IDInterruptor = _int.GetId();
+	active = _int.GetActive();
 	_name = _int.GetName();
 	_className = _gotObjName;
+	_fileRoot = _int.GetMeshFileRoot(); 
+
 	InitLocationRotation(_int.GetPosition(), _int.GetRotation(), _int.GetActiveRotation());
+	activeRotation = _int.GetActiveRotation();
 	InitRotationSpeed(_int.GetSpeedRotation());
-	position = _int.GetPosition();
-	rotation = _int.GetRotation();
-	SetActorLocationAndRotation(position, rotation);
-	_fileRoot = _int.GetMeshFileRoot();
-	_mesh = _motor->SetMesh(_name, (const TCHAR*)_fileRoot, GetRootComponent(), this);
 	_motor->MoveActor(*this, _int.GetPosition());
-	_motor->RotateActor(*this, _int.GetRotation());
+	//_motor->RotateActor(*this, _int.GetRotation());
+
+	_mesh = _motor->SetMesh((const TCHAR*)_name, (const TCHAR*)_fileRoot, GetRootComponent(), this);
+	_motor->RegisterMeshComponent(_mesh);
 }
 
 int AInterruptor::GetId()
