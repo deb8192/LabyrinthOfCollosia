@@ -141,11 +141,11 @@ void AInterruptor::updateRotation(float updTime)
 				rotation.Roll -= rotationSpeed;
 			}
 		}
-		if (abs(rotation.Roll) + rotationSpeed >= abs(defaultRotation.Roll))
+		if (abs(rotation.Roll) + rotationSpeed > abs(defaultRotation.Roll))
 		{
 			rotation.Roll = defaultRotation.Roll;
 		}
-		if (abs(rotation.Yaw) + rotationSpeed >= abs(defaultRotation.Yaw))
+		if (abs(rotation.Yaw) + rotationSpeed > abs(defaultRotation.Yaw))
 		{
 			rotation.Yaw = defaultRotation.Yaw;
 		}
