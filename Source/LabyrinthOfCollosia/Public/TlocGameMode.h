@@ -17,6 +17,7 @@
 
 
 #include "TlocPlayerController.h"
+#include "AI/TlocAIEnemiesController.h"
 
 
 //#include "CoreMinimal.h"

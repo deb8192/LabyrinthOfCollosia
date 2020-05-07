@@ -4,6 +4,7 @@
 #include "TlocEnemy.h"
 #include "../Public/GlobalConstants.h"
 #include "Camera/CameraComponent.h"
+#include "../Public/Characters/TlocHumanPlayer.h"
 #include "ConstructorHelpers.h"
 
 
@@ -29,11 +30,11 @@ ATlocEnemy::ATlocEnemy()
 	level = 1;
 	life = defaultLife = 150;
 	master = defaultMaster = 100;
-	attack = 25;
-	defense = 15;
-	magicDef = 13;
+	attack = 10;
+	defense = 5;
+	magicDef = 3;
 	criticalHit = 2;
-	criticalProb = 16;
+	criticalProb = 10;
 	luck = 75;
 	evasion = 25;
 	speed = 4.0f;
@@ -76,6 +77,11 @@ ATlocEnemy::ATlocEnemy()
 	_targetCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("TargetCamera"));
 	_targetCamera->SetupAttachment(_targetCameraSpringArm, USpringArmComponent::SocketName);
 	_targetCameraSpringArm->SetRelativeLocationAndRotation(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z + constants.K1_4PI_RADIAN), FRotator(0.0f, 45.f, 0.0f));
+
+	_attackCollision = CreateDefaultSubobject<USphereComponent>(TEXT("AttackCollision"));
+	_attackCollision->SetSphereRadius(100.f, true);
+	_attackCollision->SetupAttachment(GetRootComponent());
+	_attackCollision->SetRelativeLocation(FVector(GetActorLocation().X, GetActorLocation().Y + constants.K1_4PI_RADIAN, GetActorLocation().Z));
 
 	/*
 	_charMesh->SetRelativeLocation(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z - 90));
@@ -162,14 +168,49 @@ ATlocEnemy::~ATlocEnemy()
 	evasion = 0;
 }
 
+void ATlocEnemy::Update(float DeltaTime)
+{
+	//If actor is invulnerable, we substract deltatime to invulnerableTime
+	if (invulnerable)
+	{
+		invulnerableTime -= DeltaTime;
+		if (invulnerableTime <= 0.0)
+		{
+			invulnerable = false;
+			invulnerableTime = 0.0;
+		}
+	}
+}
+
 // Called when the game starts or when spawned
 void ATlocEnemy::BeginPlay()
 {
 	Super::BeginPlay();
 
+	_attackCollision->OnComponentBeginOverlap.AddDynamic(this, &ATlocEnemy::OnEnemyActorHit);
+	_attackCollision->OnComponentEndOverlap.AddDynamic(this, &ATlocEnemy::OnEnemyActorStopHit);
+
 	//_motor->RegisterMeshComponent(_charMesh);
 	//_motor->RegisterMeshComponent(_auxCharMesh);
 	//AddActorLocalOffset(FVector(0.0f, 0.0f, 0.0f), true);
+}
+
+void ATlocEnemy::OnEnemyActorHit(UPrimitiveComponent* _attackCollision, AActor* _other, UPrimitiveComponent* _otherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& Hit)
+{
+	if (!attacking && dynamic_cast<ATlocHumanPlayer*>(_other))
+	{
+		attacking = true;
+		_enemy = _other;
+	}
+}
+
+void ATlocEnemy::OnEnemyActorStopHit(UPrimitiveComponent* _attackCollision, AActor* _other, UPrimitiveComponent* _otherComp, int32 OtherBodyIndex)
+{
+	if (attacking)
+	{
+		attacking = false;
+		_enemy = NULL;
+	}
 }
 
 void ATlocEnemy::moveEntity(float updTime)
@@ -301,6 +342,37 @@ void ATlocEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 
 }
 
+int ATlocEnemy::attackEnemy()
+{
+	GlobalConstants constants;
+	float damage = constants.KBASICDAMAGE + attack;
+
+	int hitProbability = rand() % constants.KPERCENT;
+	if (hitProbability >= luck)
+	{
+		return constants.KMINUS_ONE;
+	}
+	int critProbability = rand() % constants.KPERCENT;
+	if (critProbability < criticalProb)
+	{
+		damage *= (criticalHit + constants.KONE_F);
+	}
+	//If hit doesn't miss
+	if (damage != constants.KMINUS_ONE)
+	{
+		if (_enemy)
+		{
+			//Enemy's life is modified with damage value
+			ATlocHumanPlayer* tlocEnemy = dynamic_cast<ATlocHumanPlayer*>(_enemy);
+			tlocEnemy->ModifyLife(-damage);
+			tlocEnemy->ModifyHudLife(-damage);
+		}
+		else damage = constants.KMINUS_ONE;
+	}
+
+	return int(damage);
+}
+
 /***************************** Modify life **************************
 *** 	Function that adds the quantity parameter value to the   ****
 ***	character's life. Quantity value may be positive or negative ****
@@ -315,7 +387,7 @@ void ATlocEnemy::ModifyLife(float quantity)
 {
 	GlobalConstants constants;
 	UE_LOG(LogTemp, Warning, TEXT("You hurt the enemy."));
-	if (quantity < 0)
+	if (quantity < 0 && !invulnerable)
 	{
 		life += (quantity - defense * constants.KTEN_PERCENT);
 		invulnerable = true;
@@ -348,21 +420,8 @@ void ATlocEnemy::ModifyLife(float quantity)
 */
 int ATlocEnemy::Attack()
 {
-	GlobalConstants constants;
-	float damage = constants.KBASICDAMAGE * attack;
-
-	int hitProbability = rand() % constants.KPERCENT;
-	if (hitProbability >= luck)
-	{
-		return constants.KMINUS_ONE;
-	}
-	int critProbability = rand() % constants.KPERCENT;
-	if (critProbability < criticalProb)
-	{
-		damage *= criticalHit;
-	}
-
-	return int(damage);
+	int damage = attackEnemy();
+	return damage;
 }
 
 int ATlocEnemy::Magic()

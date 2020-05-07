@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Components/StaticMeshComponent.h"
+#include "Engine/StaticMesh.h"
 #include "Engine/Scene.h"
 #include "Camera/PlayerCameraManager.h"
 #include "CoreMinimal.h"

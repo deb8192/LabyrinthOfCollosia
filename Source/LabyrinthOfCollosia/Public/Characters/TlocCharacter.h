@@ -28,6 +28,8 @@ public:
 	// Called when the game starts or when spawned
 	virtual ~TlocCharacter() {};
 
+	virtual void Update(float DeltaTime) = 0;
+
 	virtual void ModifyLife(float quantity) = 0;				//Adds or substracts as many as quantity value is
 	virtual int Attack() = 0;									//Calculates hit damage
 	virtual int Magic() = 0;									//Calculates magic damage

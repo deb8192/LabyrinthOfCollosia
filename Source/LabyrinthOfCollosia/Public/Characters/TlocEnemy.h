@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "Components/SphereComponent.h"
 #include "TlocCharacter.h"
 
 #include "CoreMinimal.h"
@@ -19,6 +20,7 @@ public:
 	ATlocEnemy(int idChrctr, int lvl, int lif, int att, int def, int magdef, int crit, int critProb, int lck, int eva);
 	~ATlocEnemy();
 
+	void Update(float DeltaTime);
 	//Character's functions
 	void ModifyLife(float quantity);
 	int  Attack();
@@ -120,6 +122,11 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UFUNCTION()
+	void OnEnemyActorHit(UPrimitiveComponent* _attackCollision, AActor* _other, UPrimitiveComponent* _otherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& Hit);
+	UFUNCTION()
+	void OnEnemyActorStopHit(UPrimitiveComponent* _attackCollision, AActor* _other, UPrimitiveComponent* _otherComp, int32 OtherBodyIndex);
+
 	// Functions
 	void moveEntity(float updTime);
 	void rotateEntity(float updTime);
@@ -136,6 +143,8 @@ public:
 
 private:
 
+	int attackEnemy();
+
 	UStaticMeshComponent* _auxCharMesh;
 	UStaticMeshComponent* _auxCharMesh2;
 
@@ -146,4 +155,11 @@ private:
 		USpringArmComponent* _targetCameraSpringArm;
 	UPROPERTY(VisibleAnywhere)
 		UCameraComponent* _targetCamera;
+
+	USphereComponent* _attackCollision;
+
+	AActor* _enemy;
+	bool coward;
+	bool jump;
+	bool projectil;
 };

@@ -2,7 +2,6 @@
 
 #pragma once
 
-
 #include <iostream>
 #include "TlocCharacter.h"
 #include "..\UserInterfaces\TlocIngameMenu.h"
@@ -23,6 +22,8 @@ public:
 	//NO ES INCORRECTO, PERO NO ES FUNCIONAL EN UNREAL ENGINE
 	//TlocPlayer(int idChrctr, int lvl, int lif, int att, int def, int magdef, int exp, int nxtlvl, int crit, int critProb, int lck, int eva);
 	~TlocPlayer();
+
+	void Update(float DeltaTime);
 
 	//Character's functions
 	void ModifyLife(float quantity);

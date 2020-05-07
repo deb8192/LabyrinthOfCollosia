@@ -10,6 +10,7 @@ public class LabyrinthOfCollosia : ModuleRules
 	
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
 		PublicDependencyModuleNames.AddRange(new string[] { "Json", "JsonUtilities" });
+ 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "AIModule", "GameplayTasks" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 

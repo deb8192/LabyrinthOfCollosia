@@ -21,7 +21,7 @@ ATlocHumanPlayer::ATlocHumanPlayer() : TlocPlayer()
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 
 	//Player equip and motor
-	playerEquipment._weapon = CreateDefaultSubobject<TlocWeapon>(TEXT("PlayerWeapon")); /* NewObject<TlocWeapon>();*/		//Calling the constructor to create a new TlocWeapon object
+	playerEquipment._weapon = CreateDefaultSubobject<TlocWeapon>(TEXT("PlayerWeapon"));	//Calling the constructor to create a new TlocWeapon object
 	_weapon.push_back(playerEquipment._weapon);
 	playerEquipment._armor = NULL;
 	playerEquipment._gauntlet = NULL;
@@ -146,8 +146,9 @@ ATlocHumanPlayer::~ATlocHumanPlayer()
 	rotate = false;
 }
 
-void ATlocHumanPlayer::Update()
+void ATlocHumanPlayer::Update(float DeltaTime)
 {
+	TlocPlayer::Update(DeltaTime);
 }
 
 void ATlocHumanPlayer::Render(float rendTime)
@@ -562,13 +563,11 @@ void ATlocHumanPlayer::loadHud()
 	PlayerHud->AddToViewport();
 }
 
-void ATlocHumanPlayer::modifyHudLife(/*float quantity*/)
+void ATlocHumanPlayer::ModifyHudLife(float quantity)
 {
-	//TEST
-	ModifyLife(-25);
 	float percent = life / defaultLife;
 	PlayerHud->ModifyLifeBar(percent);
-	modifyHudMaster(-25/defaultLife);
+	modifyHudMaster(-quantity/defaultLife);
 }
 
 void ATlocHumanPlayer::modifyHudMaster(float quantity)
@@ -576,6 +575,7 @@ void ATlocHumanPlayer::modifyHudMaster(float quantity)
 	GlobalConstants constants;
 	if (quantity < constants.KZERO_F)
 	{
+		master += (abs(quantity)) * defaultLife;
 		PlayerHud->ModifyMasterBar(abs(quantity));
 	}
 }
@@ -605,9 +605,12 @@ void ATlocHumanPlayer::attack()
 		//If hit doesn't miss
 		if (damage != constants.KMINUS_ONE)
 		{
-			//Enemy's life is modified with damage value
-			ATlocEnemy* tlocEnemy = Cast<ATlocEnemy>(_enemy);
-			tlocEnemy->ModifyLife(-damage);
+			if (_enemy)
+			{
+				//Enemy's life is modified with damage value
+				ATlocEnemy* tlocEnemy = Cast<ATlocEnemy>(_enemy);
+				tlocEnemy->ModifyLife(-damage);
+			}
 		}
 	}
 }

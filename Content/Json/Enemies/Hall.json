@@ -1,6 +1,6 @@
 {
 	"TlocEnemy": [{
-		"position": [2000, -3000, 45],
+		"position": [2000, -3000, 55],
 		"name": "satyr",
 		"life": 100,
 		"fileDirectory1": "/Game/Models/Characters/Satyr_Cube_000.Satyr_Cube_000",
@@ -15,7 +15,7 @@
 		"evasion": 50
 	},
 	{
-		"position": [-1800, -1500, 45],
+		"position": [-1800, -1500, 55],
 		"name": "satyr",
 		"life": 100,
 		"fileDirectory1": "/Game/Models/Characters/Satyr_Cube_000.Satyr_Cube_000",
@@ -30,7 +30,7 @@
 		"evasion": 50
 	},
 	{
-		"position": [1500, 0, 45],
+		"position": [1500, 0, 55],
 		"name": "slim",
 		"life": 70,
 		"fileDirectory1": "/Game/Models/Characters/Slim.Slim",
@@ -45,7 +45,7 @@
 		"evasion": 50
 	},
 	{
-		"position": [-1200, 300, 45],
+		"position": [-1200, 300, 55],
 		"name": "slim",
 		"life": 70,
 		"fileDirectory1": "/Game/Models/Characters/Slim.Slim",
@@ -60,7 +60,7 @@
 		"evasion": 50
 	},
 	{
-		"position": [600, 200, 45],
+		"position": [600, 200, 55],
 		"name": "slim",
 		"life": 70,
 		"fileDirectory1": "/Game/Models/Characters/Slim.Slim",
@@ -75,7 +75,7 @@
 		"evasion": 50
 	},
 	{
-		"position": [250, 500, 45],
+		"position": [250, 500, 55],
 		"name": "slim",
 		"life": 70,
 		"fileDirectory1": "/Game/Models/Characters/Slim.Slim",
@@ -90,7 +90,7 @@
 		"evasion": 50
 	},
 	{
-		"position": [0, -3000, 45],
+		"position": [0, -3000, 55],
 		"name": "slim",
 		"life": 70,
 		"fileDirectory1": "/Game/Models/Characters/Slim.Slim",

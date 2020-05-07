@@ -162,9 +162,24 @@ TlocPlayer::~TlocPlayer()
 	nextLevel = 0;
 }
 
+void TlocPlayer::Update(float DeltaTime)
+{
+	//If actor is invulnerable, we substract deltatime to invulnerableTime
+	if (invulnerable)
+	{
+		invulnerableTime -= DeltaTime;
+		if (invulnerableTime <= 0.0)
+		{
+			invulnerable = false;
+			invulnerableTime = 0.0;
+		}
+	}
+}
+
 void TlocPlayer::ModifyLife(float quantity)
 {
-	life += quantity;
+	if(quantity > 0 || !invulnerable)
+		life += quantity;
 	if (life <= 0)
 	{
 		//Se muere, se acaba la partida

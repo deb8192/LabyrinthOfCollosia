@@ -4,6 +4,7 @@
 #include "TlocGameMode.h"
 #include "TlocGameState.h"
 #include "TlocIngameMenu.h"
+#include "../Public/AI/TlocAIEnemiesController.h"
 #include "../Public/GlobalConstants.h"
 #include "Misc/FileHelper.h"
 #include "FileHelpers.h"
@@ -101,6 +102,11 @@ void ATlocGameMode::SpawnActorsOnStage()
 		_levelEnemies.push_back(_world->SpawnActor<ATlocEnemy>(ATlocEnemy::StaticClass(), FVector(-500, -70, 100), FRotator::ZeroRotator, SpawnParam));
 		//_levelEnemies[i] = _createdEnemies[0][i];
 		_levelEnemies[i]->replaceEnemy(_createdEnemies[0][i]);
+		_levelEnemies[i]->AIControllerClass = ATlocAIEnemiesController::StaticClass();
+		_levelEnemies[i]->AutoPossessAI = EAutoPossessAI::Spawned;
+		//_levelEnemies[i]->Controller = NewObject<ATlocAIEnemiesController>();*/
+		_levelEnemies[i]->SpawnDefaultController();
+		((ATlocAIEnemiesController*)_levelEnemies[i]->Controller)->OnPosses(_levelEnemies[i]);
 	}
 	for (int i = 0; i < _createdInterruptors[0].size(); i++)
 	{
@@ -247,7 +253,7 @@ void ATlocGameMode::Update(float deltaTime)
 		{
 			if (_levelEnemies[i] != NULL)
 			{
-				_levelEnemies[i]->AddActorWorldOffset(FVector(0.0f, 0.0f, 0.0f), true);
+				((ATlocAIEnemiesController*)_levelEnemies[i]->Controller)->Update(deltaTime);
 				if (_levelEnemies[i]->GetLife() <= constants.KZERO)
 				{
 					_levelEnemies[i]->Destroy();
@@ -265,7 +271,15 @@ void ATlocGameMode::Render(float DeltaTime)
 	_humanPlayerController->Render(DeltaTime);
 	_motor->MovePlayer(*_humanPlayer, _humanPlayer->GetRenderPosition());
 	_motor->RotateActor(*_humanPlayer, _humanPlayer->GetRenderRotation());
-
+	
+	for (int i = 0; i < _levelEnemies.size(); i++)
+	{
+		if (_levelEnemies[i] != NULL)
+		{
+			_motor->MoveActor(*_levelEnemies[i], _levelEnemies[i]->GetActorLocation());
+			_motor->RotateActor(*_levelEnemies[i], _levelEnemies[i]->GetActorRotation());
+		}
+	}
 	//Render _projectiles position & rotation
 	for (int i = 0; i < _projectiles.size(); i++)
 	{

@@ -31,6 +31,7 @@ void ATlocPlayerController::Update(float DeltaTime)
 {
 	AcknowledgedPawn->OnActorBeginOverlap.Get();
 	AcknowledgedPawn->OnActorEndOverlap.Get();
+	Cast<ATlocHumanPlayer>(AcknowledgedPawn)->Update(DeltaTime);
 	//PlayerTick(DeltaTime);
 	ProcessPlayerInput(DeltaTime, false);
 	

@@ -19,9 +19,10 @@ public:
 	//ATlocHumanPlayer(int idChrctr, int lvl, int lif, int att, int def, int magdef, int exp, int nxtlvl, int crit, int critProb, int lck, int eva);
 	~ATlocHumanPlayer();
 
-	void Update();
+	virtual void Update(float DeltaTime) override;
 	void Render(float rendTime);
 	void InitLocationRotation();
+	void ModifyHudLife(float quantity);
 
 	//Setters & Getters
 
@@ -108,7 +109,6 @@ private:
 
 	//Functions to load Player's HUD and use it
 	void loadHud();
-	void modifyHudLife(/*float quantity*/);
 	void modifyHudMaster(float quantity);
 
 	//Functions to eject player's actions
