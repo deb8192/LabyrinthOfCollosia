@@ -17,6 +17,10 @@ EBTNodeResult::Type UTlocBTTaskAttackNode::ExecuteTask(UBehaviorTreeComponent& O
 		{
 			return EBTNodeResult::Succeeded;
 		}
+		else if (attack == constants.KZERO)
+		{
+			return EBTNodeResult::InProgress;
+		}
 		else return EBTNodeResult::Failed;
 	}
 	else return EBTNodeResult::Failed;

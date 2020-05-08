@@ -176,20 +176,29 @@ void TlocPlayer::Update(float DeltaTime)
 	}
 }
 
+void TlocPlayer::Render(float DeltaTime)
+{
+	GlobalConstants constants;
+	moveEntity(constants.KUPDATE_TIME);
+	rotateEntity(constants.KUPDATE_TIME);
+	updateTimeMove(DeltaTime);
+}
+
 void TlocPlayer::ModifyLife(float quantity)
 {
-	if(quantity > 0 || !invulnerable)
+	GlobalConstants constants;
+	if(quantity > 0)
 		life += quantity;
+	else if (quantity < 0 && !invulnerable)
+	{
+		life += (quantity - defense * constants.KTEN_PERCENT);
+		invulnerable = true;
+		invulnerableTime = constants.KINVULNERABLE_TIME;
+	}
 	if (life <= 0)
 	{
 		//Se muere, se acaba la partida
 		life = 0;
-	}
-	else if (quantity < 0)
-	{
-		GlobalConstants constants;
-		invulnerable = true;
-		invulnerableTime = constants.KINVULNERABLE_TIME;
 	}
 	else if (life > defaultLife)
 	{

@@ -24,7 +24,8 @@ public:
 
 	virtual void OnPosses(class APawn* _enemy);
 
-	void Update(float DesltaTime);
+	void Update(float DeltaTime);
+	void Render(float DeltaTime);
 
 	// Human player ingame menu
 	FORCEINLINE UBlackboardComponent* GetBlackboardComp() const
@@ -54,6 +55,10 @@ private:
 
 	UPROPERTY()
 		FName blackBoardKeyName = FName("DetectedPlayer");
+	UPROPERTY()
+		FName blackBoardKeyNameCoward = FName("IsCoward");
+	UPROPERTY()
+		FName blackBoardKeyNameNotCoward = FName("IsNotCoward");
 
 	// Ingame menu class
 	/*TSubclassOf<class UBehaviorTree> BehaviorTreeClass;

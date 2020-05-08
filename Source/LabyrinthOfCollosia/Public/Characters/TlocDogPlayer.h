@@ -18,6 +18,9 @@ public:
 	ATlocDogPlayer(int idChrctr, int lvl, int lif, int att, int def, int magdef, int exp, int nxtlvl, int crit, int critProb, int lck, int eva);
 	~ATlocDogPlayer();
 
+	virtual void Update(float DeltaTime) override;
+	virtual void Render(float rendTime) override;
+
 	//Setters & Getters
 	void SetMesh(const TCHAR* fileRoot, int mesh);
 	void SetPosition(FVector newPosition);

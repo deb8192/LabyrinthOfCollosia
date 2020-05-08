@@ -1,6 +1,7 @@
 {
 	"TlocEnemy": [{
 		"position": [2000, -3000, 55],
+		"rotation": [0, 0, 0],
 		"name": "satyr",
 		"life": 100,
 		"fileDirectory1": "/Game/Models/Characters/Satyr_Cube_000.Satyr_Cube_000",
@@ -12,10 +13,13 @@
 		"criticalHit": 200,
 		"criticalProb": 10,
 		"luck": 60,
-		"evasion": 50
+		"evasion": 50,
+		"speed": 500,
+		"coward": false
 	},
 	{
 		"position": [-1800, -1500, 55],
+		"rotation": [0, 0, 0],
 		"name": "satyr",
 		"life": 100,
 		"fileDirectory1": "/Game/Models/Characters/Satyr_Cube_000.Satyr_Cube_000",
@@ -27,10 +31,13 @@
 		"criticalHit": 200,
 		"criticalProb": 10,
 		"luck": 60,
-		"evasion": 50
+		"evasion": 50,
+		"speed": 500,
+		"coward": false
 	},
 	{
 		"position": [1500, 0, 55],
+		"rotation": [0, 0, 0],
 		"name": "slim",
 		"life": 70,
 		"fileDirectory1": "/Game/Models/Characters/Slim.Slim",
@@ -42,10 +49,13 @@
 		"criticalHit": 200,
 		"criticalProb": 10,
 		"luck": 60,
-		"evasion": 50
+		"evasion": 50,
+		"speed": 100,
+		"coward": true
 	},
 	{
 		"position": [-1200, 300, 55],
+		"rotation": [0, 0, 0],
 		"name": "slim",
 		"life": 70,
 		"fileDirectory1": "/Game/Models/Characters/Slim.Slim",
@@ -57,10 +67,13 @@
 		"criticalHit": 200,
 		"criticalProb": 10,
 		"luck": 60,
-		"evasion": 50
+		"evasion": 50,
+		"speed": 100,
+		"coward": true
 	},
 	{
 		"position": [600, 200, 55],
+		"rotation": [0, 0, 0],
 		"name": "slim",
 		"life": 70,
 		"fileDirectory1": "/Game/Models/Characters/Slim.Slim",
@@ -72,10 +85,13 @@
 		"criticalHit": 200,
 		"criticalProb": 10,
 		"luck": 60,
-		"evasion": 50
+		"evasion": 50,
+		"speed": 100,
+		"coward": true
 	},
 	{
 		"position": [250, 500, 55],
+		"rotation": [0, 0, 0],
 		"name": "slim",
 		"life": 70,
 		"fileDirectory1": "/Game/Models/Characters/Slim.Slim",
@@ -87,10 +103,13 @@
 		"criticalHit": 200,
 		"criticalProb": 10,
 		"luck": 60,
-		"evasion": 50
+		"evasion": 50,
+		"speed": 100,
+		"coward": true
 	},
 	{
 		"position": [0, -3000, 55],
+		"rotation": [0, 0, 0],
 		"name": "slim",
 		"life": 70,
 		"fileDirectory1": "/Game/Models/Characters/Slim.Slim",
@@ -102,6 +121,8 @@
 		"criticalHit": 200,
 		"criticalProb": 10,
 		"luck": 60,
-		"evasion": 50
+		"evasion": 50,
+		"speed": 100,
+		"coward": true
 	}]
 }

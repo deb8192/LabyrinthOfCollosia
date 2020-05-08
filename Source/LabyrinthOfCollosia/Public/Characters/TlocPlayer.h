@@ -24,6 +24,7 @@ public:
 	~TlocPlayer();
 
 	void Update(float DeltaTime);
+	void Render(float DeltaTime);
 
 	//Character's functions
 	void ModifyLife(float quantity);

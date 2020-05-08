@@ -159,8 +159,11 @@ std::vector<ATlocEnemy*> TlocStageLoader::EnemiesLoader(const char* _name)
 	{
 		TArray<TSharedPtr<FJsonValue>> enemiesArray = jsonParser->GetArrayField(constants.KENEMY);
 		ATlocEnemy* _enm;
-		FString* _filePath, _auxFilePath;
+		FString* _filePath, _auxFilePath, name;
 		FVector* _pos;
+		FRotator* _rot;
+		int life, attack, defense, magDefense, criticalHit, criticalProb, luck, evasion, speed;
+		bool coward;
 		for (short i = 0; i < enemiesArray.Num(); i++)
 		{
 			_enm = NewObject<ATlocEnemy>();
@@ -170,6 +173,20 @@ std::vector<ATlocEnemy*> TlocStageLoader::EnemiesLoader(const char* _name)
 			_pos = new FVector{ FCString::Atof(*posRot[0]),
 							  FCString::Atof(*posRot[1]),
 							  FCString::Atof(*posRot[2]), };
+			jsonObject->TryGetStringArrayField(constants.KROTATION, posRot);
+			_rot = new FRotator{ FCString::Atof(*posRot[3]),
+							  FCString::Atof(*posRot[4]),
+							  FCString::Atof(*posRot[5]), };
+			jsonObject->TryGetNumberField(constants.KLIFE, life);
+			jsonObject->TryGetNumberField(constants.KATTACK, attack);
+			jsonObject->TryGetNumberField(constants.KDEFENSE, defense);
+			jsonObject->TryGetNumberField(constants.KMAGIC_DEFENSE, magDefense);
+			jsonObject->TryGetNumberField(constants.KCRITICAL_HIT, criticalHit);
+			jsonObject->TryGetNumberField(constants.KCRITICAL_PROB, criticalProb);
+			jsonObject->TryGetNumberField(constants.KLUCK, luck);
+			jsonObject->TryGetNumberField(constants.KEVASION, evasion);
+			jsonObject->TryGetNumberField(constants.KSPEED_STR, speed);
+			jsonObject->TryGetBoolField(constants.KCOWARD, coward);
 			int j = 1;
 			while (j < constants.KMAX_NUM_DIRECTORIES)
 			{
@@ -181,6 +198,18 @@ std::vector<ATlocEnemy*> TlocStageLoader::EnemiesLoader(const char* _name)
 				j++;
 			}
 			_enm->SetPosition(*_pos);
+			_enm->SetRotation(*_rot);
+			_enm->SetLife(life);
+			_enm->SetDefaultLife(life);
+			_enm->SetAttack(attack);
+			_enm->SetDefense(defense);
+			_enm->SetMagicDefense(magDefense);
+			_enm->SetCriticalHit(criticalHit);
+			_enm->SetCriticalProb(criticalProb);
+			_enm->SetLuck(luck);
+			_enm->SetEvasion(evasion);
+			_enm->SetCoward(coward);
+			_enm->SetSpeed(speed);
 			levelEnemies.push_back(_enm);
 		}
 	}

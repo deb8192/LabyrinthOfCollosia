@@ -27,6 +27,16 @@ ATlocDogPlayer::~ATlocDogPlayer()
 	//PrimaryActorTick.bCanEverTick = false;
 }
 
+void ATlocDogPlayer::Update(float DeltaTime)
+{
+	TlocPlayer::Update(DeltaTime);
+}
+
+void ATlocDogPlayer::Render(float DeltaTime)
+{
+	TlocPlayer::Render(DeltaTime);
+}
+
 // Called when the game starts or when spawned
 void ATlocDogPlayer::BeginPlay()
 {

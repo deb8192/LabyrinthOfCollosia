@@ -151,18 +151,9 @@ void ATlocHumanPlayer::Update(float DeltaTime)
 	TlocPlayer::Update(DeltaTime);
 }
 
-void ATlocHumanPlayer::Render(float rendTime)
+void ATlocHumanPlayer::Render(float DeltaTime)
 {
-	GlobalConstants constants;
-	moveEntity(constants.KUPDATE_TIME);
-	rotateEntity(constants.KUPDATE_TIME);
-	updateTimeMove(rendTime);
-
-	//if(renderPosition.X)
-	//AddMovementInput(GetActorRightVector(), renderPosition.X);
-	//AddMovementInput(GetActorForwardVector(), renderPosition.Y);
-	//_motor->MovePlayer(*this, renderPosition);
-	//_motor->SetMeshRotation(*this, renderRotation);
+	TlocPlayer::Render(DeltaTime);
 }
 
 void ATlocHumanPlayer::InitLocationRotation()

@@ -22,7 +22,7 @@ bool TlocMotorSpatialCalculus::CheckIsInAttackRange(const FVector& actorPosition
 FVector TlocMotorSpatialCalculus::CalculateVectorDistance(const FVector& positionA, const FVector& positionB)
 {
     //We get the distance vectorand the module between actorPositionand targetPostion
-    FVector distance = FVector(abs(positionA.X - positionB.X), abs(positionA.Y - positionB.Y), abs(positionA.Z - positionB.Z));
+    FVector distance = FVector(positionA.X - positionB.X, positionA.Y - positionB.Y, positionA.Z - positionB.Z);
     return distance;
 }
 float TlocMotorSpatialCalculus::CalculateModule(const FVector& position)

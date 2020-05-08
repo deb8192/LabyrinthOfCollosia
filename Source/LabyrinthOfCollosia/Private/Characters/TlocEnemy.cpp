@@ -3,6 +3,7 @@
 
 #include "TlocEnemy.h"
 #include "../Public/GlobalConstants.h"
+#include "../Public/Motor/TlocMotorSpatialCalculus.h"
 #include "Camera/CameraComponent.h"
 #include "../Public/Characters/TlocHumanPlayer.h"
 #include "ConstructorHelpers.h"
@@ -25,6 +26,11 @@ ATlocEnemy::ATlocEnemy()
 
 	attacking = false;
 	defending = false;
+	coward = false;
+	runningAway = false;
+	runAwayTime = 0.0f;
+	wanderTime = 0.0f;
+
 
 	//ID = idChrctr;
 	level = 1;
@@ -154,7 +160,12 @@ ATlocEnemy::~ATlocEnemy()
 		_gauntlet[size] = nullptr;
 	}
 
+	attacking = false;
 	defending = false;
+	coward = false;
+	runningAway = false;
+	runAwayTime = 0.0f;
+	wanderTime = 0.0f;
 
 	ID = 0;
 	level = 0;
@@ -170,16 +181,57 @@ ATlocEnemy::~ATlocEnemy()
 
 void ATlocEnemy::Update(float DeltaTime)
 {
+	GlobalConstants constants;
 	//If actor is invulnerable, we substract deltatime to invulnerableTime
 	if (invulnerable)
 	{
 		invulnerableTime -= DeltaTime;
-		if (invulnerableTime <= 0.0)
+		if (invulnerableTime <= constants.KZERO_F)
 		{
 			invulnerable = false;
-			invulnerableTime = 0.0;
+			invulnerableTime = constants.KZERO_F;
 		}
 	}
+	//If coward actors where damaged, noCowardTime > 0 and they don't run away
+	if (noCowardTime > constants.KZERO_F)
+	{
+		noCowardTime -= DeltaTime;
+		if (noCowardTime <= constants.KZERO_F)
+		{
+			coward = constants.KTRUE;
+			noCowardTime = constants.KZERO_F;
+		}
+	}
+	//If actor is runingaway, runAwayTime get lower
+	if (runAwayTime > constants.KZERO_F)
+	{
+		runAwayTime -= DeltaTime;
+		if (runAwayTime < constants.KZERO_F)
+		{
+			runAwayTime = constants.KZERO_F;
+		}
+	}
+	if (wanderTime > constants.KZERO_F)
+	{
+		wanderTime -= DeltaTime;
+		if (wanderTime < constants.KZERO_F)
+		{
+			wanderTime = constants.KZERO_F;
+		}
+	}
+	if ((runAwayTime <= 0 && wanderTime <= 0) && (lastPosition != position || lastPosition == position && position != FVector::ZeroVector))
+	{
+		lastPosition = position = FVector::ZeroVector;
+	}
+}
+
+
+void ATlocEnemy::Render(float rendTime)
+{
+	GlobalConstants constants;
+	moveEntity(constants.KUPDATE_TIME);
+	rotateEntity(constants.KUPDATE_TIME);
+	updateTimeMove(rendTime);
 }
 
 // Called when the game starts or when spawned
@@ -295,9 +347,23 @@ void ATlocEnemy::Tick(float DeltaTime)
 
 void ATlocEnemy::replaceEnemy(ATlocEnemy* _enm)
 {
-	position = _enm->GetPosition();
-	rotation = _enm->GetRotation();
+	SetPosition(_enm->GetPosition());
+	SetRotation(_enm->GetRotation());
+	SetLife(_enm->GetLife());
+	SetDefaultLife(_enm->GetDefaultLife());
+	SetAttack(_enm->GetAttack());
+	SetDefense(_enm->GetDefense());
+	SetMagicDefense(_enm->GetMagicDefense());
+	SetCriticalHit(_enm->GetCriticalHit());
+	SetCriticalProb(_enm->GetCriticalProb());
+	SetLuck(_enm->GetLuck());
+	SetEvasion(_enm->GetEvasion());
+	SetSpeed(_enm->GetSpeed());
+	SetCoward(_enm->GetCoward());
+
 	SetActorLocationAndRotation(position, rotation);
+	lastPosition = position;
+	lastRotation = rotation;
 	TArray<TCHAR*> paths = _enm->GetMeshesFileRoot();
 	_fileRoot = paths[0];
 	_auxFilePath = paths[1];
@@ -332,7 +398,60 @@ void ATlocEnemy::replaceEnemy(ATlocEnemy* _enm)
 			_auxCharMesh2->SetupAttachment(GetRootComponent());
 		}
 	}
-	//_charMesh->SetRelativeLocationAndRotation(pos, rot);
+}
+
+float ATlocEnemy::RunAway(FVector runawayPos)
+{
+	TlocMotorSpatialCalculus* calculator = TlocMotorSpatialCalculus::GetInstance();
+	GlobalConstants constants;
+	if (!runningAway)
+	{
+		runningAway = constants.KTRUE;
+		runAwayTime = constants.KRUN_AWAY_TIME;
+		calculateRunawayRoute(runawayPos);
+	}
+	else if (runningAway && runAwayTime <= constants.KZERO_F)
+	{
+		runningAway = constants.KFALSE;
+		runAwayTime = constants.KZERO_F;
+		lastPosition = position = FVector::ZeroVector;
+	}
+	if (runningAway && runAwayTime > constants.KZERO_F)
+	{
+		FVector directorVector = FVector(FVector::OneVector);
+		calculator->SetDirectorVector(directorVector, rotation);
+
+		lastPosition = position;
+		position.X += directorVector.X * speed;
+		position.Y += directorVector.Y * speed;
+	}
+
+	return runAwayTime;
+}
+
+void ATlocEnemy::Wander()
+{
+	GlobalConstants constants;
+	TlocMotorSpatialCalculus *calculator = TlocMotorSpatialCalculus::GetInstance();
+	
+	if (wanderTime <= constants.KZERO_F)
+	{
+		float rotationAngle = rand() & constants.K1_2PI_RADIAN;
+		float posNeg = rand() & constants.KTWO;
+		if (posNeg == constants.KONE)
+		{
+			rotationAngle *= constants.KMINUS_ONE;
+		}
+		lastRotation = rotation;
+		rotation.Yaw = rotationAngle;
+		wanderTime = constants.KRUN_AWAY_TIME;
+	}
+
+	FVector directorVector = FVector::OneVector;
+	calculator->SetDirectorVector(directorVector, rotation);
+	
+	position.X = directorVector.X * speed;
+	position.Y = directorVector.Y * speed;
 }
 
 // Called to bind functionality to input
@@ -367,10 +486,26 @@ int ATlocEnemy::attackEnemy()
 			tlocEnemy->ModifyLife(-damage);
 			tlocEnemy->ModifyHudLife(-damage);
 		}
-		else damage = constants.KMINUS_ONE;
+		else damage = constants.KZERO;
 	}
 
 	return int(damage);
+}
+
+void ATlocEnemy::calculateRunawayRoute(FVector runAwayPos)
+{
+	GlobalConstants constants;
+	TlocMotorSpatialCalculus *calculator = TlocMotorSpatialCalculus::GetInstance();
+
+	FVector distance = calculator->CalculateVectorDistance(position, runAwayPos);
+	float distanceMod = calculator->CalculateModule(distance);
+
+	lastRotation.Yaw = rotation.Yaw;
+	distance.Y < 0 ?
+		rotation.Yaw = constants.KPI_RADIAN + (constants.RAD_TO_DEG * atan(distance.X / distance.Y)) :
+		rotation.Yaw = constants.RAD_TO_DEG * atan(distance.X / distance.Y);
+
+	rotation.Yaw += constants.KPI_RADIAN;
 }
 
 /***************************** Modify life **************************
@@ -386,12 +521,26 @@ int ATlocEnemy::attackEnemy()
 void ATlocEnemy::ModifyLife(float quantity)
 {
 	GlobalConstants constants;
-	UE_LOG(LogTemp, Warning, TEXT("You hurt the enemy."));
 	if (quantity < 0 && !invulnerable)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("You hurt the enemy."));
 		life += (quantity - defense * constants.KTEN_PERCENT);
 		invulnerable = true;
 		invulnerableTime = constants.KINVULNERABLE_TIME;
+		if (coward)
+		{
+			coward = false;
+			noCowardTime = constants.KNO_COWARD_TIME;
+			if (wanderTime > constants.KZERO_F)
+			{
+				wanderTime = constants.KZERO_F;
+			}
+			if (runningAway)
+			{
+				runAwayTime = constants.KZERO_F;
+				runningAway = !runningAway;
+			}
+		}
 	}
 	else
 	{
@@ -555,6 +704,16 @@ FRotator ATlocEnemy::GetRotation()
 	return rotation;
 }
 
+FVector ATlocEnemy::GetRenderPosition()
+{
+	return renderPosition;
+}
+
+FRotator ATlocEnemy::GetRenderRotation()
+{
+	return renderRotation;
+}
+
 TCHAR* ATlocEnemy::GetMeshFileRoot()
 {
 	return _fileRoot;
@@ -642,6 +801,16 @@ std::vector<AActor*> ATlocEnemy::GetTargetPlayers()
 std::vector<AActor*> ATlocEnemy::GetTargetObjects()
 {
 	return _targetObjects;
+}
+
+bool ATlocEnemy::GetCoward()
+{
+	return coward;
+}
+
+float ATlocEnemy::GetSpeed()
+{
+	return speed;
 }
 
 void ATlocEnemy::SetInitialLife(float lif)
@@ -855,4 +1024,14 @@ void ATlocEnemy::SetTargetPlayers(std::vector<AActor*>& _all)
 void ATlocEnemy::SetTargetObjects(std::vector<AActor*>& _obj)
 {
 	_targetObjects = _obj;
+}
+
+void ATlocEnemy::SetCoward(bool cwrd)
+{
+	coward = cwrd;
+}
+
+void ATlocEnemy::SetSpeed(float spd)
+{
+	speed = spd;
 }

@@ -3,8 +3,10 @@
 
 
 #include "TlocAIEnemiesController.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "ConstructorHelpers.h"
 #include "../Public/Characters/TlocHumanPlayer.h"
+#include "../Public/Characters/TlocEnemy.h"
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISenseConfig_Sight.h"
 #include "../AI/BehaviorTree/TlocBehaviorTreeEnemies.h"
@@ -67,11 +69,18 @@ void ATlocAIEnemiesController::OnPosses(APawn* _enemy)
 		_behaviorTreeComponent = Cast<UBehaviorTreeComponent>(BrainComponent);
 		_behaviorTreeComponent->StartTree(*_enemyBehaviorTree);
 	}
+	Blackboard->SetValueAsBool(blackBoardKeyNameCoward, dynamic_cast<ATlocEnemy*>(_enemy)->GetCoward());
+	Blackboard->SetValueAsBool(blackBoardKeyNameNotCoward, !dynamic_cast<ATlocEnemy*>(_enemy)->GetCoward());
 	AIPerceptionComponent->OnPerceptionUpdated.AddDynamic(this, &ATlocAIEnemiesController::OnPerceptionUpdated);
+	dynamic_cast<ACharacter*>(_enemy)->GetCharacterMovement()->MaxWalkSpeed = dynamic_cast<ATlocEnemy*>(_enemy)->GetSpeed();
+}
+void ATlocAIEnemiesController::Update(float DeltaTime)
+{
+	Cast<ATlocEnemy>(GetPawn())->Update(DeltaTime);
 	
 }
-void ATlocAIEnemiesController::Update(float DesltaTime)
+void ATlocAIEnemiesController::Render(float DeltaTime)
 {
-	
-	
+	Cast<ATlocEnemy>(GetPawn())->Render(DeltaTime);
+
 }

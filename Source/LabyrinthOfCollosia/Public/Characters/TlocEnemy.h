@@ -21,6 +21,7 @@ public:
 	~ATlocEnemy();
 
 	void Update(float DeltaTime);
+	void Render(float rendTime);
 	//Character's functions
 	void ModifyLife(float quantity);
 	int  Attack();
@@ -58,6 +59,8 @@ public:
 	UStaticMeshComponent* GetMesh();
 	FVector GetPosition();
 	FRotator GetRotation();
+	FVector GetRenderPosition();
+	FRotator GetRenderRotation();
 	TCHAR* GetMeshFileRoot();
 	TArray<TCHAR*> GetMeshesFileRoot();
 	std::vector<TlocIngredients*> GetIngredients();
@@ -75,6 +78,10 @@ public:
 	std::vector<AActor*> GetTargetEnemies();
 	std::vector<AActor*> GetTargetPlayers();
 	std::vector<AActor*> GetTargetObjects();
+
+	// -Getters TlocEnemy
+	bool GetCoward();
+	float GetSpeed();
 	
 	// -Setters TlocCharacter
 	void SetInitialLife(float lif);
@@ -117,6 +124,9 @@ public:
 	void SetTargetPlayers(std::vector<AActor*>& _all);
 	void SetTargetObjects(std::vector<AActor*>& _obj);
 
+	// -Getters TlocEnemy
+	void SetCoward(bool cwrd);
+	void SetSpeed(float spd);
 
 protected:
 	// Called when the game starts or when spawned
@@ -138,12 +148,17 @@ public:
 
 	void replaceEnemy(ATlocEnemy* _enm);
 
+	//Stearing behaviors
+	float RunAway(FVector runawayPos);
+	void Wander();
+
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
 
 	int attackEnemy();
+	void calculateRunawayRoute(FVector runawayPos);
 
 	UStaticMeshComponent* _auxCharMesh;
 	UStaticMeshComponent* _auxCharMesh2;
@@ -160,6 +175,10 @@ private:
 
 	AActor* _enemy;
 	bool coward;
+	float noCowardTime;
 	bool jump;
 	bool projectil;
+	bool runningAway;
+	float runAwayTime;
+	float wanderTime;
 };

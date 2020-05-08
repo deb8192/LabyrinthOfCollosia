@@ -20,7 +20,7 @@ public:
 	~ATlocHumanPlayer();
 
 	virtual void Update(float DeltaTime) override;
-	void Render(float rendTime);
+	virtual void Render(float DeltaTime) override;
 	void InitLocationRotation();
 	void ModifyHudLife(float quantity);
 

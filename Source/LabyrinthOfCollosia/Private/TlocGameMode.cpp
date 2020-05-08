@@ -272,14 +272,6 @@ void ATlocGameMode::Render(float DeltaTime)
 	_motor->MovePlayer(*_humanPlayer, _humanPlayer->GetRenderPosition());
 	_motor->RotateActor(*_humanPlayer, _humanPlayer->GetRenderRotation());
 	
-	for (int i = 0; i < _levelEnemies.size(); i++)
-	{
-		if (_levelEnemies[i] != NULL)
-		{
-			_motor->MoveActor(*_levelEnemies[i], _levelEnemies[i]->GetActorLocation());
-			_motor->RotateActor(*_levelEnemies[i], _levelEnemies[i]->GetActorRotation());
-		}
-	}
 	//Render _projectiles position & rotation
 	for (int i = 0; i < _projectiles.size(); i++)
 	{
@@ -296,10 +288,19 @@ void ATlocGameMode::Render(float DeltaTime)
 	}
 
 	//Render _levelLevers rotation
-	for (int i = 0; i < _levelLevers.size(); i++)
+	for (int i = 0; i < _levelDoors.size(); i++)
 	{
 		_levelDoors[i]->Render(DeltaTime);
 		_motor->SetMeshRotation(*_levelDoors[i]->GetMesh(), _levelDoors[i]->GetRenderRotation());
+	}
+	for (int i = 0; i < _levelEnemies.size(); i++)
+	{
+		if (_levelEnemies[i] != NULL)
+		{
+			((ATlocAIEnemiesController*)_levelEnemies[i]->Controller)->Render(DeltaTime);
+			_motor->MovePlayer(*_levelEnemies[i], _levelEnemies[i]->GetRenderPosition());
+			_motor->RotateActor(*_levelEnemies[i], _levelEnemies[i]->GetRenderRotation());
+		}
 	}
 }
 

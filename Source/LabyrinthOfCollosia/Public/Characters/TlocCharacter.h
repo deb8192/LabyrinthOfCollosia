@@ -29,7 +29,7 @@ public:
 	virtual ~TlocCharacter() {};
 
 	virtual void Update(float DeltaTime) = 0;
-
+	virtual void Render(float rendTime) = 0;
 	virtual void ModifyLife(float quantity) = 0;				//Adds or substracts as many as quantity value is
 	virtual int Attack() = 0;									//Calculates hit damage
 	virtual int Magic() = 0;									//Calculates magic damage
@@ -63,6 +63,8 @@ public:
 	virtual UStaticMeshComponent* GetMesh() = 0;
 	virtual FVector GetPosition() = 0;
 	virtual FRotator GetRotation() = 0;
+	virtual FVector GetRenderPosition() = 0;
+	virtual FRotator GetRenderRotation() = 0;
 	virtual std::vector<TlocIngredients*> GetIngredients() = 0;
 	virtual std::vector<TlocSpell*> GetSpells() = 0;
 	virtual TlocSpell* GetAttackingSpell() = 0;

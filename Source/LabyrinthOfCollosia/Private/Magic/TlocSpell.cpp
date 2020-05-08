@@ -12,7 +12,6 @@ TlocSpell::TlocSpell()
 	_spellName = _description = _iconFilePath = nullptr;
 	level = 1; 
 	numUses = 0;
-	target = 0;
 	basicPower = 0;
 	target = Target::ENEMY;
 	ingredients.reserve(constants.KTHREE);
