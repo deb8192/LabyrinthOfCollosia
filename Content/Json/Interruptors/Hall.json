@@ -43,17 +43,6 @@
 		"activeRotation": [0,0,-90],
 		"speed": 10,
 		"ID": 3		
-	},
-	{
-		"className": "TlocLever",
-		"name": "Minitaurus door lever",
-		"fileDirectory1": "/Game/Models/Stages/Stages-objects/Interruptor.Interruptor",
-		"fileDirectory2": "/Game/Models/Stages/Stages-objects/Interruptor-base.Interruptor-base",
-		"position": [300, 0, 65],
-		"rotation": [0,180,0],
-		"activeRotation": [0,0,-90],
-		"speed": 10,
-		"ID": 15		
 	}],
 "TlocDoor": [
 	{
@@ -62,8 +51,8 @@
 		"fileDirectory1": "/Game/Models/Stages/Stages-objects/Bridge.Bridge",
 		"fileDirectory2": "",
 		"position": [-3192,-7573, 87],
-		"rotation": [0,0,-90],
-		"activeRotation": [0,0,-90],
+		"rotation": [0,0,90],
+		"activeRotation": [0,0,90],
 		"speed": 10,
 		"ID": 0		
 	},
@@ -84,8 +73,8 @@
 		"fileDirectory1": "/Game/Models/Stages/Stages-objects/Bridge.Bridge",
 		"fileDirectory2": "",
 		"position": [-5950,-7573, 87],
-		"rotation": [0,0,-90],
-		"activeRotation": [0,0,-90],
+		"rotation": [0,0,90],
+		"activeRotation": [0,0,90],
 		"speed": 10,
 		"ID": 1		
 	},
@@ -95,8 +84,8 @@
 		"fileDirectory1": "/Game/Models/Stages/Stages-objects/Bridge.Bridge",
 		"fileDirectory2": "",
 		"position": [-3886,-7573, 87],
-		"rotation": [0,0,0],
-		"activeRotation": [0,120,0],
+		"rotation": [0,0,90],
+		"activeRotation": [0,0,90],
 		"speed": 10,
 		"ID": 2		
 	},
@@ -110,16 +99,5 @@
 		"activeRotation": [0,120,0],
 		"speed": 10,
 		"ID": 3		
-	},
-	{
-		"className": "TlocDoor",
-		"name": "Minitaurus door",
-		"fileDirectory1": "/Game/Models/Stages/Stages-objects/Door.Door",
-		"fileDirectory2": "",
-		"position": [0, 1000, 0],
-		"rotation": [0,180,0],
-		"activeRotation": [0,120,0],
-		"speed": 10,
-		"ID": 15		
 	}]
 }

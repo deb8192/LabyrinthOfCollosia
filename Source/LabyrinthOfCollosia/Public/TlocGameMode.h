@@ -94,6 +94,9 @@ private:
 	float updateTime;
 	float lastRenderTime;
 	float lastUpdateTime;
+	float cameraChangeTime;
+	bool interruptorPushed;
+	float pushingInterruptor;
 	bool choosingTarget;
 	bool changingLevel; 
 	std::vector<ATlocProjectile*> _projectiles;

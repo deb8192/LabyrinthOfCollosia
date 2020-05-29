@@ -8,6 +8,8 @@
 #include "Components/SphereComponent.h"
 #include "..\Public\Motor\TlocMotorFacade.h"
 #include <LabyrinthOfCollosia\Public\Motor\TlocMotorFacade.h>
+#include "Camera/CameraComponent.h"
+#include <Runtime\Engine\Classes\GameFramework\SpringArmComponent.h>
 #include "Interruptor.generated.h"
 
 UCLASS()
@@ -68,6 +70,11 @@ protected:
 	TCHAR* _className;
 	TCHAR* _fileRoot;
 	bool active;
+
+	UPROPERTY(VisibleAnywhere)
+		UCameraComponent* _doorCamera;
+	UPROPERTY(VisibleAnywhere)
+		USpringArmComponent* _doorCameraSpringArm;
 
 public:	
 	// Called every frame

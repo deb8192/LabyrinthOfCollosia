@@ -35,7 +35,6 @@ void ATlocPlayerController::Update(float DeltaTime)
 	//PlayerTick(DeltaTime);
 	ProcessPlayerInput(DeltaTime, false);
 	
-
 }
 
 void ATlocPlayerController::Render(float DeltaTime)

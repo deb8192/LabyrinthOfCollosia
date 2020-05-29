@@ -27,6 +27,17 @@ AInterruptor::AInterruptor()
 
 	_interactionCollision->SetRelativeLocation(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z + 45.0f));
 	_mesh->SetRelativeLocation(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z - 45.0f));
+	
+	_doorCameraSpringArm = NewObject<USpringArmComponent>(this, (TEXT("CameraSpringArm")));
+	_doorCameraSpringArm->AttachTo(GetRootComponent());
+	_doorCameraSpringArm->TargetArmLength = 750.f;
+
+	//Camera target arm
+	_doorCameraSpringArm->bEnableCameraLag = true;
+
+	_doorCamera = NewObject<UCameraComponent>(this, (TEXT("DoorCamera")));
+	_doorCamera->AttachTo(_doorCameraSpringArm, USpringArmComponent::SocketName);
+	_doorCameraSpringArm->SetRelativeLocationAndRotation(FVector(GetActorLocation().X-300.0f, GetActorLocation().Y + 200, GetActorLocation().Z + 300.0f), FRotator(-30.0f, -20.0f, 0.0f));
 }
 
 AInterruptor::~AInterruptor()

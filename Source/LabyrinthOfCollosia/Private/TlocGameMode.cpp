@@ -53,6 +53,9 @@ ATlocGameMode::ATlocGameMode()
 
 	PrimaryActorTick.bCanEverTick = constants.KTRUE;
 	_spatialCalculusMotor = TlocMotorSpatialCalculus::GetInstance();
+	cameraChangeTime = constants.KZERO_F;
+	interruptorPushed = false;
+	pushingInterruptor = constants.KZERO_F;
 }
 
 ATlocGameMode::~ATlocGameMode()
@@ -104,26 +107,33 @@ void ATlocGameMode::SpawnActorsOnStage()
 		_levelEnemies[i]->replaceEnemy(_createdEnemies[0][i]);
 		_levelEnemies[i]->AIControllerClass = ATlocAIEnemiesController::StaticClass();
 		_levelEnemies[i]->AutoPossessAI = EAutoPossessAI::Spawned;
-		//_levelEnemies[i]->Controller = NewObject<ATlocAIEnemiesController>();*/
+		//_levelEnemies[i]->Controller = NewObject<ATlocAIEnemiesController>();
 		_levelEnemies[i]->SpawnDefaultController();
 		((ATlocAIEnemiesController*)_levelEnemies[i]->Controller)->OnPosses(_levelEnemies[i]);
 	}
 	for (int i = 0; i < _createdInterruptors[0].size(); i++)
 	{
-		if (i < _createdInterruptors[0].size()/constants.KTWO)
+		char* _objName = (char*)malloc(constants.KCHAR_SIZE);
+		TCHAR* _gotObjName = _createdInterruptors[0][i]->GetClassName();
+		size_t   x;
+		wcstombs_s(&x, _objName, constants.KCHAR_SIZE, _gotObjName, constants.KCHAR_SIZE);
+
+		//It obtains _obj's child class and identifies which one is it's child class
+		//WEAPONS
+		if (strcmp(_objName, constants.KLEVER) == 0)
 		{
 			_levelLevers.push_back(_world->SpawnActor<TlocLever>(TlocLever::StaticClass(), FVector(100, -150, 150), FRotator::ZeroRotator, SpawnParam));
 			_levelLevers[i]->InitLever();
-			TlocLever * _leverActor = (TlocLever*)_createdInterruptors[0][i];
+			TlocLever * _leverActor = dynamic_cast<TlocLever*>(_createdInterruptors[0][i]);
 			_levelLevers[i]->ReplaceLever(*_leverActor);
 			_leverActor = nullptr;
 		}
-		else
+		else if (strcmp(_objName, constants.KDOOR) == 0)
 		{
 			int j = i - _createdInterruptors[0].size() / constants.KTWO;
 			_levelDoors.push_back(_world->SpawnActor<TlocDoor>(TlocDoor::StaticClass(), FVector(-400, 70, 200), FRotator::ZeroRotator, SpawnParam));
-			_levelDoors[j]->InitDoor();
-			TlocDoor* _doorActor = (TlocDoor*)_createdInterruptors[0][i];
+			//_levelDoors[j]->InitDoor();
+			TlocDoor* _doorActor = dynamic_cast<TlocDoor*>(_createdInterruptors[0][i]);
 			_levelDoors[j]->ReplaceDoor(*_doorActor);
 			_doorActor = nullptr;
 		}
@@ -143,7 +153,7 @@ void ATlocGameMode::SetPlayersFeatures(int& plyr, std::vector<TlocPlayer*> &play
 		_dogPlayer->SetLevel(players[constants.KZERO]->GetLevel());
 		_dogPlayer->SetInitialLife(players[constants.KZERO]->GetDefaultLife());
 		_dogPlayer->SetAttack(players[constants.KZERO]->GetAttack());
-		_dogPlayer->SetMaster(players[constants.KZERO]->GetMaster());
+		_dogPlayer->SetInitialMaster(players[constants.KZERO]->GetDefaultMaster());
 		_dogPlayer->SetMagicDefense(players[constants.KZERO]->GetMagicDefense());
 		_dogPlayer->SetEvasion(players[constants.KZERO]->GetEvasion());
 		_dogPlayer->SetLuck(players[constants.KZERO]->GetLuck());
@@ -168,6 +178,8 @@ void ATlocGameMode::SetPlayersFeatures(int& plyr, std::vector<TlocPlayer*> &play
 		_humanPlayer->SetExperience(players[constants.KZERO]->GetExperience());
 		_humanPlayer->SetNextLevel(players[constants.KZERO]->GetNextLevel());
 		_humanPlayer->SetWeapon(((ATlocHumanPlayer*) players[constants.KZERO])->GetWeapon());
+		_humanPlayer->SetWeaponMesh();
+		_humanPlayer->AddWeapon(*((ATlocHumanPlayer*)players[constants.KZERO])->GetWeapon());
 		std::vector<TlocIngredients*> ing = players[constants.KZERO]->GetIngredients();
 		_humanPlayer->SetIngredients(ing);
 		std::vector<TlocSpell*> spl = players[constants.KZERO]->GetSpells();
@@ -184,6 +196,29 @@ void ATlocGameMode::Update(float deltaTime)
 {
 	GlobalConstants constants;
 	_humanPlayerController->Update(deltaTime);
+	if (pushingInterruptor > constants.KZERO_F)
+	{
+		pushingInterruptor -= deltaTime;
+	}
+	if (pushingInterruptor <= constants.KZERO_F && interruptorPushed)
+	{
+		pushingInterruptor = constants.KZERO_F;
+		cameraChangeTime = constants.KCAMERA_CHANGE_TIME;
+		interruptorPushed = !interruptorPushed;
+		setHumanPlayerViewTarget(0.5f);
+	}
+	if (cameraChangeTime > constants.KZERO_F)
+	{
+		cameraChangeTime -= deltaTime;
+	}
+	else if (cameraChangeTime <= constants.KZERO_F && !interruptorPushed)
+	{
+		if (_target != _humanPlayer)
+		{
+			_target = _humanPlayer;
+			setHumanPlayerViewTarget(0.5f);
+		}
+	}
 	if (_humanPlayer->GetMode() == _humanPlayer->PlayingMode::TARGET_SELECTION)
 	{
 		bool goOn = true;
@@ -234,6 +269,12 @@ void ATlocGameMode::Update(float deltaTime)
 				{
 					_levelDoors[j]->ActivateDeactivateInterruptor();
 					encontrado = true;
+					if (!interruptorPushed)
+					{
+						interruptorPushed = !interruptorPushed;
+						pushingInterruptor = 0.5f;
+						_target = _levelDoors[j];
+					}
 				}
 			}
 			j++;
@@ -241,9 +282,12 @@ void ATlocGameMode::Update(float deltaTime)
 	}
 
 	//Update _levelDoors rotation
-	for (int i = 0; i < _levelDoors.size(); i++)
+	if (cameraChangeTime > constants.KZERO_F)
 	{
-		_levelDoors[i]->Update(deltaTime);
+		for (int i = 0; i < _levelDoors.size(); i++)
+		{
+			_levelDoors[i]->Update(deltaTime);
+		}
 	}
 
 	//Checks for enemies to update their state them

@@ -21,8 +21,7 @@ ATlocHumanPlayer::ATlocHumanPlayer() : TlocPlayer()
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 
 	//Player equip and motor
-	playerEquipment._weapon = CreateDefaultSubobject<TlocWeapon>(TEXT("PlayerWeapon"));	//Calling the constructor to create a new TlocWeapon object
-	_weapon.push_back(playerEquipment._weapon);
+	playerEquipment._weapon = NULL;
 	playerEquipment._armor = NULL;
 	playerEquipment._gauntlet = NULL;
 
@@ -35,14 +34,29 @@ ATlocHumanPlayer::ATlocHumanPlayer() : TlocPlayer()
 	//MESH
 
 	_fileRoot = TEXT("/Game/Models/Characters/Hero-M.Hero-M");
-	_charMesh = _motor->SetMesh(TEXT("PlayerMesh"), (const TCHAR*) _fileRoot, GetRootComponent(), this);
-	_charMesh->SetupAttachment(GetRootComponent());
-	_charMesh->SetRelativeLocation(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z - 90));
-	_charMesh->SetRelativeRotation(FRotator(GetActorRotation().Pitch, GetActorRotation().Yaw - 90, GetActorRotation().Roll));
+	//_charMesh = _motor->SetMesh(TEXT("PlayerMesh"), (const TCHAR*) _fileRoot, GetRootComponent(), this);
+	_charPlMesh = NewObject<USkeletalMeshComponent>(this, TEXT("PlayerMesh"));
+	USkeletalMesh* _meshAsset = LoadObject<USkeletalMesh>(NULL, _fileRoot);
+
+	//static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshAsset(_directory);
+
+	if (_meshAsset)
+	{
+		_charPlMesh->SetSkeletalMesh(_meshAsset);
+		_charPlMesh->SetWorldScale3D(FVector(1.f));
+	}
+	_charPlMesh->SetupAttachment(GetRootComponent());
+	_charPlMesh->SetRelativeLocation(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z - 90));
+	_charPlMesh->SetRelativeRotation(FRotator(GetActorRotation().Pitch, GetActorRotation().Yaw - 90, GetActorRotation().Roll));
 
 	//POSITION
 	position = lastPosition = renderPosition = FVector(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z));
 	rotation = lastRotation = renderRotation = defaultRotation = FRotator(GetActorRotation().Pitch, GetActorRotation().Yaw, GetActorRotation().Roll);
+
+	//ANIMATIONS
+	characterAnim.push_back(LoadObject<UAnimationAsset>(NULL, TEXT("/Game/Models/Characters/Hero-M_Anim_Armature_Stand.Hero-M_Anim_Armature_Stand")));
+	characterAnim.push_back(LoadObject<UAnimationAsset>(NULL, TEXT("/Game/Models/Characters/Hero-M_Anim_Armature_Run.Hero-M_Anim_Armature_Run")));
+	characterAnim.push_back(LoadObject<UAnimationAsset>(NULL, TEXT("/Game/Models/Characters/Hero-M_Anim_Armature_Attack.Hero-M_Anim_Armature_Attack")));
 	
 	//CAMERA
 
@@ -57,11 +71,13 @@ ATlocHumanPlayer::ATlocHumanPlayer() : TlocPlayer()
 	_playerCamera->SetupAttachment(_playerCameraSpringArm, USpringArmComponent::SocketName);
 	_playerCameraSpringArm->SetRelativeLocationAndRotation(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z + 45.0f), FRotator(-10.0f, 0.0f, 0.0f));
 
-	_wpnMesh = _motor->SetMesh(TEXT("WeaponMesh"), (const TCHAR*)playerEquipment._weapon->GetMeshFileRoot(), GetRootComponent(), this);
-	_wpnMesh->SetupAttachment(GetRootComponent());
+	
+	_wpnMesh = _motor->SetMesh(TEXT("WeaponMesh"), TEXT("Game/Models/Equipment/Weapons/Gladius.Gladius"), GetRootComponent(), this);
+	//_wpnMesh->SetBoundsScale(1.0);
+	_wpnMesh->SetupAttachment(_charPlMesh, FName(TEXT("R-Corazon")));
 
-	_wpnMesh->SetRelativeLocation(FVector(0.0f, 0.0f, 25.0f));
-	_wpnMesh->SetRelativeRotation(FRotator(-90.f, 0.0f, 0.0f));
+	//_wpnMesh->SetRelativeLocation(FVector(0.0f, 0.0f, 25.0f));
+	//_wpnMesh->SetRelativeRotation(FRotator(-90.f, 0.0f, 0.0f));
 
 	_wpnMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
 
@@ -149,6 +165,23 @@ ATlocHumanPlayer::~ATlocHumanPlayer()
 void ATlocHumanPlayer::Update(float DeltaTime)
 {
 	TlocPlayer::Update(DeltaTime);
+	GlobalConstants constants;
+	if (lastPosition.Y != position.Y || lastPosition.X != position.X)
+	{
+		if (!moving)
+		{
+			moving = true;
+			_charPlMesh->PlayAnimation(characterAnim[1], true);
+		}
+	}
+	else
+	{
+		if (moving)
+		{
+			moving = false;
+			_charPlMesh->PlayAnimation(characterAnim[0], true);
+		}
+	}
 }
 
 void ATlocHumanPlayer::Render(float DeltaTime)
@@ -174,8 +207,11 @@ void ATlocHumanPlayer::BeginPlay()
 
 	SetActorTickEnabled(false);
 
-	_motor->RegisterMeshComponent(_charMesh);
-	_motor->RegisterMeshComponent(_wpnMesh);
+	_charPlMesh->PlayAnimation(characterAnim[0], true);
+
+	_charPlMesh->RegisterComponent();
+	//_motor->RegisterMeshComponent(_charPlMesh);
+	//_motor->RegisterMeshComponent(_wpnMesh);
 	_wpnMesh->OnComponentBeginOverlap.AddDynamic(this, &ATlocHumanPlayer::OnHumanActorHit);
 	_wpnMesh->OnComponentEndOverlap.AddDynamic(this, &ATlocHumanPlayer::OnHumanActorStopHit);
 	OnActorBeginOverlap.AddDynamic(this, &ATlocHumanPlayer::OnHumanActorOverlap);
@@ -284,10 +320,10 @@ ATlocHumanPlayer::Equipment ATlocHumanPlayer::GetPlayerEquipment()
 
 void ATlocHumanPlayer::moveVertically(float value)
 {
+	GlobalConstants constants;
 	if (mode == PlayingMode::NORMAL)
 	{
 		moveTime = 0.0;
-		GlobalConstants constants;
 		lastPosition.Y = position.Y;
 		position.Y += value * speed * constants.KUPDATE_TIME;
 		if (lastPosition.Y == position.Y)
@@ -299,10 +335,10 @@ void ATlocHumanPlayer::moveVertically(float value)
 
 void ATlocHumanPlayer::moveHorizontally(float value)
 {
+	GlobalConstants constants;
 	if (mode == PlayingMode::NORMAL)
 	{
 		moveTime = 0.0;
-		GlobalConstants constants;
 		lastPosition.X = position.X;
 		position.X += value * speed * constants.KUPDATE_TIME;
 		if (lastPosition.X == position.X)
@@ -558,16 +594,20 @@ void ATlocHumanPlayer::ModifyHudLife(float quantity)
 {
 	float percent = life / defaultLife;
 	PlayerHud->ModifyLifeBar(percent);
-	modifyHudMaster(-quantity/defaultLife);
+	modifyHudMaster(abs(quantity));
 }
 
 void ATlocHumanPlayer::modifyHudMaster(float quantity)
 {
 	GlobalConstants constants;
-	if (quantity < constants.KZERO_F)
+	if (master < defaultMaster)
 	{
-		master += (abs(quantity)) * defaultLife;
-		PlayerHud->ModifyMasterBar(abs(quantity));
+		master += quantity;
+		PlayerHud->ModifyMasterBar(master/defaultMaster);
+		if (master >= defaultMaster)
+		{
+			master = defaultMaster;
+		}
 	}
 }
 
@@ -586,6 +626,7 @@ void ATlocHumanPlayer::action()
 
 void ATlocHumanPlayer::attack()
 {
+	_charPlMesh->PlayAnimation(characterAnim[2], false);
 	//If player is attacking some enemy
 	if (!openMenu && attacking)
 	{
@@ -932,12 +973,14 @@ void ATlocHumanPlayer::SetMesh(const TCHAR* fileRoot, int mesh)
 
 void ATlocHumanPlayer::SetWeaponMesh()
 {
-	playerEquipment._weapon->SetMesh(playerEquipment._weapon->GetMeshFileRoot());
-	playerEquipment._weapon->GetMesh()->SetupAttachment(GetRootComponent());
-	playerEquipment._weapon->GetMesh()->SetRelativeLocation(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z - 90));
-	playerEquipment._weapon->GetMesh()->SetRelativeRotation(FRotator(GetActorRotation().Pitch, GetActorRotation().Yaw - 90, GetActorRotation().Roll)); 
-	playerEquipment._weapon->GetMesh()->OnComponentBeginOverlap.AddDynamic(this, &ATlocHumanPlayer::OnHumanActorHit);
-	playerEquipment._weapon->GetMesh()->OnComponentEndOverlap.AddDynamic(this, &ATlocHumanPlayer::OnHumanActorStopHit);
+	if (playerEquipment._weapon != NULL)
+	{
+		playerEquipment._weapon->SetMesh(playerEquipment._weapon->GetMeshFileRoot());
+		_wpnMesh = _motor->SetMesh((const TCHAR*) playerEquipment._weapon->GetName(), (const TCHAR*)playerEquipment._weapon->GetMeshFileRoot(), GetRootComponent(), this);
+		_wpnMesh->SetupAttachment(_charPlMesh, FName(TEXT("R-Corazon")));
+		_wpnMesh->SetRelativeRotation(FRotator(playerEquipment._weapon->GetActorRotation().Pitch, playerEquipment._weapon->GetActorRotation().Yaw, playerEquipment._weapon->GetActorRotation().Roll -90));
+		_wpnMesh->RegisterComponent();
+	}
 }
 
 TlocWeapon* ATlocHumanPlayer::GetWeapon()

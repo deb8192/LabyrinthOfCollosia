@@ -21,9 +21,9 @@ public:
 
 private: 
 
-	UPROPERTY(VisibleAnywhere)
+	/*UPROPERTY(VisibleAnywhere)
 		UCameraComponent* _doorCamera;
 	UPROPERTY(VisibleAnywhere)
 		USpringArmComponent* _doorCameraSpringArm;
-
+		*/
 };

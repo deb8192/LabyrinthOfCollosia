@@ -12,6 +12,7 @@
 #include "..\Public\Objects\TlocGauntlet.h"
 #include "..\Public\Motor\TlocMotorFacade.h"
 #include "Camera/CameraComponent.h"
+#include "Components/SkeletalMeshComponent.h"
 #include <Runtime\Engine\Classes\GameFramework\SpringArmComponent.h>
 //#include "TlocEnemy.h"
 
@@ -177,9 +178,11 @@ protected:
 
 	//Unreal variables
 	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent *_charMesh;
+		UStaticMeshComponent*_charMesh;
 	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent* _wpnMesh;
+		UStaticMeshComponent* _wpnMesh;
+	std::vector<UAnimationAsset*> characterAnim;
+	bool moving;
 
 	TCHAR* _fileRoot;
 };

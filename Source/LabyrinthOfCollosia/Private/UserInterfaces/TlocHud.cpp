@@ -68,7 +68,7 @@ void UTlocHud::ModifyMasterBar(float percent)
 {
 	GlobalConstants constants;
 	UCanvasPanelSlot* _slot = Cast<UCanvasPanelSlot>(MasterBar->Slot);
-	masterBarCurrentWidth += masterBarDefaultWidth * percent;
+	masterBarCurrentWidth = masterBarDefaultWidth * percent;
 	if (masterBarCurrentWidth > masterBarDefaultWidth)
 	{
 		masterBarCurrentWidth = masterBarDefaultWidth;

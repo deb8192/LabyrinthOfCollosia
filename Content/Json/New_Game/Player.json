@@ -4,7 +4,7 @@
 		"ID": 0,
 		"level": 1,
 		"life": 30,
-		"master": 100,
+		"master": 20,
 		"attack": 17,
 		"defense": 5,
 		"magicDef": 5,

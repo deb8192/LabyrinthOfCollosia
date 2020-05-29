@@ -83,7 +83,9 @@ private:
 
 
 	//Functions to move and rotate character
+	UFUNCTION()
 	void moveVertically(float value);
+	UFUNCTION()
 	void moveHorizontally(float value);
 	void rotateHorizontally(float value);
 

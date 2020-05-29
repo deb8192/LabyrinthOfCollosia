@@ -160,6 +160,9 @@ protected:
 	int experience;				//Player experience
 	int player;					//Int that identifies if player is boy, girls or dog
 	int mode;					//Int that identifies playing mode: normal or target_selection
+
+	UPROPERTY(VisibleAnywhere)
+		USkeletalMeshComponent* _charPlMesh;
 	int targetSelector;
 
 };

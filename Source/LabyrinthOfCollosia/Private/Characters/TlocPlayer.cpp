@@ -25,7 +25,8 @@ TlocPlayer::TlocPlayer()
 	//ID = idChrctr;
 	level = 1;
 	life = defaultLife = 250;
-	master = defaultMaster = 100;
+	master = 0;
+	defaultMaster = 20;
 	attack = 25;
 	defense = 15;
 	magicDef = 13;
@@ -47,7 +48,7 @@ TlocPlayer::TlocPlayer()
 	_targetObjects.reserve(constants.KMAX_NUM_TARGETS);
 
 	_className = nullptr;
-
+	moving = false;
 
 }
 
@@ -233,8 +234,7 @@ int TlocPlayer::Attack()
 int TlocPlayer::Attack(TlocWeapon* _wp)
 {
 	GlobalConstants constants;
-
-	if(Attack() == constants.KMINUS_ONE)
+	if(master < defaultMaster && Attack() == constants.KMINUS_ONE)
 	{
 
 		UE_LOG(LogTemp, Warning, TEXT("You missed the attack."));
@@ -252,6 +252,10 @@ int TlocPlayer::Attack(TlocWeapon* _wp)
 		if (critProbability < criticalProb * _wp->GetCriticalProbabilityInc())
 		{
 			damage *= (criticalHit + _wp->GetCriticalDamageInc() + constants.KONE_F);
+			if (master >= defaultMaster)
+			{
+				damage *= constants.KMASTER_DAMAGE;
+			}
 		}
 	}
 
@@ -264,6 +268,10 @@ int TlocPlayer::Attack(TlocWeapon* _wp)
 		if (critProbability < criticalProb)
 		{
 			damage *= (criticalHit + constants.KONE_F);
+			if (master >= defaultMaster)
+			{
+				damage *= constants.KMASTER_DAMAGE;
+			}
 		}
 	}
 
@@ -542,7 +550,8 @@ void TlocPlayer::SetInitialLife(float lif)
 
 void TlocPlayer::SetInitialMaster(float mstr)
 {
-	SetMaster(mstr);
+	GlobalConstants constants;
+	SetMaster(constants.KZERO_F);
 	SetDefaultMaster(mstr);
 }
 
