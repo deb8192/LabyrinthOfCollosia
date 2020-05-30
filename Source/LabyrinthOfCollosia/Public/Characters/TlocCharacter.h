@@ -11,6 +11,7 @@
 #include "..\Public\Objects\TlocArmor.h"
 #include "..\Public\Objects\TlocGauntlet.h"
 #include "..\Public\Motor\TlocMotorFacade.h"
+#include "Components/SphereComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include <Runtime\Engine\Classes\GameFramework\SpringArmComponent.h>
@@ -182,6 +183,8 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 		UStaticMeshComponent* _wpnMesh;
 	std::vector<UAnimationAsset*> characterAnim;
+
+	USphereComponent* _attackCollision;
 	bool moving;
 
 	TCHAR* _fileRoot;

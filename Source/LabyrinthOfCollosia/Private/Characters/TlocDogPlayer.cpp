@@ -2,10 +2,12 @@
 
 
 #include "TlocDogPlayer.h"
+#include "../Public/GlobalConstants.h"
 
 // Sets default values
 ATlocDogPlayer::ATlocDogPlayer()
 {
+	GlobalConstants constants;
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	//PrimaryActorTick.bCanEverTick = true;
 
@@ -19,6 +21,11 @@ ATlocDogPlayer::ATlocDogPlayer()
 	_charMesh->SetupAttachment(GetRootComponent());
 	_charMesh->SetRelativeLocation(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z - 90));
 	_charMesh->SetRelativeRotation(FRotator(GetActorRotation().Pitch, GetActorRotation().Yaw - 90, GetActorRotation().Roll));
+
+	_attackCollision = CreateDefaultSubobject<USphereComponent>(TEXT("AttackCollision"));
+	_attackCollision->SetSphereRadius(100.f, true);
+	_attackCollision->SetupAttachment(GetRootComponent());
+	_attackCollision->SetRelativeLocation(FVector(GetActorLocation().X, GetActorLocation().Y + constants.K1_4PI_RADIAN, GetActorLocation().Z));
 
 }
 

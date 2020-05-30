@@ -57,6 +57,7 @@ ATlocHumanPlayer::ATlocHumanPlayer() : TlocPlayer()
 	characterAnim.push_back(LoadObject<UAnimationAsset>(NULL, TEXT("/Game/Models/Characters/Hero-M_Anim_Armature_Stand.Hero-M_Anim_Armature_Stand")));
 	characterAnim.push_back(LoadObject<UAnimationAsset>(NULL, TEXT("/Game/Models/Characters/Hero-M_Anim_Armature_Run.Hero-M_Anim_Armature_Run")));
 	characterAnim.push_back(LoadObject<UAnimationAsset>(NULL, TEXT("/Game/Models/Characters/Hero-M_Anim_Armature_Attack.Hero-M_Anim_Armature_Attack")));
+	characterAnim.push_back(LoadObject<UAnimationAsset>(NULL, TEXT("/Game/Models/Characters/Hero-M_Anim_Armature_Master.Hero-M_Anim_Armature_Master")));
 	
 	//CAMERA
 
@@ -71,6 +72,11 @@ ATlocHumanPlayer::ATlocHumanPlayer() : TlocPlayer()
 	_playerCamera->SetupAttachment(_playerCameraSpringArm, USpringArmComponent::SocketName);
 	_playerCameraSpringArm->SetRelativeLocationAndRotation(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z + 45.0f), FRotator(-10.0f, 0.0f, 0.0f));
 
+	
+	_attackCollision = CreateDefaultSubobject<USphereComponent>(TEXT("AttackCollision"));
+	_attackCollision->SetSphereRadius(100.f, true);
+	_attackCollision->SetupAttachment(GetRootComponent());
+	_attackCollision->SetRelativeLocation(FVector(GetActorLocation().X, GetActorLocation().Y + constants.K1_4PI_RADIAN, GetActorLocation().Z));
 	
 	_wpnMesh = _motor->SetMesh(TEXT("WeaponMesh"), TEXT("Game/Models/Equipment/Weapons/Gladius.Gladius"), GetRootComponent(), this);
 	//_wpnMesh->SetBoundsScale(1.0);
@@ -212,8 +218,8 @@ void ATlocHumanPlayer::BeginPlay()
 	_charPlMesh->RegisterComponent();
 	//_motor->RegisterMeshComponent(_charPlMesh);
 	//_motor->RegisterMeshComponent(_wpnMesh);
-	_wpnMesh->OnComponentBeginOverlap.AddDynamic(this, &ATlocHumanPlayer::OnHumanActorHit);
-	_wpnMesh->OnComponentEndOverlap.AddDynamic(this, &ATlocHumanPlayer::OnHumanActorStopHit);
+	_attackCollision->OnComponentBeginOverlap.AddDynamic(this, &ATlocHumanPlayer::OnHumanActorHit);
+	_attackCollision->OnComponentEndOverlap.AddDynamic(this, &ATlocHumanPlayer::OnHumanActorStopHit);
 	OnActorBeginOverlap.AddDynamic(this, &ATlocHumanPlayer::OnHumanActorOverlap);
 	OnActorEndOverlap.AddDynamic(this, &ATlocHumanPlayer::OnHumanActorStopOverlap);
 }
@@ -592,9 +598,12 @@ void ATlocHumanPlayer::loadHud()
 
 void ATlocHumanPlayer::ModifyHudLife(float quantity)
 {
-	float percent = life / defaultLife;
-	PlayerHud->ModifyLifeBar(percent);
-	modifyHudMaster(abs(quantity));
+	/*if(!invulnerable)
+	{*/
+		float percent = life / defaultLife;
+		PlayerHud->ModifyLifeBar(percent);
+		modifyHudMaster(abs(quantity));
+	//}
 }
 
 void ATlocHumanPlayer::modifyHudMaster(float quantity)
@@ -626,7 +635,11 @@ void ATlocHumanPlayer::action()
 
 void ATlocHumanPlayer::attack()
 {
-	_charPlMesh->PlayAnimation(characterAnim[2], false);
+	if(master >= defaultMaster)
+	{
+		_charPlMesh->PlayAnimation(characterAnim[3], false);
+	}
+	else	_charPlMesh->PlayAnimation(characterAnim[2], false);
 	//If player is attacking some enemy
 	if (!openMenu && attacking)
 	{
@@ -977,7 +990,7 @@ void ATlocHumanPlayer::SetWeaponMesh()
 	{
 		playerEquipment._weapon->SetMesh(playerEquipment._weapon->GetMeshFileRoot());
 		_wpnMesh = _motor->SetMesh((const TCHAR*) playerEquipment._weapon->GetName(), (const TCHAR*)playerEquipment._weapon->GetMeshFileRoot(), GetRootComponent(), this);
-		_wpnMesh->SetupAttachment(_charPlMesh, FName(TEXT("R-Corazon")));
+		_wpnMesh->SetupAttachment(_charPlMesh, FName(TEXT("R-Corazon1Socket")));
 		_wpnMesh->SetRelativeRotation(FRotator(playerEquipment._weapon->GetActorRotation().Pitch, playerEquipment._weapon->GetActorRotation().Yaw, playerEquipment._weapon->GetActorRotation().Roll -90));
 		_wpnMesh->RegisterComponent();
 	}

@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "Components/SphereComponent.h"
 #include "TlocCharacter.h"
 
 #include "CoreMinimal.h"
@@ -170,8 +169,6 @@ private:
 		USpringArmComponent* _targetCameraSpringArm;
 	UPROPERTY(VisibleAnywhere)
 		UCameraComponent* _targetCamera;
-
-	USphereComponent* _attackCollision;
 
 	AActor* _enemy;
 	bool coward;

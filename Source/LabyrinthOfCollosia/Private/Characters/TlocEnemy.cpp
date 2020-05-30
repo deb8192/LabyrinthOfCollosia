@@ -388,22 +388,16 @@ void ATlocEnemy::replaceEnemy(ATlocEnemy* _enm)
 		_auxCharMesh2 = nullptr;
 	}
 	_charMesh = _motor->SetMesh((const TCHAR*)_name, (const TCHAR*)_fileRoot, GetRootComponent(), this);
-	_charMesh->SetRelativeLocation(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z - 90));
-	_charMesh->SetRelativeRotation(FRotator(GetActorRotation().Pitch, GetActorRotation().Yaw + 90, GetActorRotation().Roll));
 	_charMesh->SetupAttachment(GetRootComponent());
 	_motor->RegisterMeshComponent(_charMesh);
 	if (*_auxFilePath !=  _T('\0'))
 	{
 		_auxCharMesh = _motor->SetMesh(TEXT("Auxiliar mesh"), (const TCHAR*)_auxFilePath, GetRootComponent(), this);
 		_auxCharMesh->SetupAttachment(GetRootComponent());
-		_auxCharMesh->SetRelativeLocation(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z - 90));
-		_auxCharMesh->SetRelativeRotation(FRotator(GetActorRotation().Pitch, GetActorRotation().Yaw + 90, GetActorRotation().Roll));
 		_motor->RegisterMeshComponent(_auxCharMesh);
 		if (*_auxFilePath2 != _T('\0'))
 		{
 			_auxCharMesh2 = _motor->SetMesh(TEXT("Auxiliar mesh 2"), (const TCHAR*)_auxFilePath2, GetRootComponent(), this);
-			_auxCharMesh2->SetRelativeLocation(FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z - 90));
-			_auxCharMesh2->SetRelativeRotation(FRotator(GetActorRotation().Pitch, GetActorRotation().Yaw + 90, GetActorRotation().Roll));
 			_auxCharMesh2->SetupAttachment(GetRootComponent());
 			_motor->RegisterMeshComponent(_auxCharMesh2);
 		}
