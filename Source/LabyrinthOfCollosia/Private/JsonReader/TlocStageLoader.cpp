@@ -95,6 +95,7 @@ std::vector<ATlocObject*> TlocStageLoader::ObjectsLoader(const char* _name)
 
 					_chst->SetMeshFileRoot(**_fPath);
 					_chst->SetObject(_wpn);
+					_chst->SetOpened(constants.KFALSE);
 					_chst->SetClassName(**_clsNm);
 					_chst->SetPosition(*_pos);
 					//_chst->SetRotation(*_rot);

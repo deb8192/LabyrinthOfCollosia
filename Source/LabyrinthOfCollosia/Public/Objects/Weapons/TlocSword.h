@@ -13,7 +13,6 @@ public:
 	TlocSword();
 	~TlocSword();
 
-	void SetSwordID();
 	void SetBuffAillment(int bffAill);
 	void SetProbAillment(float probAill);
 

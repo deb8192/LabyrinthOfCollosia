@@ -10,6 +10,7 @@ TlocWeapon::TlocWeapon() : ATlocObject()
 	level = 1;
 	experience = 0;
 	nextLevelExp = 100;
+	idWeapon = 0;
 	criticalDamageInc = 1.25;
 	criticalProbabilityInc = 10;
 	longRange = false;
@@ -21,6 +22,7 @@ TlocWeapon::~TlocWeapon()
 	level = 0;
 	experience = 0;
 	nextLevelExp = 0;
+	idWeapon = 0;
 	criticalDamageInc = 0.0;
 	criticalProbabilityInc = 0;
 	longRange = false;
@@ -61,6 +63,10 @@ void TlocWeapon::SetNextLevel(int nxt)
 {
 	nextLevelExp = nxt;
 }
+void TlocWeapon::SetWeaponID(int id)
+{
+	idWeapon = id;
+}
 void TlocWeapon::SetCriticalDamageInc(float dam)
 {
 	criticalDamageInc = dam;
@@ -91,6 +97,11 @@ int TlocWeapon::GetExperience()
 int TlocWeapon::GetNextLevel()
 {
 	return nextLevelExp;
+}
+
+int TlocWeapon::GetWeaponID()
+{
+	return idWeapon;
 }
 
 float TlocWeapon::GetCriticalDamageInc()

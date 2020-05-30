@@ -19,10 +19,6 @@ TlocSword::~TlocSword()
 	probAillment = 0.f;
 }
 
-void TlocSword::SetSwordID()
-{
-}
-
 void TlocSword::SetBuffAillment(int bffAill)
 {
 	buffAillment = bffAill;

@@ -21,6 +21,7 @@
 			"fileDirectory": "/Game/Models/Equipment/Weapons/Femur.Femur",
 			"price": 5,
 			"attack": 10,
+			"ID": 1,
 			"criticalDamageInc": 10,
 			"criticalProbabilityInc": 10
 		},

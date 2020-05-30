@@ -21,6 +21,7 @@ public:
 
 	virtual void Update(float DeltaTime) override;
 	virtual void Render(float DeltaTime) override;
+	void CreateInGameUI();
 	void InitLocationRotation();
 	void ModifyHudLife(float quantity);
 

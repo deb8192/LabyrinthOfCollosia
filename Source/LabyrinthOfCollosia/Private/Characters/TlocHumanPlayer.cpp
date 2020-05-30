@@ -86,14 +86,7 @@ ATlocHumanPlayer::ATlocHumanPlayer() : TlocPlayer()
 	//_wpnMesh->SetRelativeRotation(FRotator(-90.f, 0.0f, 0.0f));
 
 	_wpnMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
-
-	/*playerEquipment._weapon->GetMesh()->SetupAttachment(GetRootComponent());
-
-	playerEquipment._weapon->GetMesh()->SetRelativeLocation(FVector(0.0f, 0.0f, 25.0f));
-	playerEquipment._weapon->GetMesh()->SetRelativeRotation(FRotator(-90.f, 0.0f, 0.0f));
-
-	playerEquipment._weapon->GetMesh()->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
-	*/
+	
 
 
 	static ConstructorHelpers::FClassFinder<UUserWidget> IngameMenuUIBPClass(TEXT("/Game/UserInterface/Menu/TlocInGameMenuBP"));
@@ -105,7 +98,7 @@ ATlocHumanPlayer::ATlocHumanPlayer() : TlocPlayer()
 
 	static ConstructorHelpers::FClassFinder<UUserWidget> PlayerHudUIBPClass(TEXT("/Game/UserInterface/HUD/HUD-BP"));
 
-	if (IngameMenuUIBPClass.Class != nullptr)
+	if (PlayerHudUIBPClass.Class != nullptr)
 	{
 		PlayerHudUIClass = PlayerHudUIBPClass.Class;
 	}
@@ -187,6 +180,11 @@ void ATlocHumanPlayer::Update(float DeltaTime)
 			moving = false;
 			_charPlMesh->PlayAnimation(characterAnim[0], true);
 		}
+	}
+	if (masterTime > constants.KZERO_F)
+	{
+		masterTime -= DeltaTime;
+		modifyHudMaster(-masterTime / constants.KMASTER_TIME);
 	}
 }
 
@@ -365,7 +363,7 @@ void ATlocHumanPlayer::rotateHorizontally(float value)
 	}
 }
 
-void ATlocHumanPlayer::loadInGameUI()
+void ATlocHumanPlayer::CreateInGameUI()
 {
 	if (IngameMenuUIClass == nullptr) return;
 
@@ -380,7 +378,18 @@ void ATlocHumanPlayer::loadInGameUI()
 				_memorizedSpells[i]->SetMenuId(i);
 			}
 		}
+		if (_weapon.size() > 0)
+		{
+			for (int i = 0; i < _weapon.size(); i++)
+			{
+				IngameMenu->SetWeaponIcons(_weapon[i]->GetWeaponID());
+			}
+		}
 	}
+}
+
+void ATlocHumanPlayer::loadInGameUI()
+{
 	if (IngameMenu == nullptr) return;
 	if (!IngameMenu->IsInViewport())
 	{
@@ -496,18 +505,21 @@ void ATlocHumanPlayer::useMenuElement()
 	if (openMenu)
 	{
 		options = IngameMenu->GetSelectedObject();
-		switch (options[0])
+		if (options)
 		{
+			switch (options[0])
+			{
 			case 1:
 				selectSpell(options[1]);
 			case 2:
-			//	selectSpell(options[1]);
+				//	selectSpell(options[1]);
 			case 3:
-			//	selectSpell(options[1]);
+				//	selectSpell(options[1]);
 			case 4:
-			//	selectSpell(options[1]);
+				//	selectSpell(options[1]);
 			default:
 				selectItem(options[1]);
+			}
 		}
 	}
 }
@@ -598,25 +610,31 @@ void ATlocHumanPlayer::loadHud()
 
 void ATlocHumanPlayer::ModifyHudLife(float quantity)
 {
-	/*if(!invulnerable)
-	{*/
-		float percent = life / defaultLife;
-		PlayerHud->ModifyLifeBar(percent);
-		modifyHudMaster(abs(quantity));
-	//}
+	GlobalConstants constants;
+	float percent = life / defaultLife;
+	PlayerHud->ModifyLifeBar(percent);
+	modifyHudMaster(abs(quantity));
+	invulnerable = true;
+	invulnerableTime = constants.KINVULNERABLE_TIME;
 }
 
 void ATlocHumanPlayer::modifyHudMaster(float quantity)
 {
 	GlobalConstants constants;
-	if (master < defaultMaster)
+	if (master < defaultMaster && quantity > constants.KZERO_F)
 	{
 		master += quantity;
 		PlayerHud->ModifyMasterBar(master/defaultMaster);
 		if (master >= defaultMaster)
 		{
 			master = defaultMaster;
+			masterTime = constants.KMASTER_TIME;
 		}
+	}
+	else
+	{
+		master *= masterTime / constants.KMASTER_TIME;
+		PlayerHud->ModifyMasterBar(master / defaultMaster);
 	}
 }
 
@@ -635,7 +653,8 @@ void ATlocHumanPlayer::action()
 
 void ATlocHumanPlayer::attack()
 {
-	if(master >= defaultMaster)
+	GlobalConstants constants;
+	if(master >= defaultMaster || masterTime > constants.KZERO_F)
 	{
 		_charPlMesh->PlayAnimation(characterAnim[3], false);
 	}
@@ -773,7 +792,8 @@ void ATlocHumanPlayer::pickupObject()
 			if ((strcmp(_objName, constants.KSWORD) == 0) || (strcmp(_objName, constants.KSPEAR) == 0) || (strcmp(_objName, constants.KAXE) == 0))
 			{
 				TlocWeapon* _wpn = (TlocWeapon*)_obj;
-				_weapon.push_back(_wpn);
+				AddWeapon(*_wpn);
+				IngameMenu->SetWeaponIcons(_wpn->GetWeaponID());
 				UE_LOG(LogTemp, Warning, TEXT("You picked up a weapon."));
 			}
 			//GAUNTLETS

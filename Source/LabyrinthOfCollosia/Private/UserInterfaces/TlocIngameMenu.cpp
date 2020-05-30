@@ -152,14 +152,6 @@ void UTlocIngameMenu::MoveMenuUp()
 		moveCanvasUp(*_slot);
 	}
 	moveCanvasToBottom();
-	/*UCanvasPanelSlot* _slot = Cast<UCanvasPanelSlot>(ItemCanvas->Slot);
-	_slot->SetPosition(FVector2D(_slot->GetPosition().X, _slot->GetPosition().Y + verticalDistance));
-
-	_slot = Cast<UCanvasPanelSlot>(SpellCanvas->Slot);
-	_slot->SetPosition(FVector2D(_slot->GetPosition().X, _slot->GetPosition().Y + verticalDistance));
-
-	_slot = Cast<UCanvasPanelSlot>(WeaponCanvas->Slot);
-	_slot->SetPosition(FVector2D(_slot->GetPosition().X, _slot->GetPosition().Y + verticalDistance));*/
 	
 }
 
@@ -180,19 +172,6 @@ void UTlocIngameMenu::MoveMenuDown()
 		moveCanvasDown(*_slot);
 	}
 	moveCanvasToTop();
-
-	/*if (selMenu < Menu::WEAPONS)
-	{
-		selMenu++;
-		UCanvasPanelSlot* _slot = Cast<UCanvasPanelSlot>(ItemCanvas->Slot);
-		_slot->SetPosition(FVector2D(_slot->GetPosition().X, _slot->GetPosition().Y - verticalDistance));
-
-		_slot = Cast<UCanvasPanelSlot>(SpellCanvas->Slot);
-		_slot->SetPosition(FVector2D(_slot->GetPosition().X, _slot->GetPosition().Y - verticalDistance));
-
-		_slot = Cast<UCanvasPanelSlot>(WeaponCanvas->Slot);
-		_slot->SetPosition(FVector2D(_slot->GetPosition().X, _slot->GetPosition().Y - verticalDistance));
-	}*/
 }
 
 //Function that sets the spells sprites having in count the filePath route to get the sprite
@@ -272,143 +251,103 @@ void UTlocIngameMenu::SetSpellsIcons(int numSpell, TCHAR* filePath)
 	brush = nullptr;
 }
 
-void UTlocIngameMenu::SetWeaponIcons(int numWeapon, TCHAR* filePath)	//TO DO: this function it is not definitive, is for testing weapon sprites movement
+void UTlocIngameMenu::SetWeaponIcons(int numWeapon)	//TO DO: this function it is not definitive, is for testing weapon sprites movement
 {
 	GlobalConstants constants;
-	UObject* _resource;
-	FSlateBrush* brush = new FSlateBrush();
-	FLinearColor bckgrdOpacity = FLinearColor(FVector4(constants.KONE_F, constants.KONE_F, constants.KONE_F, constants.KZERO_F));
 
 	switch (numWeapon)
 	{
 	case 1:
-		_resource = LoadObject<UObject>(NULL, filePath);
-		brush->SetResourceObject(_resource);
-		Spell_1->SetBrush(*brush);
-		Spell_1_btn->SetBackgroundColor(bckgrdOpacity);
+		
+		Femur->SetVisibility( ESlateVisibility::Visible);
 		break;
 
 	case 2:
-		_resource = LoadObject<UObject>(NULL, filePath);
-		brush->SetResourceObject(_resource);
-		Spell_2->SetBrush(*brush);
-		Spell_2_btn->SetBackgroundColor(bckgrdOpacity);
+		
+		Axe->SetVisibility(ESlateVisibility::Visible);
 		break;
 
 	case 3:
-		_resource = LoadObject<UObject>(NULL, filePath);
-		brush->SetResourceObject(_resource);
-		Spell_3->SetBrush(*brush);
-		Spell_3_btn->SetBackgroundColor(bckgrdOpacity);
+		
+		Spear->SetVisibility(ESlateVisibility::Visible);
 		break;
 
 	case 4:
-		_resource = LoadObject<UObject>(NULL, filePath);
-		brush->SetResourceObject(_resource);
-		Spell_4->SetBrush(*brush);
-		Spell_4_btn->SetBackgroundColor(bckgrdOpacity);
+		
+		Falcata->SetVisibility(ESlateVisibility::Visible);
 		break;
 
 	case 5:
-		_resource = LoadObject<UObject>(NULL, filePath);
-		brush->SetResourceObject(_resource);
-		Spell_5->SetBrush(*brush);
-		Spell_5_btn->SetBackgroundColor(bckgrdOpacity);
+		
+		IberianAxe->SetVisibility(ESlateVisibility::Visible);
 		break;
 
 	case 6:
-		_resource = LoadObject<UObject>(NULL, filePath);
-		brush->SetResourceObject(_resource);
-		Spell_6->SetBrush(*brush);
-		Spell_6_btn->SetBackgroundColor(bckgrdOpacity);
+		
+		ViriatusSpear->SetVisibility(ESlateVisibility::Visible);
+
 		break;
 
 	case 7:
-		_resource = LoadObject<UObject>(NULL, filePath);
-		brush->SetResourceObject(_resource);
-		Spell_7->SetBrush(*brush);
-		Spell_7_btn->SetBackgroundColor(bckgrdOpacity);
+		
+		SpartanSword->SetVisibility(ESlateVisibility::Visible);
 		break;
 
 	case 8:
-		_resource = LoadObject<UObject>(NULL, filePath);
-		brush->SetResourceObject(_resource);
-		Spell_8->SetBrush(*brush);
-		Spell_8_btn->SetBackgroundColor(bckgrdOpacity);
+		
+		SpartanAxe->SetVisibility(ESlateVisibility::Visible);
 		break;
 
 	case 9:
-		_resource = LoadObject<UObject>(NULL, filePath);
-		brush->SetResourceObject(_resource);
-		Spell_0->SetBrush(*brush);
-		Spell_0_btn->SetBackgroundColor(bckgrdOpacity);
+		
+		Doru->SetVisibility(ESlateVisibility::Visible);
 		break;
 
 	case 10:
-		_resource = LoadObject<UObject>(NULL, filePath);
-		brush->SetResourceObject(_resource);
-		Spell_1->SetBrush(*brush);
-		Spell_1_btn->SetBackgroundColor(bckgrdOpacity);
+		
+		RaSword->SetVisibility(ESlateVisibility::Visible);
 		break;
 
 	case 11:
-		_resource = LoadObject<UObject>(NULL, filePath);
-		brush->SetResourceObject(_resource);
-		Spell_2->SetBrush(*brush);
-		Spell_2_btn->SetBackgroundColor(bckgrdOpacity);
+		
+		CeremonialAxe->SetVisibility(ESlateVisibility::Visible);
 		break;
 
 	case 12:
-		_resource = LoadObject<UObject>(NULL, filePath);
-		brush->SetResourceObject(_resource);
-		Spell_3->SetBrush(*brush);
-		Spell_3_btn->SetBackgroundColor(bckgrdOpacity);
+		
+		HorusSpear->SetVisibility(ESlateVisibility::Visible);
 		break;
 
 	case 13:
-		_resource = LoadObject<UObject>(NULL, filePath);
-		brush->SetResourceObject(_resource);
-		Spell_4->SetBrush(*brush);
-		Spell_4_btn->SetBackgroundColor(bckgrdOpacity);
+		
+		VikingSword->SetVisibility(ESlateVisibility::Visible);
 		break;
 
 	case 14:
-		_resource = LoadObject<UObject>(NULL, filePath);
-		brush->SetResourceObject(_resource);
-		Spell_5->SetBrush(*brush);
-		Spell_5_btn->SetBackgroundColor(bckgrdOpacity);
+		
+		VikingAxe->SetVisibility(ESlateVisibility::Visible);
 		break;
 
 	case 15:
-		_resource = LoadObject<UObject>(NULL, filePath);
-		brush->SetResourceObject(_resource);
-		Spell_6->SetBrush(*brush);
-		Spell_6_btn->SetBackgroundColor(bckgrdOpacity);
+		
+		VikingSpear->SetVisibility(ESlateVisibility::Visible);
 		break;
 
 	case 16:
-		_resource = LoadObject<UObject>(NULL, filePath);
-		brush->SetResourceObject(_resource);
-		Spell_7->SetBrush(*brush);
-		Spell_7_btn->SetBackgroundColor(bckgrdOpacity);
+		
+		Gladius->SetVisibility(ESlateVisibility::Visible);
 		break;
 
 	case 17:
-		_resource = LoadObject<UObject>(NULL, filePath);
-		brush->SetResourceObject(_resource);
-		Spell_8->SetBrush(*brush);
-		Spell_8_btn->SetBackgroundColor(bckgrdOpacity);
+		
+		RomanAxe->SetVisibility(ESlateVisibility::Visible);
 		break;
 
-	default:
-		_resource = LoadObject<UObject>(NULL, filePath);
-		brush->SetResourceObject(_resource);
-		Spell_0->SetBrush(*brush);
-		Spell_0_btn->SetBackgroundColor(bckgrdOpacity);
+	case 18:
+		
+		Pillum->SetVisibility(ESlateVisibility::Visible);
 		break;
 	}
-	_resource = nullptr;
-	brush = nullptr;
 }
 
 //Function that returns the selected menu and the menu element which is placed at the selectors place to use it

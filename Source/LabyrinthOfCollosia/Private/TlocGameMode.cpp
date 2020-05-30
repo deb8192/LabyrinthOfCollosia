@@ -185,6 +185,7 @@ void ATlocGameMode::SetPlayersFeatures(int& plyr, std::vector<TlocPlayer*> &play
 		std::vector<TlocSpell*> spl = players[constants.KZERO]->GetSpells();
 		_humanPlayer->SetSpells(spl);
 		_humanPlayer->InitMemorizedSpells();
+		_humanPlayer->CreateInGameUI();
 		_humanPlayerController = (ATlocPlayerController*) _humanPlayer->Controller;
 		_humanPlayer->AutoPossessPlayer = EAutoReceiveInput::Player0;
 		break;

@@ -49,6 +49,7 @@ using GlobalConstants = struct Constants
 	const float KINVULNERABLE_TIME = 1.5;
 	const float KNO_COWARD_TIME = 10.0;
 	const float KRUN_AWAY_TIME = 5.0;
+	const float KMASTER_TIME = 5.0;
 	const float KCAMERA_CHANGE_TIME = 4.0;
 	const float KMAX_TARGET_DISTANCE = 2000.f;
 	const float KCAMERA_DISTANCE = 250.f;

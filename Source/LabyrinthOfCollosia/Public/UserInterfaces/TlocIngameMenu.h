@@ -29,7 +29,7 @@ public:
 	void MoveMenuDown();
 
 	void SetSpellsIcons(int numSpell, TCHAR* filePath);
-	void SetWeaponIcons(int numWeapon, TCHAR* filePath);
+	void SetWeaponIcons(int numWeapon);
 	int* GetSelectedObject();
 
 	//---- Motion menu variables ----//	

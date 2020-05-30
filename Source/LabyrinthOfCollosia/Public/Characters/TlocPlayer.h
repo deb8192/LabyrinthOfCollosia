@@ -160,6 +160,7 @@ protected:
 	int experience;				//Player experience
 	int player;					//Int that identifies if player is boy, girls or dog
 	int mode;					//Int that identifies playing mode: normal or target_selection
+	float masterTime;			//Player's Master attack time
 
 	UPROPERTY(VisibleAnywhere)
 		USkeletalMeshComponent* _charPlMesh;
