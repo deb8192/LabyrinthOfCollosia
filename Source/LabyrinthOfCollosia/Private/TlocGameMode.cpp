@@ -91,7 +91,7 @@ void ATlocGameMode::SpawnActorsOnStage()
 	_createdEnemies.push_back(_stageLoader->EnemiesLoader(constants.KFIRST_LEVEL_NAME));
 	_createdInterruptors.push_back(_stageLoader->InterruptorsLoader(constants.KFIRST_LEVEL_NAME));
 
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < _createdObjects[0].size(); i++)
 	{
 		//_createdObjects[0][i]->RegisterMeshComponent();
 		_levelObjects.push_back(_world->SpawnActor<ATlocObject>(SpawnParam));

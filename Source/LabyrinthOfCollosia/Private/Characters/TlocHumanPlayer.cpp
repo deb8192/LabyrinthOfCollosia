@@ -78,7 +78,7 @@ ATlocHumanPlayer::ATlocHumanPlayer() : TlocPlayer()
 	_attackCollision->SetupAttachment(GetRootComponent());
 	_attackCollision->SetRelativeLocation(FVector(GetActorLocation().X, GetActorLocation().Y + constants.K1_4PI_RADIAN, GetActorLocation().Z));
 	
-	_wpnMesh = _motor->SetMesh(TEXT("WeaponMesh"), TEXT("Game/Models/Equipment/Weapons/Gladius.Gladius"), GetRootComponent(), this);
+	_wpnMesh = _motor->SetMesh(TEXT("WeaponMesh"), TEXT("/Game/Models/Equipment/Weapons/Falcata.Falcata"), GetRootComponent(), this);
 	//_wpnMesh->SetBoundsScale(1.0);
 	_wpnMesh->SetupAttachment(_charPlMesh, FName(TEXT("R-Corazon")));
 

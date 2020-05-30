@@ -1,14 +1,22 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "TlocAxe.h"
+
+#include "../Public/Objects/Weapons/TlocAxe.h"
+#include "../Public/GlobalConstants.h"
 
 TlocAxe::TlocAxe()
 {
+	axeID = "axe-";
+	breakWalls = false;
+	defenseInc = 0.0f;
 }
 
 TlocAxe::~TlocAxe()
 {
+	axeID = nullptr;
+	breakWalls = false;
+	defenseInc = 0.0f;
 }
 
 void TlocAxe::SetBreakWalls(bool brkWll)

@@ -74,7 +74,7 @@ using GlobalConstants = struct Constants
 	const char* KDIR_JSON_OBJ = "Json/Objects/";
 	const char* KDIR_JSON_INT = "Json/Interruptors/";
 	const char* KDIR_JSON_ENM = "Json/Enemies/";
-	const char* KDIR_GLADIUS_MESH = "/Game/Models/Stages/Stages-objects/Gladius.Gladius";
+	const char* KDIR_GLADIUS_MESH = "/Game/Models/Equipment/Weapons/Gladius.Gladius";
 	const char* KDIR_CHEST_MESH = "/Game/Models/Stages/Stages-objects/Vessel_Cube.Vessel_Cube";
 	const char* KDIR_CHEST_AUX_MESH = "/Game/Models/Stages/Stages-objects/Vessel_Sphere.Vessel_Sphere";
 

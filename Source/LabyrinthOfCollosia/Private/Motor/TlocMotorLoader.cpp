@@ -20,6 +20,16 @@
 TlocMotorLoader* TlocMotorLoader::_unic_instance = 0;
 //End singleton class indicator
 
+
+
+TlocMotorLoader::TlocMotorLoader()
+{
+}
+
+TlocMotorLoader::~TlocMotorLoader()
+{
+}
+
 TSharedPtr<FJsonObject> TlocMotorLoader::ParsingJson(FString fileName)
 {
 	//Json content file it's saved inside jsonStr
@@ -185,7 +195,6 @@ void TlocMotorLoader::createSword(TSharedPtr<FJsonObject> obj, TlocWeapon &_wpn)
 	obj->TryGetStringField(constants.KFILE_DIRECTORY, *_fileDirectory);
 	obj->TryGetStringField(constants.KNAME, *_name);
 
-	//_swrd = NewObject<TlocSword>();
 	_swrd->SetClassName(**_className);
 	_swrd->SetName(**_name);
 	_swrd->SetMesh(**_fileDirectory);
@@ -207,7 +216,6 @@ void TlocMotorLoader::createSpear(TSharedPtr<FJsonObject> obj, TlocWeapon& _wpn)
 	obj->TryGetStringField(constants.KFILE_DIRECTORY, *_fileDirectory);
 	obj->TryGetStringField(constants.KNAME, *_name);
 
-	_spr = NewObject<TlocSpear>();
 	_spr->SetClassName(*obj->GetStringField(constants.KCLASS_NAME));
 	_spr->SetName(*obj->GetStringField(constants.KNAME));
 	_spr->SetMeshFileRoot(*obj->GetStringField(constants.KFILE_DIRECTORY));
@@ -230,7 +238,6 @@ void TlocMotorLoader::createAxe(TSharedPtr<FJsonObject> obj, TlocWeapon& _wpn)
 	obj->TryGetStringField(constants.KFILE_DIRECTORY, *_fileDirectory);
 	obj->TryGetStringField(constants.KNAME, *_name);
 
-	_axe = NewObject<TlocAxe>();
 	_axe->SetClassName(*obj->GetStringField(constants.KCLASS_NAME));
 	_axe->SetName(*obj->GetStringField(constants.KNAME));
 	_axe->SetMeshFileRoot(*obj->GetStringField(constants.KFILE_DIRECTORY));
@@ -240,12 +247,4 @@ void TlocMotorLoader::createAxe(TSharedPtr<FJsonObject> obj, TlocWeapon& _wpn)
 	_axe->SetCriticalDamageInc(obj->GetNumberField(constants.KCRITICAL_DAMAGE_INC));
 	_axe->SetCriticalProbabilityInc(obj->GetNumberField(constants.KCRITICAL_PROBABILITY_INC));
 
-}
-
-TlocMotorLoader::TlocMotorLoader()
-{
-}
-
-TlocMotorLoader::~TlocMotorLoader()
-{
 }

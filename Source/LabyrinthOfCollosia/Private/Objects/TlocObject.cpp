@@ -26,8 +26,8 @@ ATlocObject::ATlocObject()
 	_interactionCollision->SetSphereRadius(75.f, true);
 	SetRootComponent(_interactionCollision);
 
-	_fileRoot = TEXT("/Game/Models/Equipment/Weapons/Gladius.Gladius");
-	_spriteFileRoot = TEXT("/Game/Sprites/Equipment/Weapons/Icons-128/Gladius-128px.Gladius128px");
+	_fileRoot = TEXT("/Game/Models/Equipment/Weapons/Spear.Spear");
+	_spriteFileRoot = TEXT("/Game/Sprites/Equipment/Weapons/Icons-128/Spear-128px.Spear-128px");
 	_name = TEXT("object");
 	_className = TEXT("ATlocObject");
 

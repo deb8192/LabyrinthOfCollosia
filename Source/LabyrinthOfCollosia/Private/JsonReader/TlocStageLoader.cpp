@@ -65,7 +65,7 @@ std::vector<ATlocObject*> TlocStageLoader::ObjectsLoader(const char* _name)
 				_clsNm = new FString();
 				bool chest = false;
 				_chst = NewObject<TlocChest>();
-				//_wpn = NewObject<TlocWeapon>();
+				_wpn = NewObject<TlocWeapon>();
 				TSharedPtr<FJsonObject> jsonObject = objectsArray[i]->AsObject();
 				TArray<FString> posRot;
 				jsonObject->TryGetStringArrayField(constants.KPOSITION, posRot);

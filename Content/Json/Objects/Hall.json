@@ -56,14 +56,5 @@
 		"price": 40,
 		"healthID": 1,
 		"healthRecovered": 120
-	}],
-	"TlocArmor": [{
-		"chest": true,
-		"position": [1870, -5400, 45],
-		"name": "linothorax",
-		"fileDirectory": "",
-		"price": 40,
-		"healthID": 1,
-		"healthRecovered": 120
 	}]
 }

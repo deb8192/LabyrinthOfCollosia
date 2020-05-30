@@ -41,6 +41,7 @@ private:
 	static TlocMotorLoader* _unic_instance;
 	//fin clase singleton
 
+
 	TlocIngredients* obtainIngredientsFeatures(TSharedPtr<FJsonObject> obj);
 	TlocSpell* obtainSpellFeatures(TSharedPtr<FJsonObject> obj);
 	void createSword(TSharedPtr<FJsonObject> obj, TlocWeapon& _wpn);
