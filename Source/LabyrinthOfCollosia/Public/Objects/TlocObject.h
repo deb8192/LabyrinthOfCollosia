@@ -34,6 +34,7 @@ public:
 	void DestroyMeshComponent();
 
 	//Getters & Setters
+	void SetIDObject(int idObj);
 	void SetName(const TCHAR* _nm);
 	void SetClassName(const TCHAR* _clsNm);
 	void SetPrice(float pric);

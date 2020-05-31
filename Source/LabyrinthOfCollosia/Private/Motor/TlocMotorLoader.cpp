@@ -200,7 +200,7 @@ void TlocMotorLoader::createSword(TSharedPtr<FJsonObject> obj, TlocWeapon &_wpn)
 	_swrd->SetMesh(**_fileDirectory);
 	_swrd->SetPrice(obj->GetNumberField(constants.KPRICE));
 	_swrd->SetAttack(obj->GetNumberField(constants.KATTACK));
-	//_swrd->SetWeaponID(obj->GetNumberField(constants.KID));
+	_swrd->SetIDObject(obj->GetNumberField(constants.KID));
 	_swrd->SetCriticalDamageInc(obj->GetNumberField(constants.KCRITICAL_DAMAGE_INC));
 	_swrd->SetCriticalProbabilityInc(obj->GetNumberField(constants.KCRITICAL_PROBABILITY_INC));
 }
@@ -216,12 +216,12 @@ void TlocMotorLoader::createSpear(TSharedPtr<FJsonObject> obj, TlocWeapon& _wpn)
 	obj->TryGetStringField(constants.KFILE_DIRECTORY, *_fileDirectory);
 	obj->TryGetStringField(constants.KNAME, *_name);
 
-	_spr->SetClassName(*obj->GetStringField(constants.KCLASS_NAME));
-	_spr->SetName(*obj->GetStringField(constants.KNAME));
-	_spr->SetMeshFileRoot(*obj->GetStringField(constants.KFILE_DIRECTORY));
+	_spr->SetClassName(**_className);
+	_spr->SetName(**_name);
+	_spr->SetMesh(**_fileDirectory);
 	_spr->SetPrice(obj->GetNumberField(constants.KPRICE));
 	_spr->SetAttack(obj->GetNumberField(constants.KATTACK));
-	//_spr->SetWeaponID(obj->GetNumberField(constants.KID));
+	_spr->SetIDObject(obj->GetNumberField(constants.KID));
 	_spr->SetCriticalDamageInc(obj->GetNumberField(constants.KCRITICAL_DAMAGE_INC));
 	_spr->SetCriticalProbabilityInc(obj->GetNumberField(constants.KCRITICAL_PROBABILITY_INC));
 
@@ -238,12 +238,12 @@ void TlocMotorLoader::createAxe(TSharedPtr<FJsonObject> obj, TlocWeapon& _wpn)
 	obj->TryGetStringField(constants.KFILE_DIRECTORY, *_fileDirectory);
 	obj->TryGetStringField(constants.KNAME, *_name);
 
-	_axe->SetClassName(*obj->GetStringField(constants.KCLASS_NAME));
-	_axe->SetName(*obj->GetStringField(constants.KNAME));
-	_axe->SetMeshFileRoot(*obj->GetStringField(constants.KFILE_DIRECTORY));
+	_axe->SetClassName(**_className);
+	_axe->SetName(**_name);
+	_axe->SetMesh(**_fileDirectory);
 	_axe->SetPrice(obj->GetNumberField(constants.KPRICE));
 	_axe->SetAttack(obj->GetNumberField(constants.KATTACK));
-	//_axe->SetWeaponID(obj->GetNumberField(constants.KID));
+	_axe->SetIDObject(obj->GetNumberField(constants.KID));
 	_axe->SetCriticalDamageInc(obj->GetNumberField(constants.KCRITICAL_DAMAGE_INC));
 	_axe->SetCriticalProbabilityInc(obj->GetNumberField(constants.KCRITICAL_PROBABILITY_INC));
 

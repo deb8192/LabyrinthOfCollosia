@@ -213,6 +213,11 @@ void ATlocObject::SetPrice(float pric)
 	price = pric;
 }
 
+void ATlocObject::SetIDObject(int idObj)
+{
+	IDObject = idObj;
+}
+
 void ATlocObject::SetName(const TCHAR* _nm)
 {
 	_name = (TCHAR*) _nm;

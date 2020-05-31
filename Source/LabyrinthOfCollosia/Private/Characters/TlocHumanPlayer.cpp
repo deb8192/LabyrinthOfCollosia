@@ -382,7 +382,7 @@ void ATlocHumanPlayer::CreateInGameUI()
 		{
 			for (int i = 0; i < _weapon.size(); i++)
 			{
-				//IngameMenu->SetWeaponIcons(_weapon[i]->GetWeaponID());
+				IngameMenu->SetWeaponIcons(_weapon[i]->GetIDObject());
 			}
 		}
 	}
@@ -793,7 +793,7 @@ void ATlocHumanPlayer::pickupObject()
 			{
 				TlocWeapon* _wpn = (TlocWeapon*)_obj;
 				AddWeapon(*_wpn);
-				//IngameMenu->SetWeaponIcons(_wpn->GetWeaponID());
+				IngameMenu->SetWeaponIcons(_wpn->GetIDObject());
 				UE_LOG(LogTemp, Warning, TEXT("You picked up a weapon."));
 			}
 			//GAUNTLETS

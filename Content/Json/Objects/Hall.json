@@ -39,22 +39,6 @@
 		"criticalDamageInc": 25,
 		"criticalProbabilityInc": 10
 	}
-	],
-	"TlocIngredient": [{
-		"chest": true,
-		"position": [-930, -5400, 45],
-		"name": "vinegar",
-		"fileDirectory": "/Game/Models/Sprites/Items/Icons-256/Petal-256.Petal-256",
-		"price": 25,
-		"ingredientID": 19
-	}],
-	"TlocHealtItem": [{
-		"chest": true,
-		"position": [1000, -5400, 45],
-		"name": "nectar",
-		"fileDirectory": "/Game/Models/Sprites/Items/Icons-256/Nectar-256.Nectar-256",
-		"price": 40,
-		"healthID": 1,
-		"healthRecovered": 120
-	}]
+	]
+	
 }
