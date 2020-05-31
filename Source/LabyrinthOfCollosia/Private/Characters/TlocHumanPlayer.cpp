@@ -382,7 +382,7 @@ void ATlocHumanPlayer::CreateInGameUI()
 		{
 			for (int i = 0; i < _weapon.size(); i++)
 			{
-				IngameMenu->SetWeaponIcons(_weapon[i]->GetWeaponID());
+				//IngameMenu->SetWeaponIcons(_weapon[i]->GetWeaponID());
 			}
 		}
 	}
@@ -793,7 +793,7 @@ void ATlocHumanPlayer::pickupObject()
 			{
 				TlocWeapon* _wpn = (TlocWeapon*)_obj;
 				AddWeapon(*_wpn);
-				IngameMenu->SetWeaponIcons(_wpn->GetWeaponID());
+				//IngameMenu->SetWeaponIcons(_wpn->GetWeaponID());
 				UE_LOG(LogTemp, Warning, TEXT("You picked up a weapon."));
 			}
 			//GAUNTLETS
@@ -1008,6 +1008,10 @@ void ATlocHumanPlayer::SetWeaponMesh()
 {
 	if (playerEquipment._weapon != NULL)
 	{
+		if (_wpnMesh != nullptr)
+		{
+			_motor->DestroyMeshComponent(_wpnMesh);
+		}
 		playerEquipment._weapon->SetMesh(playerEquipment._weapon->GetMeshFileRoot());
 		_wpnMesh = _motor->SetMesh((const TCHAR*) playerEquipment._weapon->GetName(), (const TCHAR*)playerEquipment._weapon->GetMeshFileRoot(), GetRootComponent(), this);
 		_wpnMesh->SetupAttachment(_charPlMesh, FName(TEXT("R-Corazon1Socket")));

@@ -200,7 +200,7 @@ void TlocMotorLoader::createSword(TSharedPtr<FJsonObject> obj, TlocWeapon &_wpn)
 	_swrd->SetMesh(**_fileDirectory);
 	_swrd->SetPrice(obj->GetNumberField(constants.KPRICE));
 	_swrd->SetAttack(obj->GetNumberField(constants.KATTACK));
-	_swrd->SetWeaponID(obj->GetNumberField(constants.KID));
+	//_swrd->SetWeaponID(obj->GetNumberField(constants.KID));
 	_swrd->SetCriticalDamageInc(obj->GetNumberField(constants.KCRITICAL_DAMAGE_INC));
 	_swrd->SetCriticalProbabilityInc(obj->GetNumberField(constants.KCRITICAL_PROBABILITY_INC));
 }
@@ -221,7 +221,7 @@ void TlocMotorLoader::createSpear(TSharedPtr<FJsonObject> obj, TlocWeapon& _wpn)
 	_spr->SetMeshFileRoot(*obj->GetStringField(constants.KFILE_DIRECTORY));
 	_spr->SetPrice(obj->GetNumberField(constants.KPRICE));
 	_spr->SetAttack(obj->GetNumberField(constants.KATTACK));
-	_spr->SetWeaponID(obj->GetNumberField(constants.KID));
+	//_spr->SetWeaponID(obj->GetNumberField(constants.KID));
 	_spr->SetCriticalDamageInc(obj->GetNumberField(constants.KCRITICAL_DAMAGE_INC));
 	_spr->SetCriticalProbabilityInc(obj->GetNumberField(constants.KCRITICAL_PROBABILITY_INC));
 
@@ -243,7 +243,7 @@ void TlocMotorLoader::createAxe(TSharedPtr<FJsonObject> obj, TlocWeapon& _wpn)
 	_axe->SetMeshFileRoot(*obj->GetStringField(constants.KFILE_DIRECTORY));
 	_axe->SetPrice(obj->GetNumberField(constants.KPRICE));
 	_axe->SetAttack(obj->GetNumberField(constants.KATTACK));
-	_axe->SetWeaponID(obj->GetNumberField(constants.KID));
+	//_axe->SetWeaponID(obj->GetNumberField(constants.KID));
 	_axe->SetCriticalDamageInc(obj->GetNumberField(constants.KCRITICAL_DAMAGE_INC));
 	_axe->SetCriticalProbabilityInc(obj->GetNumberField(constants.KCRITICAL_PROBABILITY_INC));
 

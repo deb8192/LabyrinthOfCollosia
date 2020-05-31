@@ -17,7 +17,7 @@ private:
 	int level;
 	int experience;
 	int nextLevelExp;
-	int idWeapon;
+	//int idWeapon;
 	float criticalDamageInc;
 	float criticalProbabilityInc;
 	bool longRange;
