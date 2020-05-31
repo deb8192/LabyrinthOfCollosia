@@ -220,6 +220,7 @@ void ATlocHumanPlayer::BeginPlay()
 	_attackCollision->OnComponentEndOverlap.AddDynamic(this, &ATlocHumanPlayer::OnHumanActorStopHit);
 	OnActorBeginOverlap.AddDynamic(this, &ATlocHumanPlayer::OnHumanActorOverlap);
 	OnActorEndOverlap.AddDynamic(this, &ATlocHumanPlayer::OnHumanActorStopOverlap);
+
 }
 
 // Called every frame
@@ -254,6 +255,7 @@ void ATlocHumanPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	
 
 	//Player actions
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ATlocHumanPlayer::PlayerJump);
 	PlayerInputComponent->BindAction("PickUp", IE_Pressed, this, &ATlocHumanPlayer::interact);
 	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &ATlocHumanPlayer::action);
 
@@ -374,7 +376,7 @@ void ATlocHumanPlayer::CreateInGameUI()
 		{
 			for (int i = 0; i < _memorizedSpells.size(); i++)
 			{
-				IngameMenu->SetSpellsIcons(i, _memorizedSpells[i]->GetIconFilePath());
+				//IngameMenu->SetSpellsIcons(i, _memorizedSpells[i]->GetIconFilePath());
 				_memorizedSpells[i]->SetMenuId(i);
 			}
 		}
@@ -516,7 +518,7 @@ void ATlocHumanPlayer::useMenuElement()
 			case 3:
 				//	selectSpell(options[1]);
 			case 4:
-				//	selectSpell(options[1]);
+				selectWeapon(options[1]);
 			default:
 				selectItem(options[1]);
 			}
@@ -594,6 +596,7 @@ void ATlocHumanPlayer::cancel()
 		mode = PlayingMode::NORMAL;
 		_motor->SetViewTarget(*this, *this, constants.KUPDATE_TIME);
 		unselectSpell();	//WORK WITH OBJECTS TO
+		EmptyTargets();
 	}
 }
 
@@ -613,9 +616,15 @@ void ATlocHumanPlayer::ModifyHudLife(float quantity)
 	GlobalConstants constants;
 	float percent = life / defaultLife;
 	PlayerHud->ModifyLifeBar(percent);
-	modifyHudMaster(abs(quantity));
+	if(quantity < constants.KZERO_F)
+		modifyHudMaster(abs(quantity));
 	invulnerable = true;
 	invulnerableTime = constants.KINVULNERABLE_TIME;
+}
+
+void ATlocHumanPlayer::PlayerJump()
+{
+	this->Jump();
 }
 
 void ATlocHumanPlayer::modifyHudMaster(float quantity)
@@ -653,8 +662,9 @@ void ATlocHumanPlayer::action()
 
 void ATlocHumanPlayer::attack()
 {
+
 	GlobalConstants constants;
-	if(master >= defaultMaster || masterTime > constants.KZERO_F)
+	if (master >= defaultMaster || masterTime > constants.KZERO_F)
 	{
 		_charPlMesh->PlayAnimation(characterAnim[3], false);
 	}
@@ -663,7 +673,6 @@ void ATlocHumanPlayer::attack()
 	if (!openMenu && attacking)
 	{
 		//It's calculated the attack damage
-		GlobalConstants constants;
 		int damage = this->Attack(playerEquipment._weapon);
 
 		//If hit doesn't miss
@@ -738,6 +747,24 @@ void ATlocHumanPlayer::selectSpell(int selection)
 		SetMode(PlayingMode::TARGET_SELECTION);
 	}
 }
+
+void ATlocHumanPlayer::selectWeapon(int selection)
+{
+	selection++;
+	GlobalConstants constants;
+	int i = 0;
+	while (i < _weapon.size())
+	{
+		if (_weapon[i] && _weapon[i]->GetIDObject() == selection)
+		{
+			SetWeapon(_weapon[i]);
+			SetWeaponMesh();
+			i = _weapon.size();
+		}
+		else i++;
+	}
+}
+
 
 /**************************************   Unselect Spell  *************************************
 ****  Function that unsets the prepared spell and changes TARGET_SELECTIONS mode to NORMAL ****

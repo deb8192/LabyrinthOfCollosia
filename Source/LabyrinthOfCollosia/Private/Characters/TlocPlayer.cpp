@@ -49,6 +49,7 @@ TlocPlayer::TlocPlayer()
 
 	_className = nullptr;
 	moving = false;
+	masterTime = 0.0f;
 
 }
 
@@ -161,6 +162,7 @@ TlocPlayer::~TlocPlayer()
 
 	experience = 0;
 	nextLevel = 0;
+	masterTime = 0.0f;
 }
 
 void TlocPlayer::Update(float DeltaTime)
@@ -307,6 +309,14 @@ void TlocPlayer::AddWeapon(TlocWeapon& wpn)
 void TlocPlayer::SelectTarget(AActor &_target, float blendTime)
 {
 	//_motor->SetViewTarget(this, _target, blendTime);
+}
+
+void TlocPlayer::EmptyTargets()
+{
+	GlobalConstants constants;
+	_targetEnemies.clear();
+	_targetPlayers.clear();
+	_targetObjects.clear();
 }
 
 

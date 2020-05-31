@@ -24,6 +24,7 @@ public:
 	void CreateInGameUI();
 	void InitLocationRotation();
 	void ModifyHudLife(float quantity);
+	void PlayerJump();
 
 	//Setters & Getters
 
@@ -119,6 +120,7 @@ private:
 	void attack();
 	void interact();
 	void selectSpell(int selection);
+	void selectWeapon(int selection);
 	void unselectSpell();
 	void selectItem(int selection);
 	void pickupObject();

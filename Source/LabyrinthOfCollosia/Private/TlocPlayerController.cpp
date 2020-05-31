@@ -2,6 +2,7 @@
 
 
 #include "TlocPlayerController.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 #include "Characters/TlocHumanPlayer.h"
 
@@ -9,6 +10,8 @@
 void ATlocPlayerController::BeginPlay()
 {
 	SetActorTickEnabled(false);
+
+	dynamic_cast<ACharacter*>(Cast<ATlocHumanPlayer>(AcknowledgedPawn))->GetCharacterMovement()->JumpZVelocity = 500;
 }
 
 ATlocPlayerController::ATlocPlayerController()

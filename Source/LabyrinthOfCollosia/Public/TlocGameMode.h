@@ -65,6 +65,7 @@ private:
 
 	void getSpellEffect(TlocSpell& _castingSpell, AActor &_activeActor);
 	void spawnProjectiles(TlocSpell& _castingSpell, AActor& _activeActor, const int &selector);
+	void manageLife(TlocSpell& _castingSpell, AActor& _activeActor);
 
 	//World playable characters and levels
 	ATlocHumanPlayer* _humanPlayer;

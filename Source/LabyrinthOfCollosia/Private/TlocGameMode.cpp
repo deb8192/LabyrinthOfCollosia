@@ -751,9 +751,9 @@ void ATlocGameMode::getSpellEffect(TlocSpell& _castingSpell, AActor &_activeActo
 			}
 			break;
 		//Acid rain
-		case 2:
+		/*case 2:
 			//rainEffect(*_activeActor, _castingSpell);
-			break;
+			break;*/
 		//Defend
 		case 3:
 			//improve(*_activeActor, _castingSpell);
@@ -764,17 +764,17 @@ void ATlocGameMode::getSpellEffect(TlocSpell& _castingSpell, AActor &_activeActo
 			break;
 		//Heal
 		case 5:
-			//manageLife(*_activeActor, _castingSpell);
+			manageLife(_castingSpell, _activeActor);
 			break;
 		//Levitate
-		case 6:
+		/*case 6:
 			//levitate(*_activeActor, _castingSpell);
 			break;
 		//Speed
 		case 7:
 			//manageBuffsAillments(*_activeActor, _castingSpell);
-			break;
-		//Crush
+			break;*/
+		//FireBall
 		case 8:
 			if (enemy)
 			{
@@ -806,9 +806,9 @@ void ATlocGameMode::getSpellEffect(TlocSpell& _castingSpell, AActor &_activeActo
 			}
 			break;
 		//Sting
-		case 9:
+		/*case 9:
 			//sting(*_activeActor, _castingSpell);
-			break;
+			break;*/
 		//Revive
 		case 10:
 			//manageLife(*_activeActor, _castingSpell);
@@ -822,10 +822,10 @@ void ATlocGameMode::getSpellEffect(TlocSpell& _castingSpell, AActor &_activeActo
 			//manageBuffsAillments(*_activeActor, _castingSpell);
 			break;
 		//Drain
-		case 13:
+		/*case 13:
 			if (enemy)
 			{
-				if (/*_enemyActor->GetTargetSelector() == _enemyActor->GetTargetEnemies().size()*/enemy)
+				if (/*_enemyActor->GetTargetSelector() == _enemyActor->GetTargetEnemies().size()enemy)
 				{
 					for (int i = 0; i < _enemyActor->GetTargetEnemies().size(); i++)
 					{
@@ -851,7 +851,7 @@ void ATlocGameMode::getSpellEffect(TlocSpell& _castingSpell, AActor &_activeActo
 					spawnProjectiles(_castingSpell, *_humanPlayer, _humanPlayer->GetTargetSelector());
 				}
 			}
-			break;
+			break;*/
 	}
 }
 
@@ -893,6 +893,20 @@ void ATlocGameMode::spawnProjectiles(TlocSpell& _castingSpell, AActor& _activeAc
 			}
 			_projectiles.push_back(_projectile);
 	}
+}
+
+void ATlocGameMode::manageLife(TlocSpell& _castingSpell, AActor& _activeActor)
+{
+	GlobalConstants constants;
+	bool enemy = constants.KFALSE;
+	ATlocEnemy* _enemyActor = nullptr;
+	if (dynamic_cast<ATlocEnemy*>(&_activeActor))
+	{
+		enemy = constants.KTRUE;
+		_enemyActor = (ATlocEnemy*)&_activeActor;
+	}
+	_humanPlayer->ModifyLife(50);
+	_humanPlayer->ModifyHudLife(50);
 }
 
 

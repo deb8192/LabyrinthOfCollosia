@@ -537,7 +537,7 @@ int* UTlocIngameMenu::GetSelectedObject()
 				}
 				break;
 		}
-		if (_slot->GetPosition().Y == _selectorSlot->GetPosition().Y)
+		if (_slot->GetPosition().Y == _selectorSlot->GetPosition().Y || (_slot->GetPosition().Y + 5 >= _selectorSlot->GetPosition().Y && _slot->GetPosition().Y <= _selectorSlot->GetPosition().Y) || (_slot->GetPosition().Y >= _selectorSlot->GetPosition().Y && _slot->GetPosition().Y - 5 <= _selectorSlot->GetPosition().Y))
 		{
 			found = true;
 			solution[0] = selMenu;

@@ -38,6 +38,7 @@ public:
 	void Defend();
 	void AddWeapon(TlocWeapon &wpn);
 	void SelectTarget(AActor& _target, float blendTime);
+	void EmptyTargets();
 
 	//Getters & Setters
 
