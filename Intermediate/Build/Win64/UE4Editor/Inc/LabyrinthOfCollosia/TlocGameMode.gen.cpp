@@ -40,6 +40,7 @@ void EmptyLinkFunctionForGeneratedCodeTlocGameMode() {}
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_ATlocGameMode_Statics::Class_MetaDataParams[] = {
+		{ "Comment", "/**\n * \n */" },
 		{ "HideCategories", "Info Rendering MovementReplication Replication Actor Input Movement Collision Rendering Utilities|Transformation" },
 		{ "IncludePath", "TlocGameMode.h" },
 		{ "ModuleRelativePath", "Public/TlocGameMode.h" },
@@ -73,7 +74,7 @@ void EmptyLinkFunctionForGeneratedCodeTlocGameMode() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(ATlocGameMode, 806940186);
+	IMPLEMENT_CLASS(ATlocGameMode, 3577643240);
 	template<> LABYRINTHOFCOLLOSIA_API UClass* StaticClass<ATlocGameMode>()
 	{
 		return ATlocGameMode::StaticClass();

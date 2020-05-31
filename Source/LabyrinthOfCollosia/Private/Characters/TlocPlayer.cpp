@@ -193,8 +193,6 @@ void TlocPlayer::ModifyLife(float quantity)
 	else if (quantity < 0 && !invulnerable)
 	{
 		life += (quantity - defense * constants.KTEN_PERCENT);
-		invulnerable = true;
-		invulnerableTime = constants.KINVULNERABLE_TIME;
 	}
 	if (life <= 0)
 	{

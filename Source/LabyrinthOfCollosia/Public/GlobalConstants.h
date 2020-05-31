@@ -49,6 +49,7 @@ using GlobalConstants = struct Constants
 	const float KINVULNERABLE_TIME = 1.5;
 	const float KNO_COWARD_TIME = 10.0;
 	const float KRUN_AWAY_TIME = 5.0;
+	const float KMASTER_TIME = 5.0;
 	const float KCAMERA_CHANGE_TIME = 4.0;
 	const float KMAX_TARGET_DISTANCE = 2000.f;
 	const float KCAMERA_DISTANCE = 250.f;
@@ -73,7 +74,7 @@ using GlobalConstants = struct Constants
 	const char* KDIR_JSON_OBJ = "Json/Objects/";
 	const char* KDIR_JSON_INT = "Json/Interruptors/";
 	const char* KDIR_JSON_ENM = "Json/Enemies/";
-	const char* KDIR_GLADIUS_MESH = "/Game/Models/Stages/Stages-objects/Gladius.Gladius";
+	const char* KDIR_GLADIUS_MESH = "/Game/Models/Equipment/Weapons/Gladius.Gladius";
 	const char* KDIR_CHEST_MESH = "/Game/Models/Stages/Stages-objects/Vessel_Cube.Vessel_Cube";
 	const char* KDIR_CHEST_AUX_MESH = "/Game/Models/Stages/Stages-objects/Vessel_Sphere.Vessel_Sphere";
 

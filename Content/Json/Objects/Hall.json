@@ -1,31 +1,48 @@
 {
-	"TlocWeapon": [{
-		"className": "TlocSword",
+	"TlocWeapon": [
+	{
+		"className": "TlocAxe",
 		"chest": true,
-		"position": [-3930, -9700, 45],
+		"position": [-200, -3000, 45],
 		"rotation": [0, 0, -90],
-		"name": "Gladius",
-		"fileDirectory": "/Game/Models/Equipment/Weapons/Gladius.Gladius",
+		"name": "Axe",
+		"fileDirectory": "/Game/Models/Equipment/Weapons/Axe.Axe",
 		"price": 50,
-		"attack": 15,
+		"attack": 16,
+		"ID": 2,
 		"criticalDamageInc": 25,
 		"criticalProbabilityInc": 10
 	},
 	{
 		"className": "TlocSword",
 		"chest": true,
-		"position": [-200, -3000, 45],
+		"position": [-4127, -7733, 145],
 		"rotation": [0, 0, -90],
 		"name": "Falcata",
 		"fileDirectory": "/Game/Models/Equipment/Weapons/Falcata.Falcata",
 		"price": 50,
-		"attack": 15,
+		"attack": 19,
+		"ID": 4,
 		"criticalDamageInc": 25,
 		"criticalProbabilityInc": 10
-	}],
+	},
+	{
+		"className": "TlocSpear",
+		"chest": true,
+		"position": [-3930, -9700, 45],
+		"rotation": [0, 0, -90],
+		"name": "Spear",
+		"fileDirectory": "/Game/Models/Equipment/Weapons/Spear.Spear",
+		"price": 50,
+		"attack": 17,
+		"ID": 3,
+		"criticalDamageInc": 25,
+		"criticalProbabilityInc": 10
+	}
+	],
 	"TlocIngredient": [{
 		"chest": true,
-		"position": [-930, -5400, 0],
+		"position": [-930, -5400, 45],
 		"name": "vinegar",
 		"fileDirectory": "/Game/Models/Sprites/Items/Icons-256/Petal-256.Petal-256",
 		"price": 25,
@@ -33,17 +50,8 @@
 	}],
 	"TlocHealtItem": [{
 		"chest": true,
-		"position": [1000, -5400, 0],
+		"position": [1000, -5400, 45],
 		"name": "nectar",
-		"fileDirectory": "/Game/Models/Sprites/Items/Icons-256/Nectar-256.Nectar-256",
-		"price": 40,
-		"healthID": 1,
-		"healthRecovered": 120
-	}],
-	"TlocArmor": [{
-		"chest": true,
-		"position": [1870, -5400, 0],
-		"name": "linothorax",
 		"fileDirectory": "/Game/Models/Sprites/Items/Icons-256/Nectar-256.Nectar-256",
 		"price": 40,
 		"healthID": 1,

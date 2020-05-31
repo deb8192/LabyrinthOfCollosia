@@ -21,7 +21,7 @@ ATlocGameMode::ATlocGameMode()
 	//_defaultLevel = _world->GetPersistentLevel();
 	DefaultPawnClass = nullptr;	//Associate player's pawn with player's default class
 	PlayerControllerClass = ATlocPlayerController::StaticClass();
-	_humanPlayerController = (ATlocPlayerController*) PlayerControllerClass->GetDefaultObject();
+	_humanPlayerController = (ATlocPlayerController*)PlayerControllerClass->GetDefaultObject();
 	HUDClass = UTlocIngameMenu::StaticClass();
 	GameStateClass = ATlocGameState::StaticClass();
 
@@ -71,7 +71,7 @@ void ATlocGameMode::BeginPlay()
 	spawnPlayers(true);
 	SpawnActorsOnStage();
 	_humanPlayer->InitLocationRotation();
-	
+
 
 	/*
 	PlayerControllerClass.GetDefaultObject()->UnPossess();
@@ -91,7 +91,7 @@ void ATlocGameMode::SpawnActorsOnStage()
 	_createdEnemies.push_back(_stageLoader->EnemiesLoader(constants.KFIRST_LEVEL_NAME));
 	_createdInterruptors.push_back(_stageLoader->InterruptorsLoader(constants.KFIRST_LEVEL_NAME));
 
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < _createdObjects[0].size(); i++)
 	{
 		//_createdObjects[0][i]->RegisterMeshComponent();
 		_levelObjects.push_back(_world->SpawnActor<ATlocObject>(SpawnParam));
@@ -124,7 +124,7 @@ void ATlocGameMode::SpawnActorsOnStage()
 		{
 			_levelLevers.push_back(_world->SpawnActor<TlocLever>(TlocLever::StaticClass(), FVector(100, -150, 150), FRotator::ZeroRotator, SpawnParam));
 			_levelLevers[i]->InitLever();
-			TlocLever * _leverActor = dynamic_cast<TlocLever*>(_createdInterruptors[0][i]);
+			TlocLever* _leverActor = dynamic_cast<TlocLever*>(_createdInterruptors[0][i]);
 			_levelLevers[i]->ReplaceLever(*_leverActor);
 			_leverActor = nullptr;
 		}
@@ -137,11 +137,11 @@ void ATlocGameMode::SpawnActorsOnStage()
 			_levelDoors[j]->ReplaceDoor(*_doorActor);
 			_doorActor = nullptr;
 		}
-		
+
 	}
 }
 
-void ATlocGameMode::SetPlayersFeatures(int& plyr, std::vector<TlocPlayer*> &players)
+void ATlocGameMode::SetPlayersFeatures(int& plyr, std::vector<TlocPlayer*>& players)
 {
 
 	const FActorSpawnParameters SpawnParam = FActorSpawnParameters();
@@ -177,7 +177,7 @@ void ATlocGameMode::SetPlayersFeatures(int& plyr, std::vector<TlocPlayer*> &play
 		_humanPlayer->SetCriticalProb(players[constants.KZERO]->GetCriticalProb());
 		_humanPlayer->SetExperience(players[constants.KZERO]->GetExperience());
 		_humanPlayer->SetNextLevel(players[constants.KZERO]->GetNextLevel());
-		_humanPlayer->SetWeapon(((ATlocHumanPlayer*) players[constants.KZERO])->GetWeapon());
+		_humanPlayer->SetWeapon(((ATlocHumanPlayer*)players[constants.KZERO])->GetWeapon());
 		_humanPlayer->SetWeaponMesh();
 		_humanPlayer->AddWeapon(*((ATlocHumanPlayer*)players[constants.KZERO])->GetWeapon());
 		std::vector<TlocIngredients*> ing = players[constants.KZERO]->GetIngredients();
@@ -185,7 +185,8 @@ void ATlocGameMode::SetPlayersFeatures(int& plyr, std::vector<TlocPlayer*> &play
 		std::vector<TlocSpell*> spl = players[constants.KZERO]->GetSpells();
 		_humanPlayer->SetSpells(spl);
 		_humanPlayer->InitMemorizedSpells();
-		_humanPlayerController = (ATlocPlayerController*) _humanPlayer->Controller;
+		_humanPlayer->CreateInGameUI();
+		_humanPlayerController = (ATlocPlayerController*)_humanPlayer->Controller;
 		_humanPlayer->AutoPossessPlayer = EAutoReceiveInput::Player0;
 		break;
 	}
@@ -315,7 +316,7 @@ void ATlocGameMode::Render(float DeltaTime)
 	_humanPlayerController->Render(DeltaTime);
 	_motor->MovePlayer(*_humanPlayer, _humanPlayer->GetRenderPosition());
 	_motor->RotateActor(*_humanPlayer, _humanPlayer->GetRenderRotation());
-	
+
 	//Render _projectiles position & rotation
 	for (int i = 0; i < _projectiles.size(); i++)
 	{
@@ -356,13 +357,13 @@ void ATlocGameMode::Tick(float DeltaTime)
 	float currentTime = _world->GetTimeSeconds();
 	//if (currentTime - lastRenderTime >= renderTime)
 	//{
-		Render(currentTime - lastRenderTime);
-		lastRenderTime = currentTime;
-		if (currentTime - lastUpdateTime >= updateTime)
-		{
-			Update(currentTime - lastUpdateTime);
-			lastUpdateTime = currentTime;
-		}
+	Render(currentTime - lastRenderTime);
+	lastRenderTime = currentTime;
+	if (currentTime - lastUpdateTime >= updateTime)
+	{
+		Update(currentTime - lastUpdateTime);
+		lastUpdateTime = currentTime;
+	}
 	//}
 
 
@@ -393,10 +394,10 @@ void ATlocGameMode::spawnPlayers(bool newGame)
 
 float ATlocGameMode::getSeconds()
 {
-	return ((float)clock()/(CLOCKS_PER_SEC));
+	return ((float)clock() / (CLOCKS_PER_SEC));
 }
 
-bool ATlocGameMode::searchTargets(TlocSpell& _castingSpell, AActor &_activeActor)
+bool ATlocGameMode::searchTargets(TlocSpell& _castingSpell, AActor& _activeActor)
 {
 	GlobalConstants constants;
 	int kindOfTargetIfEnemyOrPlayer = -1;
@@ -411,77 +412,77 @@ bool ATlocGameMode::searchTargets(TlocSpell& _castingSpell, AActor &_activeActor
 	}
 	switch (_castingSpell.GetKindTarget())
 	{
-		case TlocSpell::Target::PLAYERS:
-			if (enemy)
+	case TlocSpell::Target::PLAYERS:
+		if (enemy)
+		{
+			targets.reserve(_levelEnemies.size());
+			for (int i = 0; i < _levelEnemies.size(); i++)
 			{
-				targets.reserve(_levelEnemies.size());
-				for (int i = 0; i < _levelEnemies.size(); i++)
+				if (_spatialCalculusMotor->CheckIsInAttackRange(_activeActor.GetActorLocation(), _levelEnemies[i]->GetActorLocation()))
 				{
-					if (_spatialCalculusMotor->CheckIsInAttackRange(_activeActor.GetActorLocation(), _levelEnemies[i]->GetActorLocation()))
-					{
-						targets.push_back(_levelEnemies[i]);
-					}
+					targets.push_back(_levelEnemies[i]);
 				}
-				kindOfTargetIfEnemyOrPlayer = 0;
 			}
-			else
-			{
-				targets.reserve(constants.KMAX_NUM_PLAYERS);
-				if (_spatialCalculusMotor->CheckIsInAttackRange(_activeActor.GetActorLocation(), _humanPlayer->GetActorLocation()))
-				{
-					targets.push_back(_humanPlayer);
-				}
-				if (_spatialCalculusMotor->CheckIsInAttackRange(_activeActor.GetActorLocation(), _dogPlayer->GetActorLocation()))
-				{
-					targets.push_back(_dogPlayer);
-				}
-				kindOfTargetIfEnemyOrPlayer = 1;
-			}
-			break;
-
-			//Only for Atlas
-		case TlocSpell::Target::HUMAN_PLAYER:
+			kindOfTargetIfEnemyOrPlayer = 0;
+		}
+		else
+		{
 			targets.reserve(constants.KMAX_NUM_PLAYERS);
-			targets.push_back(_humanPlayer);
+			if (_spatialCalculusMotor->CheckIsInAttackRange(_activeActor.GetActorLocation(), _humanPlayer->GetActorLocation()))
+			{
+				targets.push_back(_humanPlayer);
+			}
+			if (_spatialCalculusMotor->CheckIsInAttackRange(_activeActor.GetActorLocation(), _dogPlayer->GetActorLocation()))
+			{
+				targets.push_back(_dogPlayer);
+			}
 			kindOfTargetIfEnemyOrPlayer = 1;
-			break;
+		}
+		break;
 
-			//Only for Revive
-		case TlocSpell::Target::DOG_PLAYER:
+		//Only for Atlas
+	case TlocSpell::Target::HUMAN_PLAYER:
+		targets.reserve(constants.KMAX_NUM_PLAYERS);
+		targets.push_back(_humanPlayer);
+		kindOfTargetIfEnemyOrPlayer = 1;
+		break;
+
+		//Only for Revive
+	case TlocSpell::Target::DOG_PLAYER:
+		targets.reserve(constants.KMAX_NUM_PLAYERS);
+		targets.push_back(_dogPlayer);
+		kindOfTargetIfEnemyOrPlayer = 1;
+		break;
+	case TlocSpell::Target::STAGE:
+		kindOfTargetIfEnemyOrPlayer = 2;
+		break;
+	default:
+		if (enemy)
+		{
 			targets.reserve(constants.KMAX_NUM_PLAYERS);
-			targets.push_back(_dogPlayer);
+			if (_spatialCalculusMotor->CheckIsInAttackRange(_activeActor.GetActorLocation(), _humanPlayer->GetActorLocation()))
+			{
+				targets.push_back(_humanPlayer);
+			}
+			if (_spatialCalculusMotor->CheckIsInAttackRange(_activeActor.GetActorLocation(), _dogPlayer->GetActorLocation()))
+			{
+				targets.push_back(_dogPlayer);
+			}
 			kindOfTargetIfEnemyOrPlayer = 1;
-			break;
-		case TlocSpell::Target::STAGE:
-			kindOfTargetIfEnemyOrPlayer = 2;
-			break;
-		default :
-			if (enemy)
+		}
+		else
+		{
+			targets.reserve(_levelEnemies.size());
+			for (int i = 0; i < _levelEnemies.size(); i++)
 			{
-				targets.reserve(constants.KMAX_NUM_PLAYERS);
-				if (_spatialCalculusMotor->CheckIsInAttackRange(_activeActor.GetActorLocation(), _humanPlayer->GetActorLocation()))
+				if (_spatialCalculusMotor->CheckIsInAttackRange(_activeActor.GetActorLocation(), _levelEnemies[i]->GetActorLocation()))
 				{
-					targets.push_back(_humanPlayer);
+					targets.push_back(_levelEnemies[i]);
 				}
-				if (_spatialCalculusMotor->CheckIsInAttackRange(_activeActor.GetActorLocation(), _dogPlayer->GetActorLocation()))
-				{
-					targets.push_back(_dogPlayer);
-				}
-				kindOfTargetIfEnemyOrPlayer = 1;
 			}
-			else
-			{
-				targets.reserve(_levelEnemies.size());
-				for (int i = 0; i < _levelEnemies.size(); i++)
-				{
-					if (_spatialCalculusMotor->CheckIsInAttackRange(_activeActor.GetActorLocation(), _levelEnemies[i]->GetActorLocation()))
-					{
-						targets.push_back(_levelEnemies[i]);
-					}
-				}
-				kindOfTargetIfEnemyOrPlayer = 0;
-			}
-			break;
+			kindOfTargetIfEnemyOrPlayer = 0;
+		}
+		break;
 	}
 
 	if (targets.size() > constants.KZERO)
@@ -529,36 +530,36 @@ AActor* ATlocGameMode::pointTarget()
 	AActor* target = nullptr;
 	switch (_humanPlayer->GetAttackingSpell()->GetKindTarget())
 	{
-		case TlocSpell::Target::PLAYERS:
-			if (_humanPlayer->GetTargetSelector() < _humanPlayer->GetTargetPlayers().size())
-			{
-				target = _humanPlayer->GetTargetPlayers()[_humanPlayer->GetTargetSelector()];
-			}
-			break;
-		case TlocSpell::Target::HUMAN_PLAYER:
-			if (_humanPlayer->GetTargetSelector() < _humanPlayer->GetTargetPlayers().size())
-			{
-				target = _humanPlayer->GetTargetPlayers()[_humanPlayer->GetTargetSelector()];
-			}
-			break;
-		case TlocSpell::Target::DOG_PLAYER:
-			if (_humanPlayer->GetTargetSelector() < _humanPlayer->GetTargetPlayers().size())
-			{
-				target = _humanPlayer->GetTargetPlayers()[_humanPlayer->GetTargetSelector()];
-			}
-			break;
-		case TlocSpell::Target::STAGE:
-			if (_humanPlayer->GetTargetSelector() < _humanPlayer->GetTargetObjects().size())
-			{
-				target = _humanPlayer->GetTargetObjects()[_humanPlayer->GetTargetSelector()];
-			}
-			break;
-		default:
-			if (_humanPlayer->GetTargetSelector() < _humanPlayer->GetTargetEnemies().size())
-			{
-				target = _humanPlayer->GetTargetEnemies()[_humanPlayer->GetTargetSelector()];
-			}
-			break;
+	case TlocSpell::Target::PLAYERS:
+		if (_humanPlayer->GetTargetSelector() < _humanPlayer->GetTargetPlayers().size())
+		{
+			target = _humanPlayer->GetTargetPlayers()[_humanPlayer->GetTargetSelector()];
+		}
+		break;
+	case TlocSpell::Target::HUMAN_PLAYER:
+		if (_humanPlayer->GetTargetSelector() < _humanPlayer->GetTargetPlayers().size())
+		{
+			target = _humanPlayer->GetTargetPlayers()[_humanPlayer->GetTargetSelector()];
+		}
+		break;
+	case TlocSpell::Target::DOG_PLAYER:
+		if (_humanPlayer->GetTargetSelector() < _humanPlayer->GetTargetPlayers().size())
+		{
+			target = _humanPlayer->GetTargetPlayers()[_humanPlayer->GetTargetSelector()];
+		}
+		break;
+	case TlocSpell::Target::STAGE:
+		if (_humanPlayer->GetTargetSelector() < _humanPlayer->GetTargetObjects().size())
+		{
+			target = _humanPlayer->GetTargetObjects()[_humanPlayer->GetTargetSelector()];
+		}
+		break;
+	default:
+		if (_humanPlayer->GetTargetSelector() < _humanPlayer->GetTargetEnemies().size())
+		{
+			target = _humanPlayer->GetTargetEnemies()[_humanPlayer->GetTargetSelector()];
+		}
+		break;
 	}
 	if (target == nullptr)
 	{
@@ -609,21 +610,21 @@ bool ATlocGameMode::checkEnemyTargets(int kindOfTarget, ATlocEnemy& enemy)
 	int targetsQuantity = 0;
 	switch (kindOfTarget)
 	{
-		case TlocSpell::Target::ENEMY:
-			targetsQuantity = enemy.GetTargetEnemies().size();
-			break;
-		case TlocSpell::Target::PLAYERS:
-			targetsQuantity = enemy.GetTargetPlayers().size();
-			break;
-		case TlocSpell::Target::HUMAN_PLAYER:
-			targetsQuantity = enemy.GetTargetPlayers().size();
-			break;
-		case TlocSpell::Target::DOG_PLAYER:
-			targetsQuantity = enemy.GetTargetPlayers().size();
-			break;
-		case TlocSpell::Target::STAGE:
-			targetsQuantity = enemy.GetTargetObjects().size();
-			break;
+	case TlocSpell::Target::ENEMY:
+		targetsQuantity = enemy.GetTargetEnemies().size();
+		break;
+	case TlocSpell::Target::PLAYERS:
+		targetsQuantity = enemy.GetTargetPlayers().size();
+		break;
+	case TlocSpell::Target::HUMAN_PLAYER:
+		targetsQuantity = enemy.GetTargetPlayers().size();
+		break;
+	case TlocSpell::Target::DOG_PLAYER:
+		targetsQuantity = enemy.GetTargetPlayers().size();
+		break;
+	case TlocSpell::Target::STAGE:
+		targetsQuantity = enemy.GetTargetObjects().size();
+		break;
 	}
 	return isBiggerThan(targetsQuantity, constants.KZERO);
 }
@@ -637,7 +638,7 @@ bool ATlocGameMode::checkEnemyTargets(int kindOfTarget, ATlocEnemy& enemy)
 *
 *								Out: bool isTargetSeleced (true if targets, false if not targets)
 */
-bool ATlocGameMode::checkThereAreTargets(AActor &_actor)
+bool ATlocGameMode::checkThereAreTargets(AActor& _actor)
 {
 	GlobalConstants constants;
 	bool isTargetSelected = false;
@@ -648,7 +649,7 @@ bool ATlocGameMode::checkThereAreTargets(AActor &_actor)
 	}
 	else if (dynamic_cast<ATlocEnemy*>(&_actor))
 	{
-		ATlocEnemy* _attackingEnemy = (ATlocEnemy*) &_actor;
+		ATlocEnemy* _attackingEnemy = (ATlocEnemy*)&_actor;
 		isTargetSelected = checkEnemyTargets(_attackingEnemy->GetAttackingSpell()->GetKindTarget(), *_attackingEnemy);
 	}
 	return isTargetSelected;
@@ -668,14 +669,14 @@ bool ATlocGameMode::isBiggerThan(int num, int comparation)
 void ATlocGameMode::setHumanPlayerViewTarget(float deltaTime)
 {
 	GlobalConstants constants;
-	if(_humanPlayerController->GetViewTarget() != _target)
+	if (_humanPlayerController->GetViewTarget() != _target)
 	{
 		_humanPlayerController->SetViewTargetWithBlend(_target, deltaTime);
 	}
 }
 
 //Function that cast the spell keeping in mind _castingSpell's ID
-void ATlocGameMode::getSpellEffect(TlocSpell& _castingSpell, AActor &_activeActor)
+void ATlocGameMode::getSpellEffect(TlocSpell& _castingSpell, AActor& _activeActor)
 {
 	GlobalConstants constants;
 	bool enemy = constants.KFALSE;
@@ -688,175 +689,175 @@ void ATlocGameMode::getSpellEffect(TlocSpell& _castingSpell, AActor &_activeActo
 	switch (_castingSpell.GetId())
 	{
 		//Flash
-		case 0:
-			if (enemy)
+	case 0:
+		if (enemy)
+		{
+			if (/*_enemyActor->GetTargetSelector() == _enemyActor->GetTargetEnemies().size()*/enemy)
 			{
-				if (/*_enemyActor->GetTargetSelector() == _enemyActor->GetTargetEnemies().size()*/enemy)
+				for (int i = 0; i < _enemyActor->GetTargetEnemies().size(); i++)
 				{
-					for (int i = 0; i < _enemyActor->GetTargetEnemies().size(); i++)
-					{
-						spawnProjectiles(_castingSpell, *_enemyActor, i);
-					}
-				}
-				else
-				{
-					//spawnProjectiles(_castingSpell, *_enemyActor, _enemyActor->GetTargetSelector());
+					spawnProjectiles(_castingSpell, *_enemyActor, i);
 				}
 			}
 			else
 			{
-				if (_humanPlayer->GetTargetSelector() == _humanPlayer->GetTargetEnemies().size())
+				//spawnProjectiles(_castingSpell, *_enemyActor, _enemyActor->GetTargetSelector());
+			}
+		}
+		else
+		{
+			if (_humanPlayer->GetTargetSelector() == _humanPlayer->GetTargetEnemies().size())
+			{
+				for (int i = 0; i < _humanPlayer->GetTargetEnemies().size(); i++)
 				{
-					for (int i = 0; i < _humanPlayer->GetTargetEnemies().size(); i++)
-					{
-						spawnProjectiles(_castingSpell, *_humanPlayer, i);
-					}
-				}
-				else
-				{
-					spawnProjectiles(_castingSpell, *_humanPlayer, _humanPlayer->GetTargetSelector());
+					spawnProjectiles(_castingSpell, *_humanPlayer, i);
 				}
 			}
-			break;
+			else
+			{
+				spawnProjectiles(_castingSpell, *_humanPlayer, _humanPlayer->GetTargetSelector());
+			}
+		}
+		break;
 		//Hard ball
-		case 1:
-			if (enemy)
+	case 1:
+		if (enemy)
+		{
+			if (/*_enemyActor->GetTargetSelector() == _enemyActor->GetTargetEnemies().size()*/enemy)
 			{
-				if (/*_enemyActor->GetTargetSelector() == _enemyActor->GetTargetEnemies().size()*/enemy)
+				for (int i = 0; i < _enemyActor->GetTargetEnemies().size(); i++)
 				{
-					for (int i = 0; i < _enemyActor->GetTargetEnemies().size(); i++)
-					{
-						spawnProjectiles(_castingSpell, *_enemyActor, i);
-					}
-				}
-				else
-				{
-					//spawnProjectiles(_castingSpell, *_enemyActor, _enemyActor->GetTargetSelector());
+					spawnProjectiles(_castingSpell, *_enemyActor, i);
 				}
 			}
 			else
 			{
-				if (_humanPlayer->GetTargetSelector() == _humanPlayer->GetTargetEnemies().size())
+				//spawnProjectiles(_castingSpell, *_enemyActor, _enemyActor->GetTargetSelector());
+			}
+		}
+		else
+		{
+			if (_humanPlayer->GetTargetSelector() == _humanPlayer->GetTargetEnemies().size())
+			{
+				for (int i = 0; i < _humanPlayer->GetTargetEnemies().size(); i++)
 				{
-					for (int i = 0; i < _humanPlayer->GetTargetEnemies().size(); i++)
-					{
-						spawnProjectiles(_castingSpell, *_humanPlayer, i);
-					}
-				}
-				else
-				{
-					spawnProjectiles(_castingSpell, *_humanPlayer, _humanPlayer->GetTargetSelector());
+					spawnProjectiles(_castingSpell, *_humanPlayer, i);
 				}
 			}
-			break;
+			else
+			{
+				spawnProjectiles(_castingSpell, *_humanPlayer, _humanPlayer->GetTargetSelector());
+			}
+		}
+		break;
 		//Acid rain
-		case 2:
-			//rainEffect(*_activeActor, _castingSpell);
-			break;
+	case 2:
+		//rainEffect(*_activeActor, _castingSpell);
+		break;
 		//Defend
-		case 3:
-			//improve(*_activeActor, _castingSpell);
-			break;
+	case 3:
+		//improve(*_activeActor, _castingSpell);
+		break;
 		//Cure
-		case 4:
-			//manageBuffsAillments(*_activeActor, _castingSpell);
-			break;
+	case 4:
+		//manageBuffsAillments(*_activeActor, _castingSpell);
+		break;
 		//Heal
-		case 5:
-			//manageLife(*_activeActor, _castingSpell);
-			break;
+	case 5:
+		//manageLife(*_activeActor, _castingSpell);
+		break;
 		//Levitate
-		case 6:
-			//levitate(*_activeActor, _castingSpell);
-			break;
+	case 6:
+		//levitate(*_activeActor, _castingSpell);
+		break;
 		//Speed
-		case 7:
-			//manageBuffsAillments(*_activeActor, _castingSpell);
-			break;
+	case 7:
+		//manageBuffsAillments(*_activeActor, _castingSpell);
+		break;
 		//Crush
-		case 8:
-			if (enemy)
+	case 8:
+		if (enemy)
+		{
+			if (/*_enemyActor->GetTargetSelector() == _enemyActor->GetTargetEnemies().size()*/enemy)
 			{
-				if (/*_enemyActor->GetTargetSelector() == _enemyActor->GetTargetEnemies().size()*/enemy)
+				for (int i = 0; i < _enemyActor->GetTargetEnemies().size(); i++)
 				{
-					for (int i = 0; i < _enemyActor->GetTargetEnemies().size(); i++)
-					{
-						spawnProjectiles(_castingSpell, *_enemyActor, i);
-					}
-				}
-				else
-				{
-					//spawnProjectiles(_castingSpell, *_enemyActor, _enemyActor->GetTargetSelector());
+					spawnProjectiles(_castingSpell, *_enemyActor, i);
 				}
 			}
 			else
 			{
-				if (_humanPlayer->GetTargetSelector() == _humanPlayer->GetTargetEnemies().size())
+				//spawnProjectiles(_castingSpell, *_enemyActor, _enemyActor->GetTargetSelector());
+			}
+		}
+		else
+		{
+			if (_humanPlayer->GetTargetSelector() == _humanPlayer->GetTargetEnemies().size())
+			{
+				for (int i = 0; i < _humanPlayer->GetTargetEnemies().size(); i++)
 				{
-					for (int i = 0; i < _humanPlayer->GetTargetEnemies().size(); i++)
-					{
-						spawnProjectiles(_castingSpell, *_humanPlayer, i);
-					}
-				}
-				else
-				{
-					spawnProjectiles(_castingSpell, *_humanPlayer, _humanPlayer->GetTargetSelector());
+					spawnProjectiles(_castingSpell, *_humanPlayer, i);
 				}
 			}
-			break;
+			else
+			{
+				spawnProjectiles(_castingSpell, *_humanPlayer, _humanPlayer->GetTargetSelector());
+			}
+		}
+		break;
 		//Sting
-		case 9:
-			//sting(*_activeActor, _castingSpell);
-			break;
+	case 9:
+		//sting(*_activeActor, _castingSpell);
+		break;
 		//Revive
-		case 10:
-			//manageLife(*_activeActor, _castingSpell);
-			break;
+	case 10:
+		//manageLife(*_activeActor, _castingSpell);
+		break;
 		//Revealer
-		case 11:
-			//revealer(*_activeActor, _castingSpell);
-			break;
+	case 11:
+		//revealer(*_activeActor, _castingSpell);
+		break;
 		//Atlas
-		case 12:
-			//manageBuffsAillments(*_activeActor, _castingSpell);
-			break;
+	case 12:
+		//manageBuffsAillments(*_activeActor, _castingSpell);
+		break;
 		//Drain
-		case 13:
-			if (enemy)
+	case 13:
+		if (enemy)
+		{
+			if (/*_enemyActor->GetTargetSelector() == _enemyActor->GetTargetEnemies().size()*/enemy)
 			{
-				if (/*_enemyActor->GetTargetSelector() == _enemyActor->GetTargetEnemies().size()*/enemy)
+				for (int i = 0; i < _enemyActor->GetTargetEnemies().size(); i++)
 				{
-					for (int i = 0; i < _enemyActor->GetTargetEnemies().size(); i++)
-					{
-						spawnProjectiles(_castingSpell, *_enemyActor, i);
-					}
-				}
-				else
-				{
-					//spawnProjectiles(_castingSpell, *_enemyActor, _enemyActor->GetTargetSelector());
+					spawnProjectiles(_castingSpell, *_enemyActor, i);
 				}
 			}
 			else
 			{
-				if (_humanPlayer->GetTargetSelector() == _humanPlayer->GetTargetEnemies().size())
+				//spawnProjectiles(_castingSpell, *_enemyActor, _enemyActor->GetTargetSelector());
+			}
+		}
+		else
+		{
+			if (_humanPlayer->GetTargetSelector() == _humanPlayer->GetTargetEnemies().size())
+			{
+				for (int i = 0; i < _humanPlayer->GetTargetEnemies().size(); i++)
 				{
-					for (int i = 0; i < _humanPlayer->GetTargetEnemies().size(); i++)
-					{
-						spawnProjectiles(_castingSpell, *_humanPlayer, i);
-					}
-				}
-				else
-				{
-					spawnProjectiles(_castingSpell, *_humanPlayer, _humanPlayer->GetTargetSelector());
+					spawnProjectiles(_castingSpell, *_humanPlayer, i);
 				}
 			}
-			break;
+			else
+			{
+				spawnProjectiles(_castingSpell, *_humanPlayer, _humanPlayer->GetTargetSelector());
+			}
+		}
+		break;
 	}
 }
 
 void ATlocGameMode::spawnProjectiles(TlocSpell& _castingSpell, AActor& _activeActor, const int& selector)
 {
-	GlobalConstants constants; 
+	GlobalConstants constants;
 	bool enemy = constants.KFALSE;
 	ATlocEnemy* _enemyActor = nullptr;
 	if (dynamic_cast<ATlocEnemy*>(&_activeActor))
@@ -866,31 +867,31 @@ void ATlocGameMode::spawnProjectiles(TlocSpell& _castingSpell, AActor& _activeAc
 	}
 	switch (_castingSpell.GetId())
 	{
-		case 0:
-			ATlocProjectile* _projectile = _world->SpawnActor<ATlocProjectile>(_activeActor.GetActorLocation(), _activeActor.GetActorRotation());
-			if (enemy)
-			{
-				_projectile->SetTargetActor(*_enemyActor->GetTargetPlayers()[selector]);
-				_projectile->SetTarget(((TlocPlayer*)_enemyActor->GetTargetPlayers()[selector])->GetPosition());
-				_projectile->SetOriginActor(*_enemyActor);
-				_projectile->SetOrigin(_enemyActor->GetPosition());
-				_projectile->SetPosition(_enemyActor->GetPosition());
-				_projectile->SetLastPosition(_enemyActor->GetPosition());
-				_projectile->SetDirectorVector();
-				_projectile->SetPursue(constants.KTRUE);
-			}
-			else
-			{
-				_projectile->SetTargetActor(*_humanPlayer->GetTargetEnemies()[selector]);
-				_projectile->SetTarget(((ATlocEnemy*) _humanPlayer->GetTargetEnemies()[selector])->GetPosition());
-				_projectile->SetOriginActor(*_humanPlayer);
-				_projectile->SetOrigin(_humanPlayer->GetPosition());
-				_projectile->SetPosition(_projectile->GetActorLocation());
-				_projectile->SetLastPosition(_humanPlayer->GetPosition());
-				_projectile->SetDirectorVector();
-				_projectile->SetPursue(constants.KTRUE);
-			}
-			_projectiles.push_back(_projectile);
+	case 0:
+		ATlocProjectile * _projectile = _world->SpawnActor<ATlocProjectile>(_activeActor.GetActorLocation(), _activeActor.GetActorRotation());
+		if (enemy)
+		{
+			_projectile->SetTargetActor(*_enemyActor->GetTargetPlayers()[selector]);
+			_projectile->SetTarget(((TlocPlayer*)_enemyActor->GetTargetPlayers()[selector])->GetPosition());
+			_projectile->SetOriginActor(*_enemyActor);
+			_projectile->SetOrigin(_enemyActor->GetPosition());
+			_projectile->SetPosition(_enemyActor->GetPosition());
+			_projectile->SetLastPosition(_enemyActor->GetPosition());
+			_projectile->SetDirectorVector();
+			_projectile->SetPursue(constants.KTRUE);
+		}
+		else
+		{
+			_projectile->SetTargetActor(*_humanPlayer->GetTargetEnemies()[selector]);
+			_projectile->SetTarget(((ATlocEnemy*)_humanPlayer->GetTargetEnemies()[selector])->GetPosition());
+			_projectile->SetOriginActor(*_humanPlayer);
+			_projectile->SetOrigin(_humanPlayer->GetPosition());
+			_projectile->SetPosition(_projectile->GetActorLocation());
+			_projectile->SetLastPosition(_humanPlayer->GetPosition());
+			_projectile->SetDirectorVector();
+			_projectile->SetPursue(constants.KTRUE);
+		}
+		_projectiles.push_back(_projectile);
 	}
 }
 

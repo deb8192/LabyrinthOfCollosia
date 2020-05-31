@@ -72,7 +72,7 @@ void EmptyLinkFunctionForGeneratedCodeTlocDogPlayer() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(ATlocDogPlayer, 1320327591);
+	IMPLEMENT_CLASS(ATlocDogPlayer, 3517444286);
 	template<> LABYRINTHOFCOLLOSIA_API UClass* StaticClass<ATlocDogPlayer>()
 	{
 		return ATlocDogPlayer::StaticClass();

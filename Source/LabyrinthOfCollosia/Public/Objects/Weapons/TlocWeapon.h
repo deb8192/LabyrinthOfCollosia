@@ -5,7 +5,7 @@
 #include "TlocObject.h"
 
 /**
- * 
+ *
  */
 class LABYRINTHOFCOLLOSIA_API TlocWeapon : public ATlocObject
 {
@@ -34,6 +34,7 @@ public:
 	void SetLevel(int lvl);
 	void SetExperience(int exp);
 	void SetNextLevel(int nxt);
+	//void SetWeaponID(int idWpn);
 	void SetCriticalDamageInc(float dam);
 	void SetCriticalProbabilityInc(float prob);
 	void SetLongRange(bool lrang);
@@ -42,6 +43,7 @@ public:
 	int GetLevel();
 	int GetExperience();
 	int GetNextLevel();
+	//int GetWeaponID();
 	float GetCriticalDamageInc();
 	float GetCriticalProbabilityInc();
 	bool GetLongRange();

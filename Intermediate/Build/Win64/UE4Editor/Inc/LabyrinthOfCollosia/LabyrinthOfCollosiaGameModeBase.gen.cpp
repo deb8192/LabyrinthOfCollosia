@@ -40,6 +40,7 @@ void EmptyLinkFunctionForGeneratedCodeLabyrinthOfCollosiaGameModeBase() {}
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_ALabyrinthOfCollosiaGameModeBase_Statics::Class_MetaDataParams[] = {
+		{ "Comment", "/**\n * \n */" },
 		{ "HideCategories", "Info Rendering MovementReplication Replication Actor Input Movement Collision Rendering Utilities|Transformation" },
 		{ "IncludePath", "LabyrinthOfCollosiaGameModeBase.h" },
 		{ "ModuleRelativePath", "LabyrinthOfCollosiaGameModeBase.h" },
@@ -73,7 +74,7 @@ void EmptyLinkFunctionForGeneratedCodeLabyrinthOfCollosiaGameModeBase() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(ALabyrinthOfCollosiaGameModeBase, 2879710770);
+	IMPLEMENT_CLASS(ALabyrinthOfCollosiaGameModeBase, 1493550714);
 	template<> LABYRINTHOFCOLLOSIA_API UClass* StaticClass<ALabyrinthOfCollosiaGameModeBase>()
 	{
 		return ALabyrinthOfCollosiaGameModeBase::StaticClass();

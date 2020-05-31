@@ -365,8 +365,12 @@
   </PropertyGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\LabyrinthOfCollosia\Private\GameState\TlocGameState.cpp" />
+    <ClCompile Include="..\..\Source\LabyrinthOfCollosia\Private\Objects\Weapons\TlocSword.cpp" />
+    <ClCompile Include="..\..\Source\LabyrinthOfCollosia\Private\Objects\Weapons\TlocWeapon.cpp" />
     <ClCompile Include="..\..\Source\LabyrinthOfCollosia\Private\TlocPlayerController.cpp" />
     <ClInclude Include="..\..\Source\LabyrinthOfCollosia\Public\GameState\TlocGameState.h" />
+    <ClInclude Include="..\..\Source\LabyrinthOfCollosia\Public\Objects\Weapons\TlocSword.h" />
+    <ClInclude Include="..\..\Source\LabyrinthOfCollosia\Public\Objects\Weapons\TlocWeapon.h" />
     <ClInclude Include="..\..\Source\LabyrinthOfCollosia\Public\TlocPlayerController.h" />
     <None Include="..\..\LabyrinthOfCollosia.uproject" />
     <None Include="..\..\Source\LabyrinthOfCollosia.Target.cs" />

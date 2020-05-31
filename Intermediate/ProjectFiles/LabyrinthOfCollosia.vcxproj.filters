@@ -162,6 +162,12 @@
     <ClInclude Include="..\..\Source\LabyrinthOfCollosia\Public\GameState\TlocGameState.h">
       <Filter>Source\LabyrinthOfCollosia\Public\GameState</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\LabyrinthOfCollosia\Public\Objects\Weapons\TlocWeapon.h">
+      <Filter>Source\LabyrinthOfCollosia\Public\Objects\Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LabyrinthOfCollosia\Public\Objects\Weapons\TlocSword.h">
+      <Filter>Source\LabyrinthOfCollosia\Public\Objects\Weapons</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\LabyrinthOfCollosia\Private\TlocPlayerController.cpp">
@@ -170,5 +176,19 @@
     <ClCompile Include="..\..\Source\LabyrinthOfCollosia\Private\GameState\TlocGameState.cpp">
       <Filter>Source\LabyrinthOfCollosia\Private\GameState</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\LabyrinthOfCollosia\Private\Objects\Weapons\TlocSword.cpp">
+      <Filter>Source\LabyrinthOfCollosia\Private\Objects\Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LabyrinthOfCollosia\Private\Objects\Weapons\TlocWeapon.cpp">
+      <Filter>Source\LabyrinthOfCollosia\Private\Objects\Weapons</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source\LabyrinthOfCollosia\Public\Objects\Weapons">
+      <UniqueIdentifier>{34f3df92-3bdb-42e6-a74b-e11bbb0bd2ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\LabyrinthOfCollosia\Private\Objects\Weapons">
+      <UniqueIdentifier>{ced27f88-0274-4364-ab0f-21262b2a623f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>
